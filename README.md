@@ -6,4 +6,4 @@
 
 [![NPM](https://nodei.co/npm/bottler.png)](https://www.npmjs.com/package/bottler)
 
-bottler is simple container library.
+Very simple ioc container for Javascript(& Typescript).

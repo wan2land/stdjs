@@ -1,7 +1,7 @@
 {
   "name": "bottler",
   "version": "0.0.0",
-  "description": "simple container",
+  "description": "Very simple ioc container for Javascript(& Typescript).",
   "author": "Cris <corgidisco@gmail.com>",
   "license": "MIT",
   "repository": {

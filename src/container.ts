@@ -4,7 +4,7 @@
 import {Descriptor} from "./descriptor"
 import * as types from "./types"
 
-export class Container {
+export class Container implements types.ContainerInterface {
 
   public static shared: Container = new Container()
 
@@ -12,12 +12,15 @@ export class Container {
   protected instances: Map<string, any>
   protected factories: Map<string, () => any>
   protected aliases: Map<string, string>
+  protected providers: types.Provider[]
+  protected isBooted = false
 
   constructor() {
     this.instances = new Map<string, any>()
     this.descriptors = new Map<string, Descriptor<any>>()
     this.factories = new Map<string, () => any>()
     this.aliases = new Map<string, string>()
+    this.providers = []
   }
 
   public set<P>(name: string, value: P): void
@@ -80,6 +83,22 @@ export class Container {
       this.instances.delete(name)
       this.factories.delete(name)
       this.aliases.delete(name)
+    }
+  }
+
+  public register(provider: types.Provider): void {
+    this.providers.push(provider)
+  }
+
+  public async boot(): Promise<void> {
+    if (!this.isBooted) {
+      for (const provider of this.providers) {
+        await provider.register(this)
+      }
+      for (const provider of this.providers) {
+        await provider.boot(this)
+      }
+      this.isBooted = true
     }
   }
 }
