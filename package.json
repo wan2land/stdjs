@@ -1,6 +1,6 @@
 {
   "name": "bottler",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Very simple ioc container for Javascript(& Typescript).",
   "author": "Cris <corgidisco@gmail.com>",
   "license": "MIT",
@@ -29,8 +29,7 @@
       "json"
     ]
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^21.1.5",
     "@types/node": "^10.1.0",
