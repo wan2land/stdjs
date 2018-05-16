@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "lib": ["es5", "es6"],
+    "target": "es5",
+    "outDir": "dist",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "declaration": true,
+    "pretty": true,
+    "sourceMap": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "stripInternal": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true
+  },
+  "include": [
+    "src/**/*"
+  ]
+}
