@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
-    "lib": ["es5", "es6"],
+    "lib": ["es2017"],
     "target": "es5",
-    "outDir": "dist",
     "module": "commonjs",
     "moduleResolution": "node",
+    "outDir": "dist",
     "declaration": true,
     "pretty": true,
     "sourceMap": true,
     "strict": true,
-    "noImplicitAny": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "stripInternal": true,

@@ -1,10 +1,6 @@
 {
   "extends": "tslint:recommended",
   "rules": {
-    "max-line-length": [
-      true,
-      160
-    ],
     "semicolon": [true, "never"],
     "no-consecutive-blank-lines": false,
     "quotemark": [true, "double", "avoid-escape"],

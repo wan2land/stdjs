@@ -2,6 +2,13 @@
   "name": "bottler",
   "version": "0.1.0",
   "description": "Very simple ioc container for Javascript(& Typescript).",
+  "keywords": [
+    "di",
+    "ioc",
+    "typescript",
+    "dependency injection",
+    "inversion of control"
+  ],
   "author": "Cris <corgidisco@gmail.com>",
   "license": "MIT",
   "repository": {

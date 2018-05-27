@@ -7,3 +7,17 @@
 [![NPM](https://nodei.co/npm/bottler.png)](https://www.npmjs.com/package/bottler)
 
 Very simple ioc container for Javascript(& Typescript).
+
+## Installation
+
+```bash
+npm install bottler --save
+```
+
+## Usage
+
+```javascript
+const bottler = require("bottler")
+// or
+import * as bottler from "bottler"
+```
