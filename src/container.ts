@@ -6,8 +6,6 @@ import * as types from "./types"
 
 export class Container implements types.ContainerInterface {
 
-  public static shared: Container = new Container()
-
   protected descriptors: Map<string, Descriptor<any>>
   protected instances: Map<string, any>
   protected factories: Map<string, () => any>
@@ -93,12 +91,36 @@ export class Container implements types.ContainerInterface {
   public async boot(): Promise<void> {
     if (!this.isBooted) {
       for (const provider of this.providers) {
-        await provider.register(this)
+        const registering = provider.register(this)
+        if (registering instanceof Promise) {
+          await registering
+        }
       }
       for (const provider of this.providers) {
-        await provider.boot(this)
+        if (!provider.boot) {
+          continue
+        }
+        const booting = provider.boot(this)
+        if (booting instanceof Promise) {
+          await booting
+        }
       }
       this.isBooted = true
+    }
+  }
+
+  public async close(): Promise<void> {
+    if (this.isBooted) {
+      for (const provider of this.providers) {
+        if (!provider.close) {
+          continue
+        }
+        const closing = provider.close(this)
+        if (closing instanceof Promise) {
+          await closing
+        }
+      }
+      this.isBooted = false
     }
   }
 }

@@ -16,6 +16,7 @@ export interface ContainerFluent<P> {
 }
 
 export interface Provider {
-  register(app: ContainerInterface): Promise<void>
-  boot(app: ContainerInterface): Promise<void>
+  register(app: ContainerInterface): void | Promise<void>
+  boot?(app: ContainerInterface): void | Promise<void>
+  close?(app: ContainerInterface): void | Promise<void>
 }
