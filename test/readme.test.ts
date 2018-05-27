@@ -1,9 +1,7 @@
 
 import {} from "jest"
 
-import {Container} from "../dist/Container"
-
-// tslint:disable triple-equals
+import * as bottler from "../dist"
 
 interface TestObject {
   message: string
@@ -13,12 +11,15 @@ function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-describe("Container", () => {
+describe("readmd", () => {
+  it("exists shared", () => {
+    expect(bottler.shared).toBeInstanceOf(bottler.Container)
+  })
 
   it("bind simple value", async () => {
     expect.assertions(4)
 
-    const container = new Container()
+    const container = bottler.create()
 
     container.set("obj1", {message: "hello world 11"})
     container.set("obj2", {message: "hello world 22"})
@@ -33,7 +34,7 @@ describe("Container", () => {
   it("bind simple factory as singleton", async () => {
     expect.assertions(4)
 
-    const container = new Container()
+    const container = bottler.create()
 
     container.set("obj1", () => ({message: "hello world 11"}))
     container.set("obj2", () => ({message: "hello world 22"}))
@@ -48,7 +49,7 @@ describe("Container", () => {
   it("bind simple factory", async () => {
     expect.assertions(6)
 
-    const container = new Container()
+    const container = bottler.create()
 
     container.set<TestObject>("obj1", () => ({message: "hello world 11"})).factory()
     container.set<TestObject>("obj2", () => ({message: "hello world 22"})).factory()
@@ -66,7 +67,7 @@ describe("Container", () => {
   it("test after", async () => {
     expect.assertions(1)
 
-    const container = new Container()
+    const container = bottler.create()
 
     container
       .set<TestObject>("obj1", () => ({message: "hello world 11"}))
