@@ -1,5 +1,6 @@
 # Bottler
 
+[![Build](https://travis-ci.org/corgidisco/bottler.svg?branch=master)](https://travis-ci.org/corgidisco/bottler)
 [![Downloads](https://img.shields.io/npm/dt/bottler.svg)](https://npmcharts.com/compare/bottler?minimal=true)
 [![Version](https://img.shields.io/npm/v/bottler.svg)](https://www.npmjs.com/package/bottler)
 [![License](https://img.shields.io/npm/l/bottler.svg)](https://www.npmjs.com/package/bottler)
