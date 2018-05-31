@@ -1,39 +1,44 @@
 
-// tslint:disable unified-signatures
-
+import {Containable, ContainerFluent, Identifier, Provider} from "./interfaces"
 import {Descriptor} from "./descriptor"
-import * as types from "./types"
 
-export class Container implements types.ContainerInterface {
+export class Container implements Containable {
 
-  protected descriptors: Map<string, Descriptor<any>>
-  protected instances: Map<string, any>
-  protected factories: Map<string, () => any>
-  protected aliases: Map<string, string>
-  protected providers: types.Provider[]
+  protected descriptors: Map<Identifier, Descriptor<any>>
+  protected instances: Map<Identifier, any>
+  protected factories: Map<Identifier, () => any>
+  protected binds: Map<Identifier, {new (...args: any[]): any}>
+  protected aliases: Map<Identifier, string>
+  protected providers: Provider[]
   protected isBooted = false
 
   constructor() {
-    this.instances = new Map<string, any>()
-    this.descriptors = new Map<string, Descriptor<any>>()
-    this.factories = new Map<string, () => any>()
-    this.aliases = new Map<string, string>()
+    this.instances = new Map<Identifier, any>()
+    this.descriptors = new Map<Identifier, Descriptor<any>>()
+    this.factories = new Map<Identifier, () => any>()
+    this.binds = new Map<Identifier, {new (...args: any[]): any}>()
+    this.aliases = new Map<Identifier, string>()
     this.providers = []
   }
 
-  public set<P>(name: string, value: P): void
-  public set<P>(name: string, value: Promise<P>): void
-  public set<P>(name: string, factory: () => P): types.ContainerFluent<P>
-  public set<P>(name: string, factory: () => Promise<P>): types.ContainerFluent<P>
-  public set<P>(name: string, value: any): any {
-    this.delete(name)
-    if (typeof value === "function") {
-      this.factories.set(name, value)
-      const descriptor = new Descriptor()
-      this.descriptors.set(name, descriptor)
-      return descriptor
-    }
+  public instance<P>(name: Identifier, value: P | Promise<P>): void {
     this.instances.set(name, value)
+  }
+
+  public factory<P>(name: Identifier, factory: () => P | Promise<P>): ContainerFluent<P> {
+    this.delete(name)
+    this.factories.set(name, factory)
+    const descriptor = new Descriptor<P>()
+    this.descriptors.set(name, descriptor)
+    return descriptor
+  }
+
+  public bind<P>(name: Identifier, constructor: {new (...args: any[]): P}): ContainerFluent<P> {
+    this.delete(name)
+    this.binds.set(name, constructor)
+    const descriptor = new Descriptor<P>()
+    this.descriptors.set(name, descriptor)
+    return descriptor
   }
 
   public async get<P>(name: string): Promise<P> {
@@ -49,10 +54,20 @@ export class Container implements types.ContainerInterface {
     if (!this.descriptors.has(name)) {
       throw new Error(`"${name}" is not defined!`)
     }
-    const descriptor = this.descriptors.get(name) as Descriptor<P>
-    const factory = this.factories.get(name) as () => any
 
-    let instance = factory() as P|Promise<P>
+    const descriptor = this.descriptors.get(name)!
+    let instance: P|Promise<P>
+
+    if (this.factories.has(name)) {
+      const factory = this.factories.get(name)!
+      instance = factory()
+    } else if (this.binds.has(name)) {
+      const constructor = this.binds.get(name)!
+      instance = new constructor()
+    } else {
+      throw new Error(`"${name}" is not defined!`)
+    }
+
     if (instance instanceof Promise) {
       instance = await instance
     }
@@ -63,13 +78,13 @@ export class Container implements types.ContainerInterface {
         ? await handlerResult
         : handlerResult
     }
-    if (!descriptor.isFactory) {
+    if (descriptor.isSingleton) {
       this.instances.set(name, instance) // caching
     }
     return instance
   }
 
-  public delete(...names: string[]): void {
+  public delete(...names: Identifier[]): void {
     for (const name of names) {
       if (this.descriptors.has(name)) {
         const descriptor = this.descriptors.get(name) as Descriptor<any>
@@ -84,7 +99,7 @@ export class Container implements types.ContainerInterface {
     }
   }
 
-  public register(provider: types.Provider): void {
+  public register(provider: Provider): void {
     this.providers.push(provider)
   }
 

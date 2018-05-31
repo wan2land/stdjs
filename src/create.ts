@@ -1,7 +1,7 @@
 
 import {Container} from "./container"
-import * as types from "./types"
+import {Containable} from "./interfaces"
 
-export function create(): types.ContainerInterface {
+export function create(): Containable {
   return new Container()
 }

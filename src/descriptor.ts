@@ -1,25 +1,25 @@
 
-import * as types from "./types"
+import {ContainerFluent} from "./interfaces"
 
-export class Descriptor<P> implements types.ContainerFluent<P> {
+export class Descriptor<P> implements ContainerFluent<P> {
 
   public isFrozen = false
 
-  public isFactory = false
+  public isSingleton = false
 
   public afterHandlers: Array<(context: P) => P|Promise<P>> = []
 
-  public freeze(): types.ContainerFluent<P> {
+  public freeze(): ContainerFluent<P> {
     this.isFrozen = true
     return this
   }
 
-  public factory(): types.ContainerFluent<P> {
-    this.isFactory = true
+  public singleton(): ContainerFluent<P> {
+    this.isSingleton = true
     return this
   }
 
-  public after(handler: (context: P) => P|Promise<P>): types.ContainerFluent<P> {
+  public after(handler: (context: P) => P|Promise<P>): ContainerFluent<P> {
     this.afterHandlers.push(handler)
     return this
   }

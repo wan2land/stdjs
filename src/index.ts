@@ -1,15 +1,15 @@
 
 import {create} from "./create"
-import {ContainerFluent, ContainerInterface, Provider} from "./types"
+import {ContainerFluent, Containable, Provider} from "./interfaces"
 import {Container} from "./container"
 
-const shared = new Container()
+const shared = create()
 
 export {
   create,
   shared,
   Container,
   ContainerFluent,
-  ContainerInterface,
+  Containable,
   Provider,
 }
