@@ -1,6 +1,7 @@
 
 import {Containable, ContainerFluent, Identifier, Provider} from "./interfaces"
 import {Descriptor} from "./descriptor"
+import {inject as injectMetadata} from "./annotations/metadata"
 
 export class Container implements Containable {
 
@@ -41,7 +42,7 @@ export class Container implements Containable {
     return descriptor
   }
 
-  public async get<P>(name: string): Promise<P> {
+  public async get<P>(name: Identifier): Promise<P> {
     if (this.descriptors.has(name)) {
       (this.descriptors.get(name) as Descriptor<P>).freeze()
     }
@@ -62,8 +63,12 @@ export class Container implements Containable {
       const factory = this.factories.get(name)!
       instance = factory()
     } else if (this.binds.has(name)) {
-      const constructor = this.binds.get(name)!
-      instance = new constructor()
+      const cls = this.binds.get(name)!
+      const params = []
+      for (const [index, identifier] of injectMetadata.get(cls) || []) {
+        params[index] = await this.get(identifier)
+      }
+      instance = new cls(...params)
     } else {
       throw new Error(`"${name}" is not defined!`)
     }

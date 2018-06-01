@@ -115,21 +115,30 @@ describe("tests for README", () => {
   })
 
   it("test to bind class", async () => {
-    expect.assertions(1)
+    expect.assertions(2)
 
     const container = bottler.create()
 
     turnConsoleOff()
     // section:bind-class
-    class Foo {
+    class Driver {
     }
-    container.bind("foo", Foo)
 
-    console.log(await container.get("foo")) // instanceof Foo
+    class Connection {
+      constructor(@bottler.inject("driver") public driver: Driver) {
+      }
+    }
+    container.bind("driver", Driver)
+    container.bind("connection", Connection)
+
+    const connection = await container.get("connection")
+    console.log(connection) // Connection { driver: Driver {} }
+    console.log(connection.driver) // Driver {}
     // endsection
     turnConsoleOn()
 
-    expect(await container.get("foo")).toBeInstanceOf(Foo)
+    expect(connection).toBeInstanceOf(Connection)
+    expect(connection.driver).toBeInstanceOf(Driver)
   })
 
   it("test singleton descriptor", async () => {

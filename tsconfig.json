@@ -13,7 +13,8 @@
     "noFallthroughCasesInSwitch": true,
     "stripInternal": true,
     "strictNullChecks": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "experimentalDecorators": true
   },
   "include": [
     "src/**/*"

@@ -80,11 +80,19 @@ console.log(await container.get("factory3")) // {message: "this is async factory
 ### Bind class
 
 ```ts
-class Foo {
+class Driver {
 }
-container.bind("foo", Foo)
 
-console.log(await container.get("foo")) // instanceof Foo
+class Connection {
+  constructor(@bottler.inject("driver") public driver: Driver) {
+  }
+}
+container.bind("driver", Driver)
+container.bind("connection", Connection)
+
+const connection = await container.get("connection")
+console.log(connection) // Connection { driver: Driver {} }
+console.log(connection.driver) // Driver {}
 ```
 
 ### Singleton descriptor
