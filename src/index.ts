@@ -1,6 +1,6 @@
 
-import {MysqlConnection} from "./connection/mysql"
-import {MysqlPoolConnection} from "./connection/mysql-pool"
+import {MysqlConnection} from "./driver/mysql/connection"
+import {MysqlPoolConnection} from "./driver/mysql/pool-connection"
 import {Connection} from "./interfaces/interfaces"
 import {create} from "./create"
 

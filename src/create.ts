@@ -1,8 +1,8 @@
 
 import {ConnectionConfig, MysqlConnectionConfig, MysqlPoolConnectionConfig} from "./interfaces/config"
 import {Connection} from "./interfaces/interfaces"
-import {MysqlConnection} from "./connection/mysql"
-import {MysqlPoolConnection} from "./connection/mysql-pool"
+import {MysqlConnection} from "./driver/mysql/connection"
+import {MysqlPoolConnection} from "./driver/mysql/pool-connection"
 
 export function create(config: MysqlConnectionConfig): MysqlConnection
 export function create(config: MysqlPoolConnectionConfig): MysqlPoolConnection

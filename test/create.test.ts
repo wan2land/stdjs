@@ -1,7 +1,7 @@
 
 import {create} from "../dist/create"
-import {MysqlConnection} from "../dist/connection/mysql"
-import {MysqlPoolConnection} from "../dist/connection/mysql-pool"
+import {MysqlConnection} from "../dist/driver/mysql/connection"
+import {MysqlPoolConnection} from "../dist/driver/mysql/pool-connection"
 
 require("jest") // tslint:disable-line
 
@@ -28,7 +28,7 @@ describe("create", () => {
     const connection = create({type: "mysql2", ...dbconf})
     expect(connection).toBeInstanceOf(MysqlConnection)
 
-    console.log(await connection.select("select * from actor limit 3"))
+    // console.log(await connection.select("select * from actor limit 3"))
     await connection.close()
   })
 

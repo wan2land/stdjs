@@ -1,7 +1,8 @@
 
-import {Pool} from "mysql"
-import {Connection as ConnectionInterface, Row} from "../interfaces/interfaces"
-import {MysqlResult} from "../interfaces/mysql"
+import {Pool, PoolConnection} from "mysql"
+import {Connection as ConnectionInterface, Row} from "../../interfaces/interfaces"
+import {MysqlResult} from "../../interfaces/mysql"
+import {transaction} from "./utils"
 
 export class MysqlPoolConnection implements ConnectionInterface {
 
@@ -38,5 +39,17 @@ export class MysqlPoolConnection implements ConnectionInterface {
         resolve(results)
       })
     })
+  }
+
+  public async transaction(handler: () => Promise<any>): Promise<void> {
+    const connection = await new Promise<PoolConnection>((resolve, reject) => {
+      this.pool.getConnection((err, conn) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(conn)
+      })
+    })
+    await transaction(connection, handler)
   }
 }

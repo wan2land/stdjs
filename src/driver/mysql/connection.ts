@@ -1,7 +1,8 @@
 
 import {Connection} from "mysql"
-import {Connection as ConnectionInterface, Row} from "../interfaces/interfaces"
-import {MysqlResult} from "../interfaces/mysql"
+import {Connection as ConnectionInterface, Row} from "../../interfaces/interfaces"
+import {MysqlResult} from "../../interfaces/mysql"
+import {transaction} from "./utils"
 
 export class MysqlConnection implements ConnectionInterface {
 
@@ -38,5 +39,9 @@ export class MysqlConnection implements ConnectionInterface {
         resolve(results)
       })
     })
+  }
+
+  public transaction(handler: () => Promise<any>): Promise<void> {
+    return transaction(this.connection, handler)
   }
 }

@@ -1,6 +1,6 @@
 
-import {createConnection} from "mysql"
-import {MysqlConnection} from "../../dist/connection/mysql"
+import {createPool} from "mysql"
+import {MysqlPoolConnection} from "../../../dist/driver/mysql/pool-connection"
 
 require("jest") // tslint:disable-line
 
@@ -12,7 +12,7 @@ const dbconf = {
 
 describe("mysql", () => {
   it("test select", async () => {
-    const connection = new MysqlConnection(createConnection(dbconf))
+    const connection = new MysqlPoolConnection(createPool(dbconf))
     const users = await connection.select("select * from actor order by actor_id desc limit 3")
 
     expect(users).toHaveLength(3)
