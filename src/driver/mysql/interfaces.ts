@@ -1,6 +1,42 @@
 
 // only for developing
-// import {} from "mysql"
+// import {ConnectionConfig, PoolConfig} from "mysql"
+
+export interface MysqlConnectionConfig extends MysqlBaseConfig {
+  readonly type: "mysql" | "mysql2"
+}
+
+export interface MysqlPoolConnectionConfig extends MysqlBaseConfig {
+  readonly type: "mysql-pool" | "mysql2-pool"
+  acquireTimeout?: number
+  waitForConnections?: boolean
+  connectionLimit?: number
+  queueLimit?: number
+}
+
+// @ref @types/mysql ConnectionOptions + ConnectionConfig
+export interface MysqlBaseConfig {
+  host?: string
+  port?: number
+  user?: string
+  password?: string
+  database?: string
+  charset?: string
+  timeout?: number
+  localAddress?: string
+  socketPath?: string
+  timezone?: string
+  connectTimeout?: number
+  stringifyObjects?: boolean
+  insecureAuth?: boolean
+  supportBigNumbers?: boolean
+  bigNumberStrings?: boolean
+  dateStrings?: boolean
+  trace?: boolean
+  multipleStatements?: boolean
+  flags?: string[]
+  queryFormat?(query: string, values: any): void
+}
 
 export interface MysqlRawQuery {
   sql: string

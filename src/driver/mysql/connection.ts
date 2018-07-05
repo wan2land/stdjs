@@ -7,7 +7,7 @@ import {
 import {
   MysqlRawConnection,
   MysqlRawResult,
-} from "../../interfaces/mysql"
+} from "./interfaces"
 import {transaction} from "./utils"
 
 export class MysqlConnection implements Connection {

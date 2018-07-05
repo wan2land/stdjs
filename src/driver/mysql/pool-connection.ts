@@ -1,6 +1,6 @@
 
 import {Connection, Row} from "../../interfaces/interfaces"
-import {MysqlRawConnection, MysqlRawPool} from "../../interfaces/mysql"
+import {MysqlRawConnection, MysqlRawPool} from "./interfaces"
 import {transaction} from "./utils"
 import {MysqlConnection} from "./connection"
 
