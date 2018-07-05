@@ -1,6 +1,6 @@
 {
   "name": "async-db-adapter",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Async database adapter for Javascript(& Typescript).",
   "keywords": [
     "database-adapter",
