@@ -1,12 +1,12 @@
 
-import {Pool, PoolConnection} from "mysql"
-import {Connection as ConnectionInterface, Row} from "../../interfaces/interfaces"
-import {MysqlResult} from "../../interfaces/mysql"
+import {Connection, Row} from "../../interfaces/interfaces"
+import {MysqlRawConnection, MysqlRawPool} from "../../interfaces/mysql"
 import {transaction} from "./utils"
+import {MysqlConnection} from "./connection"
 
-export class MysqlPoolConnection implements ConnectionInterface {
+export class MysqlPoolConnection implements Connection {
 
-  constructor(protected pool: Pool) {
+  constructor(protected pool: MysqlRawPool) {
   }
 
   public close(): Promise<void> {
@@ -30,7 +30,7 @@ export class MysqlPoolConnection implements ConnectionInterface {
     return items ? items.map((item: any) => ({...item})) : []
   }
 
-  public query(query: string, values?: any): Promise<MysqlResult|Row[]> {
+  public query(query: string, values?: any): Promise<MysqlRawConnection|Row[]> {
     return new Promise((resolve, reject) => {
       this.pool.query(query, values, (err, results) => {
         if (err) {
@@ -41,8 +41,8 @@ export class MysqlPoolConnection implements ConnectionInterface {
     })
   }
 
-  public async transaction(handler: () => Promise<any>): Promise<void> {
-    const connection = await new Promise<PoolConnection>((resolve, reject) => {
+  public async transaction<P>(handler: (connection: Connection) => Promise<any>): Promise<any> {
+    const rawConn = await new Promise<MysqlRawConnection>((resolve, reject) => {
       this.pool.getConnection((err, conn) => {
         if (err) {
           return reject(err)
@@ -50,6 +50,6 @@ export class MysqlPoolConnection implements ConnectionInterface {
         resolve(conn)
       })
     })
-    await transaction(connection, handler)
+    await transaction(rawConn, new MysqlConnection(rawConn), handler)
   }
 }

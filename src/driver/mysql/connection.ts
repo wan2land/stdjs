@@ -1,17 +1,23 @@
 
-import {Connection} from "mysql"
-import {Connection as ConnectionInterface, Row} from "../../interfaces/interfaces"
-import {MysqlResult} from "../../interfaces/mysql"
+import {
+  Connection,
+  Row,
+  TransactionHandler,
+} from "../../interfaces/interfaces"
+import {
+  MysqlRawConnection,
+  MysqlRawResult,
+} from "../../interfaces/mysql"
 import {transaction} from "./utils"
 
-export class MysqlConnection implements ConnectionInterface {
+export class MysqlConnection implements Connection {
 
-  constructor(protected connection: Connection) {
+  constructor(protected connection: MysqlRawConnection) {
   }
 
   public close(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.connection.end((err) => {
+      this.connection.end((err: any) => {
         if (err) {
           return reject(err)
         }
@@ -30,9 +36,9 @@ export class MysqlConnection implements ConnectionInterface {
     return items ? items.map((item: any) => ({...item})) : []
   }
 
-  public query(query: string, values?: any): Promise<MysqlResult|Row[]> {
+  public query(query: string, values?: any): Promise<MysqlRawResult|Row[]> {
     return new Promise((resolve, reject) => {
-      this.connection.query(query, values, (err, results) => {
+      this.connection.query(query, values, (err: any, results: MysqlRawResult|Row[]) => {
         if (err) {
           return reject(err)
         }
@@ -41,7 +47,7 @@ export class MysqlConnection implements ConnectionInterface {
     })
   }
 
-  public transaction(handler: () => Promise<any>): Promise<void> {
-    return transaction(this.connection, handler)
+  public transaction<P>(handler: TransactionHandler<P>): Promise<P> {
+    return transaction<P>(this.connection, this, handler)
   }
 }

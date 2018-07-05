@@ -1,10 +1,12 @@
 
+export type TransactionHandler<P> = (connection: Connection) => Promise<P>|P
+
 export interface Connection {
   close(): Promise<void>
   query(query: string, values?: any): Promise<any>
   select(query: string, values?: any): Promise<Row[]>
   first(query: string, values?: any): Promise<Row>
-  transaction(handler: () => Promise<any>): Promise<void>
+  transaction<P>(handler: TransactionHandler<P>): Promise<P>
 }
 
 export interface Row {
