@@ -25,7 +25,7 @@
     "prepublish": "npm run build",
     "build": "npm run lint && rimraf ./dist && tsc -p .",
     "lint": "./node_modules/.bin/tslint -c ./tslint.json -p tsconfig.json 'src/**/*.ts' --format stylish",
-    "test": "npm run build && jest test"
+    "test": "npm run build && jest test --runInBand"
   },
   "jest": {
     "transform": {

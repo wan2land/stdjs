@@ -6,17 +6,23 @@ import {
 } from "../../interfaces/interfaces"
 import {
   PgRawQueryResult,
+  PgRawClientBase,
   PgRawClient,
+  PgRawPoolClient,
 } from "./interfaces"
 
 export class PgConnection implements Connection {
 
-  constructor(protected client: PgRawClient) {
+  constructor(protected client: PgRawClientBase) {
   }
 
   public async close(): Promise<void> {
     if ((this.client as any)._connected) {
-      await this.client.end()
+      if ((this.client as PgRawPoolClient).release) {
+        await (this.client as PgRawPoolClient).release()
+      } else if ((this.client as PgRawClient).end) {
+        await (this.client as PgRawClient).end()
+      }
     }
   }
 

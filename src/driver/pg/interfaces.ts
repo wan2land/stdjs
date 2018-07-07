@@ -8,11 +8,17 @@ export interface PgConnectionConfig {
   mode?: number
 }
 
+export interface PgRawPool {
+    connect(): Promise<PgRawPoolClient>
+    end(): Promise<void>
+    query(queryTextOrConfig: string, values?: any[]): Promise<PgRawQueryResult>
+}
+
 export interface PgRawClient extends PgRawClientBase {
   end(): Promise<void>
 }
 
-export interface PoolClient extends PgRawClientBase {
+export interface PgRawPoolClient extends PgRawClientBase {
   release(err?: Error): void
 }
 
