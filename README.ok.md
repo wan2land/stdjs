@@ -33,6 +33,9 @@ Use `type` parameter of `create` function`s config
 - mysql-pool
 - mysql2
 - mysql2-pool
+- pg
+- pg-pool
+- sqlite3
 
 ### Methods
 
@@ -41,8 +44,3 @@ Use `type` parameter of `create` function`s config
 - `select(query: string, values?: any): Promise<Row[]>`
 - `first(query: string, values?: any): Promise<Row>`
 - `transaction(handler: () => Promise<any>): Promise<void>`
-
-## Todos
-
-- pg (Postgres)
-- sqlite3 (Sqlite)
