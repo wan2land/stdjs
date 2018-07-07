@@ -1,6 +1,6 @@
 
 // only for developing
-// import {ConnectionConfig, PoolConfig} from "mysql"
+// import "mysql"
 
 export interface MysqlConnectionConfig extends MysqlBaseConfig {
   readonly type: "mysql" | "mysql2"

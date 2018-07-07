@@ -60,10 +60,15 @@ export class Sqlite3Connection implements Connection {
     })
   }
 
-  public transaction<P>(handler: TransactionHandler<P>): Promise<P> {
-    return new Promise(() => {
-      //
-    })
-    // return transaction<P>(this.connection, this, handler)
+  public async transaction<P>(handler: TransactionHandler<P>): Promise<P> {
+    await this.query("BEGIN TRANSACTION")
+    try {
+      const result = await handler(this)
+      await this.query("COMMIT")
+      return result
+    } catch (e) {
+      await this.query("ROLLBACK")
+      throw e
+    }
   }
 }
