@@ -1,6 +1,12 @@
 
 // only for developing
-// import "sqlite3"
+import "sqlite3"
+
+export interface Sqlite3ConnectionConfig {
+  readonly type: "sqlite3"
+  filename: string
+  mode?: number
+}
 
 export interface Sqlite3RawConnection {
   close(callback?: (err: Error | null) => void): void
