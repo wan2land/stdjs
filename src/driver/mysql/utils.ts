@@ -1,6 +1,6 @@
 
-import {Connection, TransactionHandler} from "../../interfaces/interfaces"
-import {MysqlRawConnection} from "./interfaces"
+import { Connection, TransactionHandler } from "../../interfaces/interfaces"
+import { MysqlRawConnection } from "./interfaces"
 
 export function beginTransaction(connection: MysqlRawConnection): Promise<void> {
   return new Promise((resolve, reject) => {

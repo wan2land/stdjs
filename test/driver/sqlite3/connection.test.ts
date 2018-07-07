@@ -1,6 +1,6 @@
 
-import {Database} from "sqlite3"
-import {Sqlite3Connection} from "../../../dist/driver/sqlite3/connection"
+import { Database } from "sqlite3"
+import { Sqlite3Connection } from "../../../dist/driver/sqlite3/connection"
 
 require("jest") // tslint:disable-line
 

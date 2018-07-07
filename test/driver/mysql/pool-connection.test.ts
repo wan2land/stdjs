@@ -1,6 +1,6 @@
 
-import {createPool} from "mysql"
-import {MysqlPoolConnection} from "../../../dist/driver/mysql/pool-connection"
+import { createPool } from "mysql"
+import { MysqlPoolConnection } from "../../../dist/driver/mysql/pool-connection"
 
 require("jest") // tslint:disable-line
 

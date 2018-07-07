@@ -8,7 +8,7 @@ import {
   MysqlRawConnection,
   MysqlRawResult,
 } from "./interfaces"
-import {transaction} from "./utils"
+import { transaction } from "./utils"
 
 export class MysqlConnection implements Connection {
 
