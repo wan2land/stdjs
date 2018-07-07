@@ -53,6 +53,8 @@ describe("sqlite3", () => {
 
     expect(users).toEqual([{id: 1, name: "Jack"}])
     expect(result).toEqual(1)
+
+    await connection.close()
   })
 
   it("test transaction fail", async () => {
@@ -72,5 +74,7 @@ describe("sqlite3", () => {
     const users = await connection.select("select * from users order by id")
 
     expect(users).toEqual([])
+
+    await connection.close()
   })
 })
