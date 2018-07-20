@@ -1,11 +1,11 @@
 
-import { ConnectionConfig } from "./interfaces/config"
-import { Connection } from "./interfaces/interfaces"
 import { MysqlConnection } from "./driver/mysql/connection"
-import { MysqlPoolConnection } from "./driver/mysql/pool-connection"
-import { Sqlite3Connection } from "./driver/sqlite3/connection"
+import { MysqlPool } from "./driver/mysql/pool"
 import { PgConnection } from "./driver/pg/connection"
 import { PgPool } from "./driver/pg/pool"
+import { Sqlite3Connection } from "./driver/sqlite3/connection"
+import { ConnectionConfig } from "./interfaces/config"
+import { Connection } from "./interfaces/database"
 
 function getModuleName(type: string): string {
   switch (type) {
@@ -17,27 +17,27 @@ function getModuleName(type: string): string {
 }
 
 export function create(config: ConnectionConfig): Connection {
-  if (config.type === "mysql" || config.type === "mysql2") {
-    const {type, ...remainConfig} = config
+  if (config.adapter === "mysql" || config.adapter === "mysql2") {
+    const {adapter, ...remainConfig} = config
     return new MysqlConnection(
-      require(getModuleName(config.type)).createConnection(remainConfig),
+      require(getModuleName(config.adapter)).createConnection(remainConfig)
     )
-  } else if (config.type === "mysql-pool" || config.type === "mysql2-pool") {
-    const {type, ...remainConfig} = config
-    return new MysqlPoolConnection(
-      require(getModuleName(config.type)).createPool(remainConfig),
+  } else if (config.adapter === "mysql-pool" || config.adapter === "mysql2-pool") {
+    const {adapter, ...remainConfig} = config
+    return new MysqlPool(
+      require(getModuleName(config.adapter)).createPool(remainConfig)
     )
-  } else if (config.type === "sqlite3") {
+  } else if (config.adapter === "sqlite3") {
     const sqlite3 = require("sqlite3")
     return new Sqlite3Connection(new sqlite3.Database(config.filename, config.mode))
-  } else if (config.type === "pg") {
-    const {type, ...remainConfig} = config
+  } else if (config.adapter === "pg") {
+    const {adapter, ...remainConfig} = config
     const pg = require("pg")
     return new PgConnection(new pg.Client(remainConfig))
-  } else if (config.type === "pg-pool") {
-    const {type, ...remainConfig} = config
+  } else if (config.adapter === "pg-pool") {
+    const {adapter, ...remainConfig} = config
     const pg = require("pg")
     return new PgPool(new pg.Pool(remainConfig))
   }
-  throw new Error(`cannot resolve type named "${config.type}"`)
+  throw new Error(`cannot resolve adapter named "${config.adapter}"`)
 }

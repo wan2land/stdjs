@@ -1,6 +1,6 @@
 
 import { Client } from "pg"
-import { PgConnection } from "../../../dist/driver/pg/connection"
+import { PgConnection } from "../../../dist"
 
 require("jest") // tslint:disable-line
 

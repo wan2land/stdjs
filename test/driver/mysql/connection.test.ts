@@ -1,6 +1,6 @@
 
 import { createConnection } from "mysql"
-import { MysqlConnection } from "../../../dist/driver/mysql/connection"
+import { MysqlConnection } from "../../../dist"
 
 require("jest") // tslint:disable-line
 

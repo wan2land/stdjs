@@ -5,10 +5,10 @@ import {
   TransactionHandler,
 } from "../../interfaces/database"
 import {
-  PgRawQueryResult,
-  PgRawClientBase,
   PgRawClient,
+  PgRawClientBase,
   PgRawPoolClient,
+  PgRawQueryResult,
 } from "./interfaces"
 
 export class PgConnection implements Connection {

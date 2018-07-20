@@ -1,6 +1,6 @@
 
 import { Pool } from "pg"
-import { PgPool } from "../../../dist/driver/pg/pool"
+import { PgPool } from "../../../dist"
 
 require("jest") // tslint:disable-line
 

@@ -5,8 +5,8 @@ import {
   TransactionHandler,
 } from "../../interfaces/database"
 import {
-  Sqlite3RawStatement,
   Sqlite3RawConnection,
+  Sqlite3RawStatement,
 } from "./interfaces"
 
 export class Sqlite3Connection implements Connection {

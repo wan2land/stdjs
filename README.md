@@ -18,7 +18,7 @@ npm install async-db-adapter --save
 
 ```javascript
 const connection = require("async-db-adapter").create({
-  type: "mysql"
+  adapter: "mysql"
   /* ... */
 })
 // or import {create} from "async-db-adapter"
@@ -27,7 +27,7 @@ const connection = require("async-db-adapter").create({
 
 ### Support Current Database Connection
 
-Use `type` parameter of `create` function`s config
+Use `adapter` parameter of `create` function`s config
 
 - mysql
 - mysql-pool

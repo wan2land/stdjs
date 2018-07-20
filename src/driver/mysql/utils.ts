@@ -1,5 +1,4 @@
 
-import { Connection, TransactionHandler } from "../../interfaces/interfaces"
 import { MysqlRawConnection } from "./interfaces"
 
 export function beginTransaction(connection: MysqlRawConnection): Promise<void> {
@@ -33,20 +32,4 @@ export function rollback(connection: MysqlRawConnection): Promise<void> {
       resolve()
     })
   })
-}
-
-export async function transaction<P>(
-    raw: MysqlRawConnection,
-    connection: Connection,
-    handler: TransactionHandler<P>): Promise<P> {
-
-  await beginTransaction(raw)
-  try {
-    const ret = await handler(connection)
-    await commit(raw)
-    return ret
-  } catch (e) {
-    await rollback(raw)
-    throw e
-  }
 }

@@ -3,12 +3,12 @@ import {
   Connection,
   Row,
   TransactionHandler,
-} from "../../interfaces/interfaces"
+} from "../../interfaces/database"
 import {
   MysqlRawConnection,
   MysqlRawResult,
 } from "./interfaces"
-import { transaction } from "./utils"
+import { beginTransaction, commit, rollback } from "./utils"
 
 export class MysqlConnection implements Connection {
 
@@ -47,7 +47,15 @@ export class MysqlConnection implements Connection {
     })
   }
 
-  public transaction<P>(handler: TransactionHandler<P>): Promise<P> {
-    return transaction<P>(this.connection, this, handler)
+  public async transaction<P>(handler: TransactionHandler<P>): Promise<P> {
+    await beginTransaction(this.connection)
+    try {
+      const ret = await handler(this)
+      await commit(this.connection)
+      return ret
+    } catch (e) {
+      await rollback(this.connection)
+      throw e
+    }
   }
 }

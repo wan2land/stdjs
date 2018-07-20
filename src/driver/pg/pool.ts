@@ -1,15 +1,15 @@
 
 import {
   Connection,
+  Pool,
   Row,
   TransactionHandler,
-  Pool,
 } from "../../interfaces/database"
-import {
-  PgRawQueryResult,
-  PgRawPool,
-} from "./interfaces"
 import { PgConnection } from "./connection"
+import {
+  PgRawPool,
+  PgRawQueryResult,
+} from "./interfaces"
 
 export class PgPool implements Pool {
 
