@@ -26,7 +26,7 @@ export class MysqlConnection implements Connection {
     })
   }
 
-  public async first(query: string, values?: any): Promise<Row> {
+  public async first(query: string, values?: any): Promise<Row|undefined> {
     const items = await this.select(query, values)
     return items[0]
   }
