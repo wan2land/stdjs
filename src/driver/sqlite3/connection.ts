@@ -25,7 +25,7 @@ export class Sqlite3Connection implements Connection {
     })
   }
 
-  public first(query: string, values?: any): Promise<Row> {
+  public first(query: string, values?: any): Promise<Row|undefined> {
     return new Promise<Row[]>((resolve, reject) => {
       this.connection.get(query, values || [], (err, row) => {
         if (err) {

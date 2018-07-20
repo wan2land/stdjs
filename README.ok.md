@@ -29,18 +29,32 @@ const connection = require("async-db-adapter").create({
 
 Use `adapter` parameter of `create` function`s config
 
-- mysql
-- mysql-pool
-- mysql2
-- mysql2-pool
-- pg
-- pg-pool
-- sqlite3
+- mysql (require `npm install mysql --save`)
+- mysql-pool (require `npm install mysql --save`)
+- mysql2 (require `npm install mysql2 --save`)
+- mysql2-pool (require `npm install mysql2 --save`)
+- pg (require `npm install pg --save`)
+- pg-pool (require `npm install pg --save`)
+- sqlite3 (require `npm install sqlite3 --save`)
 
 ### Methods
 
-- `close(): Promise<void>`
-- `query(query: string, values?: any): Promise<any>`
-- `select(query: string, values?: any): Promise<Row[]>`
-- `first(query: string, values?: any): Promise<Row>`
-- `transaction(handler: () => Promise<any>): Promise<void>`
+```typescript
+type TransactionHandler<P> = (connection: Connection) => Promise<P>|P
+
+interface Pool extends Connection {
+  getConnection(): Promise<Connection>
+}
+
+interface Connection {
+  close(): Promise<void>
+  query(query: string, values?: any): Promise<any>
+  select(query: string, values?: any): Promise<Row[]>
+  first(query: string, values?: any): Promise<Row|undefined>
+  transaction<P>(handler: TransactionHandler<P>): Promise<P>
+}
+```
+
+## License
+
+MIT

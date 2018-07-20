@@ -20,7 +20,7 @@ export class PgPool implements Pool {
     await this.pool.end()
   }
 
-  public async first(query: string, values?: any): Promise<Row> {
+  public async first(query: string, values?: any): Promise<Row|undefined> {
     const rows = await this.select(query, values)
     return rows[0]
   }
