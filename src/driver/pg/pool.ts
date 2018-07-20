@@ -4,7 +4,7 @@ import {
   Row,
   TransactionHandler,
   Pool,
-} from "../../interfaces/interfaces"
+} from "../../interfaces/database"
 import {
   PgRawQueryResult,
   PgRawPool,

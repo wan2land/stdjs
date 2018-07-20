@@ -3,7 +3,7 @@ import {
   Connection,
   Row,
   TransactionHandler,
-} from "../../interfaces/interfaces"
+} from "../../interfaces/database"
 import {
   PgRawQueryResult,
   PgRawClientBase,
