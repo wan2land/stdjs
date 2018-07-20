@@ -6,12 +6,12 @@ import * as stream from "stream"
 import * as tls from "tls"
 
 export interface PgConnectionConfig {
-  readonly type: "pg"
+  readonly adapter: "pg"
 }
 
 // @ref @types/pg PoolConfig
 export interface PgPoolConfig extends PgConnectionConfigBase {
-  readonly type: "pg-pool"
+  readonly adapter: "pg-pool"
 
   max?: number
   min?: number

@@ -3,11 +3,11 @@
 // import "mysql"
 
 export interface MysqlConnectionConfig extends MysqlBaseConfig {
-  readonly type: "mysql" | "mysql2"
+  readonly adapter: "mysql" | "mysql2"
 }
 
-export interface MysqlPoolConnectionConfig extends MysqlBaseConfig {
-  readonly type: "mysql-pool" | "mysql2-pool"
+export interface MysqlPoolConfig extends MysqlBaseConfig {
+  readonly adapter: "mysql-pool" | "mysql2-pool"
   acquireTimeout?: number
   waitForConnections?: boolean
   connectionLimit?: number
