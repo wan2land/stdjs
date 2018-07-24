@@ -11,6 +11,10 @@
     "async",
     "mysql",
     "mysql2",
+    "pg",
+    "postgre",
+    "sqlite3",
+    "sqlite",
     "typescript"
   ],
   "author": "Cris <corgidisco@gmail.com>",

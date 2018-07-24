@@ -16,10 +16,14 @@ npm install async-db-adapter --save
 
 ## Usage
 
+You can create as follows:
+
+(Please refer to the Config section for config.)
+
 ```javascript
 const connection = require("async-db-adapter").create({
   adapter: "mysql"
-  /* ... */
+  /* config */
 })
 // or import {create} from "async-db-adapter"
 // create(/* ... */)
@@ -39,13 +43,17 @@ Use `adapter` parameter of `create` function`s config
 
 ### Methods
 
+All adapter objects inherit the following interfaces:
+
 ```typescript
 type TransactionHandler<P> = (connection: Connection) => Promise<P>|P
 
+// mysql-pool, mysql2-pool, pg-pool
 interface Pool extends Connection {
   getConnection(): Promise<Connection>
 }
 
+// mysql, mysql2, pg, sqlite3
 interface Connection {
   close(): Promise<void>
   query(query: string, values?: any): Promise<any>
@@ -54,6 +62,29 @@ interface Connection {
   transaction<P>(handler: TransactionHandler<P>): Promise<P>
 }
 ```
+
+### Config
+
+Config can be defined as follows:
+
+#### Mysql / Mysql2
+
+Use the connection option of the `mysql` or `mysql2`.
+
+@code("./src/driver/mysql/interfaces.ts@config", "typescript")
+
+#### Postgres
+
+Use the connection option of the `pg`.
+
+@code("./src/driver/pg/interfaces.ts@config", "typescript")
+
+
+#### Sqlite
+
+Use the connection option of the `sqlite3`.
+
+@code("./src/driver/sqlite3/interfaces.ts@config", "typescript")
 
 ## License
 

@@ -2,12 +2,17 @@
 // only for developing
 // import "sqlite3"
 
-export interface Sqlite3ConnectionConfig {
+// section:config
+interface Sqlite3ConnectionConfig {
   readonly adapter: "sqlite3"
   filename: string
   mode?: number
 }
+// endsection
 
+export {
+  Sqlite3ConnectionConfig,
+}
 export interface Sqlite3RawConnection {
   close(callback?: (err: Error | null) => void): void
   run(sql: string, params: any, callback?: (this: Sqlite3RawResult, err: Error | null) => void): this

@@ -5,12 +5,14 @@
 import * as stream from "stream"
 import * as tls from "tls"
 
-export interface PgConnectionConfig {
+// @ref @types/pg PoolConfig, ClientConfig, ConnectionConfig
+
+// section:config
+interface PgConnectionConfig extends PgBaseConfig {
   readonly adapter: "pg"
 }
 
-// @ref @types/pg PoolConfig
-export interface PgPoolConfig extends PgConnectionConfigBase {
+interface PgPoolConfig extends PgBaseConfig {
   readonly adapter: "pg-pool"
 
   max?: number
@@ -22,8 +24,7 @@ export interface PgPoolConfig extends PgConnectionConfigBase {
   Promise?: PromiseConstructorLike
 }
 
-// @ref @types/pg ClientConfig, ConnectionConfig
-export interface PgConnectionConfigBase {
+interface PgBaseConfig {
   ssl?: boolean | tls.TlsOptions
 
   user?: string
@@ -34,6 +35,13 @@ export interface PgConnectionConfigBase {
   connectionString?: string
   keepAlive?: boolean
   stream?: stream.Duplex
+}
+// endsection
+
+export {
+  PgConnectionConfig,
+  PgPoolConfig,
+  PgBaseConfig,
 }
 
 export interface PgRawPool {
