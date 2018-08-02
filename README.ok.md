@@ -29,17 +29,48 @@ const connection = require("async-db-adapter").create({
 // create(/* ... */)
 ```
 
-### Support Current Database Connection
-
-Use `adapter` parameter of `create` function`s config
+### Support Database Connection
 
 - mysql (require `npm install mysql --save`)
-- mysql-pool (require `npm install mysql --save`)
 - mysql2 (require `npm install mysql2 --save`)
-- mysql2-pool (require `npm install mysql2 --save`)
 - pg (require `npm install pg --save`)
-- pg-pool (require `npm install pg --save`)
 - sqlite3 (require `npm install sqlite3 --save`)
+
+### Create Connection
+
+Use `adapter`, `pool` parameter of `create` function`s config
+
+#### mysql
+
+@code("./test/readme.test.ts@create-mysql-connection", "typescript")
+
+@code("./test/readme.test.ts@create-mysql-pool", "typescript")
+
+#### mysql2
+
+@code("./test/readme.test.ts@create-mysql2-connection", "typescript")
+
+@code("./test/readme.test.ts@create-mysql2-pool", "typescript")
+
+#### pg
+
+@code("./test/readme.test.ts@create-pg-connection", "typescript")
+
+@code("./test/readme.test.ts@create-pg-pool", "typescript")
+
+#### sqlite3
+
+@code("./test/readme.test.ts@create-sqlite3-connection", "typescript")
+
+#### Multiple Connection (Array)
+
+@code("./test/readme.test.ts@create-array-connections", "typescript")
+
+#### Multiple Connection (Object)
+
+@code("./test/readme.test.ts@create-object-connections", "typescript")
+
+
 
 ### Methods
 

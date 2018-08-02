@@ -7,10 +7,13 @@
 // section:config
 interface MysqlConnectionConfig extends MysqlBaseConfig {
   readonly adapter: "mysql" | "mysql2"
+  readonly pool?: false
 }
 
 interface MysqlPoolConfig extends MysqlBaseConfig {
-  readonly adapter: "mysql-pool" | "mysql2-pool"
+  readonly adapter: "mysql" | "mysql2"
+  readonly pool: true
+
   acquireTimeout?: number
   waitForConnections?: boolean
   connectionLimit?: number

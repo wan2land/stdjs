@@ -10,10 +10,12 @@ import * as tls from "tls"
 // section:config
 interface PgConnectionConfig extends PgBaseConfig {
   readonly adapter: "pg"
+  readonly pool?: false
 }
 
 interface PgPoolConfig extends PgBaseConfig {
-  readonly adapter: "pg-pool"
+  readonly adapter: "pg"
+  readonly pool: true
 
   max?: number
   min?: number

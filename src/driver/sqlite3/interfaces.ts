@@ -5,6 +5,7 @@
 // section:config
 interface Sqlite3ConnectionConfig {
   readonly adapter: "sqlite3"
+  readonly pool?: false
   filename: string
   mode?: number
 }
