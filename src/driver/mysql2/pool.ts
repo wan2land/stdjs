@@ -11,6 +11,9 @@ export class Mysql2Pool extends MysqlPool {
   }
 
   public select(query: string, values?: any): Promise<Row[]> {
+    if (Array.isArray(values)) {
+      values = values.map(value => typeof value  === "undefined" ? null : value)
+    }
     return new Promise((resolve, reject) => {
       this.pool.execute(query, values, (err, rows: any) => {
         if (err) {
@@ -22,6 +25,9 @@ export class Mysql2Pool extends MysqlPool {
   }
 
   public query(query: string, values?: any): Promise<any> {
+    if (Array.isArray(values)) {
+      values = values.map(value => typeof value  === "undefined" ? null : value)
+    }
     return new Promise((resolve, reject) => {
       this.pool.execute(query, values, (err, result) => {
         if (err) {

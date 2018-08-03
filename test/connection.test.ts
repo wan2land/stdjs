@@ -66,11 +66,11 @@ const beforeSqls: {[testcase: string]: string[]} = {
   ],
   "pg": [
     "DROP TABLE IF EXISTS tests_pg",
-    "CREATE TABLE tests_pg(id serial PRIMARY KEY, text varchar(20) NOT NULL)",
+    "CREATE TABLE tests_pg(id serial PRIMARY KEY, text varchar(20) DEFAULT NULL)",
   ],
   "pg-pool": [
     "DROP TABLE IF EXISTS tests_pg_pool",
-    "CREATE TABLE tests_pg_pool(id serial PRIMARY KEY, text varchar(20) NOT NULL)",
+    "CREATE TABLE tests_pg_pool(id serial PRIMARY KEY, text varchar(20) DEFAULT NULL)",
   ],
   "sqlite3": [
     "DROP TABLE IF EXISTS tests_sqlite3",
@@ -96,6 +96,16 @@ const insertManySqls: {[testcase: string]: [string, string[]]} = {
   "pg": ["INSERT INTO tests_pg(text) VALUES ($1), ($2) RETURNING id", ["hello2", "hello3"]],
   "pg-pool": ["INSERT INTO tests_pg_pool(text) VALUES ($1), ($2) RETURNING id", ["hello2", "hello3"]],
   "sqlite3": ["INSERT INTO tests_sqlite3(text) VALUES (?), (?)", ["hello2", "hello3"]],
+}
+
+const insertNullSqls: {[testcase: string]: [string, string[]]} = {
+  "mysql": ["INSERT INTO `tests_mysql`(`text`) VALUES (?), (?)", [null, undefined]],
+  "mysql-pool": ["INSERT INTO `tests_mysql_pool`(`text`) VALUES (?), (?)", [null, undefined]],
+  "mysql2": ["INSERT INTO `tests_mysql2`(`text`) VALUES (?), (?)", [null, undefined]],
+  "mysql2-pool": ["INSERT INTO `tests_mysql2_pool`(`text`) VALUES (?), (?)", [null, undefined]],
+  "pg": ["INSERT INTO tests_pg(text) VALUES ($1), ($2) RETURNING id", [null, undefined]],
+  "pg-pool": ["INSERT INTO tests_pg_pool(text) VALUES ($1), ($2) RETURNING id", [null, undefined]],
+  "sqlite3": ["INSERT INTO tests_sqlite3(text) VALUES (?), (?)", [null, undefined]],
 }
 
 const selectSqls: {[testcase: string]: string} = {
@@ -150,6 +160,32 @@ describe("connection", () => {
         const row = await connection.first(selectSqls[testcase])
 
         expect(row).toEqual({id: 1, text: "hello1"})
+
+        await connection.close()
+      } catch (e) {
+        await connection.close()
+        throw e
+      }
+    }
+  })
+
+  it("test insert null", async () => {
+    for (const testcase of testcases) {
+      const connection = create(configs[testcase])
+      for (const beforeSql of beforeSqls[testcase] || []) {
+        await connection.query(beforeSql)
+      }
+
+      try {
+
+        await connection.query(insertNullSqls[testcase][0], insertNullSqls[testcase][1])
+
+        const rows = await connection.select(selectSqls[testcase])
+
+        expect(rows).toEqual([
+          {id: 1, text: null},
+          {id: 2, text: null},
+        ])
 
         await connection.close()
       } catch (e) {
