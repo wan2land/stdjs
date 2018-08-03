@@ -1,25 +1,20 @@
 
-import { create} from "./create"
+export { create} from "./create"
 
-import { MysqlConnection } from "./driver/mysql/connection"
-import { MysqlPool } from "./driver/mysql/pool"
-import { PgConnection } from "./driver/pg/connection"
-import { PgPool } from "./driver/pg/pool"
-import { Sqlite3Connection } from "./driver/sqlite3/connection"
-
-export * from "./interfaces/config"
-export * from "./interfaces/database"
+export { ConnectionConfig } from "./interfaces/config"
+export { Connection, Pool, Row, TransactionHandler } from "./interfaces/database"
 
 export * from "./driver/mysql/interfaces"
-export * from "./driver/sqlite3/interfaces"
+export { MysqlConnection } from "./driver/mysql/connection"
+export { MysqlPool } from "./driver/mysql/pool"
+
+// export * from "./driver/mysql2/interfaces"
+export { Mysql2Connection } from "./driver/mysql2/connection"
+export { Mysql2Pool } from "./driver/mysql2/pool"
+
 export * from "./driver/pg/interfaces"
+export { PgConnection } from "./driver/pg/connection"
+export { PgPool } from "./driver/pg/pool"
 
-export {
-  create,
-
-  MysqlConnection,
-  MysqlPool,
-  PgConnection,
-  PgPool,
-  Sqlite3Connection,
-}
+export * from "./driver/sqlite3/interfaces"
+export { Sqlite3Connection } from "./driver/sqlite3/connection"

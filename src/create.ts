@@ -1,11 +1,15 @@
 
+import { ConnectionConfig } from "./interfaces/config"
+import { Connection } from "./interfaces/database"
+
+// drivers
 import { MysqlConnection } from "./driver/mysql/connection"
 import { MysqlPool } from "./driver/mysql/pool"
+import { Mysql2Connection } from "./driver/mysql2/connection"
+import { Mysql2Pool } from "./driver/mysql2/pool"
 import { PgConnection } from "./driver/pg/connection"
 import { PgPool } from "./driver/pg/pool"
 import { Sqlite3Connection } from "./driver/sqlite3/connection"
-import { ConnectionConfig } from "./interfaces/config"
-import { Connection } from "./interfaces/database"
 
 function isArrayOfConfig(config: any): config is ConnectionConfig[] {
   return Array.isArray(config)
@@ -35,10 +39,14 @@ export function create(config: any): any {
   }
 
   const {adapter, pool, ...remainConfig} = config
-  if (config.adapter === "mysql" || config.adapter === "mysql2") {
+  if (config.adapter === "mysql") {
     return config.pool
       ? new MysqlPool(require(config.adapter).createPool(remainConfig))
       : new MysqlConnection(require(config.adapter).createConnection(remainConfig))
+  } else if (config.adapter === "mysql2") {
+    return config.pool
+      ? new Mysql2Pool(require(config.adapter).createPool(remainConfig))
+      : new Mysql2Connection(require(config.adapter).createConnection(remainConfig))
   } else if (config.adapter === "pg") {
     const pg = require("pg")
     return config.pool
