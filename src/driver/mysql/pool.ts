@@ -1,7 +1,7 @@
 
 import { Connection, Pool, Row } from "../../interfaces/database"
 import { MysqlConnection } from "./connection"
-import { MysqlRawConnection, MysqlRawPool } from "./interfaces"
+import { MysqlRawPool } from "./interfaces"
 
 export class MysqlPool implements Pool {
 
@@ -24,18 +24,24 @@ export class MysqlPool implements Pool {
     return items[0]
   }
 
-  public async select(query: string, values?: any): Promise<Row[]> {
-    const items = await this.query(query, values) as Row[]
-    return items ? items.map((item: any) => ({...item})) : []
-  }
-
-  public query(query: string, values?: any): Promise<MysqlRawConnection|Row[]> {
+  public select(query: string, values?: any): Promise<Row[]> {
     return new Promise((resolve, reject) => {
-      this.pool.query(query, values, (err, results) => {
+      this.pool.query(query, values, (err, rows: any) => {
         if (err) {
           return reject(err)
         }
-        resolve(results)
+        resolve((rows && rows.map) ? rows.map((result: any) => ({...result})) : [])
+      })
+    })
+  }
+
+  public query(query: string, values?: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.pool.query(query, values, (err, result) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(result)
       })
     })
   }

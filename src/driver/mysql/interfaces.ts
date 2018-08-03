@@ -55,10 +55,10 @@ export interface MysqlRawQuery {
   values?: string[]
 }
 
-export type MysqlRawQueryCb = (err: Error|undefined, results?: any) => void
+export type MysqlRawQueryCb = (err: Error|undefined, results?: MysqlRawResult) => void
 
 export interface MysqlRawConnection {
-  query(options: string, values: any, callback?: MysqlRawQueryCb): MysqlRawQuery
+  query(options: string, values: any, callback?: MysqlRawQueryCb): any
   end(callback?: (err: Error|undefined, ...args: any[]) => void): void
   beginTransaction(callback: (err: Error|undefined) => void): void
   commit(callback: (err: Error|undefined) => void): void
@@ -66,7 +66,7 @@ export interface MysqlRawConnection {
 }
 
 export interface MysqlRawPool {
-  query(options: string, values: any, callback?: MysqlRawQueryCb): MysqlRawQuery
+  query(options: string, values: any, callback?: MysqlRawQueryCb): any
   end(callback?: (err: Error|undefined, ...args: any[]) => void): void
   getConnection(callback: (err: Error|undefined, connection: MysqlRawConnection) => void): void
 }

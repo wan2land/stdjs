@@ -1,13 +1,6 @@
 
-import {
-  Connection,
-  Row,
-  TransactionHandler,
-} from "../../interfaces/database"
-import {
-  Sqlite3RawConnection,
-  Sqlite3RawStatement,
-} from "./interfaces"
+import { Connection, Row, TransactionHandler } from "../../interfaces/database"
+import { Sqlite3RawConnection } from "./interfaces"
 
 export class Sqlite3Connection implements Connection {
 
@@ -47,14 +40,14 @@ export class Sqlite3Connection implements Connection {
     })
   }
 
-  public query(query: string, values?: any): Promise<Sqlite3RawStatement> {
+  public query(query: string, values?: any): Promise<any> {
     return new Promise((resolve, reject) => {
       // tslint:disable:only-arrow-functions
       this.connection.run(query, values || [], function(err: Error|null): void {
         if (err) {
           return reject(err)
         }
-        resolve(this as any)
+        resolve(this)
       })
       // tslint:enable:only-arrow-functions
     })

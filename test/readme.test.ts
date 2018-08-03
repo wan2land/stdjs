@@ -8,7 +8,7 @@ describe("readmd", () => {
   const mysqlConfig = {
     host: "localhost",
     user: "root",
-    database: "sakila",
+    database: "async_db_adapter",
   }
   const pgConfig = {}
 

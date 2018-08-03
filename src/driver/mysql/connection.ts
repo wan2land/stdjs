@@ -1,13 +1,6 @@
 
-import {
-  Connection,
-  Row,
-  TransactionHandler,
-} from "../../interfaces/database"
-import {
-  MysqlRawConnection,
-  MysqlRawResult,
-} from "./interfaces"
+import { Connection, Row, TransactionHandler } from "../../interfaces/database"
+import { MysqlRawConnection } from "./interfaces"
 import { beginTransaction, commit, rollback } from "./utils"
 
 export class MysqlConnection implements Connection {
@@ -31,18 +24,24 @@ export class MysqlConnection implements Connection {
     return items[0]
   }
 
-  public async select(query: string, values?: any): Promise<Row[]> {
-    const items = await this.query(query, values) as Row[]
-    return items ? items.map((item: any) => ({...item})) : []
-  }
-
-  public query(query: string, values?: any): Promise<MysqlRawResult|Row[]> {
+  public select(query: string, values?: any): Promise<Row[]> {
     return new Promise((resolve, reject) => {
-      this.connection.query(query, values, (err: any, results: MysqlRawResult|Row[]) => {
+      this.connection.query(query, values, (err, rows: any) => {
         if (err) {
           return reject(err)
         }
-        resolve(results)
+        resolve((rows && rows.map) ? rows.map((result: any) => ({...result})) : [])
+      })
+    })
+  }
+
+  public query(query: string, values?: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.connection.query(query, values, (err, result) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(result)
       })
     })
   }

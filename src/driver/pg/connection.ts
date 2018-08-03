@@ -1,14 +1,9 @@
 
-import {
-  Connection,
-  Row,
-  TransactionHandler,
-} from "../../interfaces/database"
+import { Connection, Row, TransactionHandler } from "../../interfaces/database"
 import {
   PgRawClient,
   PgRawClientBase,
-  PgRawPoolClient,
-  PgRawQueryResult,
+  PgRawPoolClient
 } from "./interfaces"
 
 export class PgConnection implements Connection {
@@ -32,11 +27,12 @@ export class PgConnection implements Connection {
   }
 
   public async select(query: string, values?: any): Promise<Row[]> {
-    const res = await this.query(query, values || [])
+    await this.connect()
+    const res = await this.client.query(query, values || [])
     return res.rows
   }
 
-  public async query(query: string, values?: any): Promise<PgRawQueryResult> {
+  public async query(query: string, values?: any): Promise<any> {
     await this.connect()
     return await this.client.query(query, values || [])
   }
