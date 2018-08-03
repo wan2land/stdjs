@@ -63,7 +63,7 @@ const connection = create({
 const connection = create({
   adapter: "mysql2",
   ...mysqlConfig,
-}) // return instanceof MysqlConnection
+}) // return instanceof Mysql2Connection
 ```
 
 ```typescript
@@ -71,7 +71,7 @@ const connection = create({
   adapter: "mysql2",
   pool: true,
   ...mysqlConfig,
-}) // return instanceof MysqlPool
+}) // return instanceof Mysql2Pool
 ```
 
 #### pg

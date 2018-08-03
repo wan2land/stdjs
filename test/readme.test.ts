@@ -1,7 +1,7 @@
 
 import "jest"
 
-import { create, MysqlConnection, MysqlPool, PgConnection, PgPool, Sqlite3Connection } from "../dist"
+import { create, Mysql2Connection, Mysql2Pool, MysqlConnection, MysqlPool, PgConnection, PgPool, Sqlite3Connection } from "../dist"
 
 describe("readmd", () => {
 
@@ -44,10 +44,10 @@ describe("readmd", () => {
     const connection = create({
       adapter: "mysql2",
       ...mysqlConfig,
-    }) // return instanceof MysqlConnection
+    }) // return instanceof Mysql2Connection
     // endsection
 
-    expect(connection).toBeInstanceOf(MysqlConnection)
+    expect(connection).toBeInstanceOf(Mysql2Connection)
 
     await connection.close()
   })
@@ -58,10 +58,10 @@ describe("readmd", () => {
       adapter: "mysql2",
       pool: true,
       ...mysqlConfig,
-    }) // return instanceof MysqlPool
+    }) // return instanceof Mysql2Pool
     // endsection
 
-    expect(connection).toBeInstanceOf(MysqlPool)
+    expect(connection).toBeInstanceOf(Mysql2Pool)
 
     await connection.close()
   })

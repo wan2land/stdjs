@@ -88,14 +88,14 @@ const insertOneSqls: {[testcase: string]: string} = {
   "sqlite3": "INSERT INTO tests_sqlite3(text) VALUES (\"hello1\")", // not exists VALUE
 }
 
-const insertManySqls: {[testcase: string]: string} = {
-  "mysql": "INSERT INTO `tests_mysql`(`text`) VALUES (\"hello2\"), (\"hello3\")",
-  "mysql-pool": "INSERT INTO `tests_mysql_pool`(`text`) VALUES (\"hello2\"), (\"hello3\")",
-  "mysql2": "INSERT INTO `tests_mysql2`(`text`) VALUES (\"hello2\"), (\"hello3\")",
-  "mysql2-pool": "INSERT INTO `tests_mysql2_pool`(`text`) VALUES (\"hello2\"), (\"hello3\")",
-  "pg": "INSERT INTO tests_pg(text) VALUES ('hello2'), ('hello3') RETURNING id",
-  "pg-pool": "INSERT INTO tests_pg_pool(text) VALUES ('hello2'), ('hello3') RETURNING id",
-  "sqlite3": "INSERT INTO tests_sqlite3(text) VALUES (\"hello2\"), (\"hello3\")",
+const insertManySqls: {[testcase: string]: [string, string[]]} = {
+  "mysql": ["INSERT INTO `tests_mysql`(`text`) VALUES (?), (?)", ["hello2", "hello3"]],
+  "mysql-pool": ["INSERT INTO `tests_mysql_pool`(`text`) VALUES (?), (?)", ["hello2", "hello3"]],
+  "mysql2": ["INSERT INTO `tests_mysql2`(`text`) VALUES (?), (?)", ["hello2", "hello3"]],
+  "mysql2-pool": ["INSERT INTO `tests_mysql2_pool`(`text`) VALUES (?), (?)", ["hello2", "hello3"]],
+  "pg": ["INSERT INTO tests_pg(text) VALUES ($1), ($2) RETURNING id", ["hello2", "hello3"]],
+  "pg-pool": ["INSERT INTO tests_pg_pool(text) VALUES ($1), ($2) RETURNING id", ["hello2", "hello3"]],
+  "sqlite3": ["INSERT INTO tests_sqlite3(text) VALUES (?), (?)", ["hello2", "hello3"]],
 }
 
 const selectSqls: {[testcase: string]: string} = {
@@ -119,7 +119,7 @@ describe("connection", () => {
       try {
 
         await connection.query(insertOneSqls[testcase])
-        await connection.query(insertManySqls[testcase])
+        await connection.query(insertManySqls[testcase][0], insertManySqls[testcase][1])
 
         const rows = await connection.select(selectSqls[testcase])
 
