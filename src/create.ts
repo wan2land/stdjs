@@ -3,6 +3,7 @@ import { QueueConfig } from "./interfaces/config"
 import { Queue } from "./interfaces/queue"
 
 // drivers
+import { BeanstalkdQueue } from "./driver/beanstalkd/queue"
 import { LocalQueue } from "./driver/local/queue"
 import { SqsQueue } from "./driver/sqs/queue"
 
@@ -39,6 +40,10 @@ export function create(config: any): any {
     const {adapter, url, ...remainConfig} = config
     const aws = require("aws-sdk")
     return new SqsQueue(new aws.SQS(remainConfig), url)
+  } else if (config.adapter === "beanstalkd") {
+    const Beanstalkd = require("beanstalkd").default
+    const beans = new Beanstalkd(config.host || "localhost", config.port || 11300)
+    return new BeanstalkdQueue(beans, config.tube)
   }
   throw new Error(`cannot resolve adapter named "${config.adapter}"`)
 }

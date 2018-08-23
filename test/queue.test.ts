@@ -5,7 +5,7 @@ import { create, QueueConfig } from "../dist"
 
 require("dotenv").config(process.cwd()) // tslint:disable-line
 
-const testcases = ["local"]
+const testcases = ["local", "beanstalkd"]
 if (process.env.AWS_ACCESS_KEY_ID
   && process.env.AWS_SECRET_ACCESS_KEY
   && process.env.AWS_SQS_URL
@@ -22,6 +22,11 @@ const configs: {[testcase: string]: QueueConfig} = {
     adapter: "sqs",
     region: process.env.AWS_SQS_REGION,
     url: process.env.AWS_SQS_URL,
+  },
+  beanstalkd: {
+    adapter: "beanstalkd",
+    host: "localhost",
+    tube: "jest",
   },
 }
 
@@ -62,6 +67,8 @@ describe("queue", () => {
       await timeout(500)
 
       expect(await queue.receive()).toBeUndefined()
+
+      queue.close()
     })
 
     if (["local"].indexOf(testcase) > -1) {
@@ -70,7 +77,7 @@ describe("queue", () => {
         await queue.flush()
 
         for (let i = 0; i < 10; i++) {
-          await queue.send(`message ${i}`, {timeout: 100})
+          await queue.send(`message ${i}`)
         }
         for (let i = 0; i < 10; i++) {
           const job = await queue.receive()
@@ -86,6 +93,8 @@ describe("queue", () => {
           expect(job.payload).toEqual(`message ${i * 2}`)
           await job.delete()
         }
+
+        queue.close()
       })
     }
   })

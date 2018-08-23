@@ -6,6 +6,9 @@
     "queue-adapter",
     "queue",
     "q",
+    "beanstalkd",
+    "sqs",
+    "aws",
     "adapter",
     "async",
     "typescript"
@@ -43,6 +46,7 @@
     "@types/jest": "^23.3.1",
     "@types/node": "^10.7.0",
     "aws-sdk": "^2.292.0",
+    "beanstalkd": "^2.2.1",
     "dotenv": "^6.0.0",
     "jest": "^23.5.0",
     "rimraf": "^2.6.2",

@@ -50,8 +50,8 @@ Use `adapter` parameter of `create` function`s config
 | adapter      | delays        | priority | timeout        |
 |--------------|---------------|----------|----------------|
 | `local`      | O             | ..todo.. | O              |
-| `sqs`        | O (Max 15min) | Never    | By AWS Console |
-| `beanstalkd` |               | ..todo.. |                |
+| `sqs`        | O (Max 15min) |          | By AWS Console |
+| `beanstalkd` | O             | O        |                |
 
 ## License
 

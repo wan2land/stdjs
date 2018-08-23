@@ -39,7 +39,7 @@ create({
 
 - local
 - sqs (require `npm install aws-sdk --save`)
-- beanstalkd (todo)
+- beanstalkd (require `npm install beanstalkd --save`)
 
 ### Create Connection
 
@@ -50,7 +50,8 @@ Use `adapter` parameter of `create` function`s config
 | adapter      | delays        | priority | timeout        |
 |--------------|---------------|----------|----------------|
 | `local`      | O             | ..todo.. | O              |
-| `sqs`        | O (Max 15min) | Never    | By AWS Console |
+| `sqs`        | O (Max 15min) |          | By AWS Console |
+| `beanstalkd` | O             | O        |                |
 
 ## License
 
