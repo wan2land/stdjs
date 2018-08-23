@@ -36,7 +36,7 @@ export function create(config: any): any {
 
   if (config.adapter === "local") {
     return new LocalQueue(config)
-  } else if (config.adapter === "sqs") {
+  } else if (config.adapter === "aws-sdk") {
     const {adapter, url, ...remainConfig} = config
     const aws = require("aws-sdk")
     return new SqsQueue(new aws.SQS(remainConfig), url)

@@ -19,7 +19,7 @@ const configs: {[testcase: string]: QueueConfig} = {
     timeout: 100,
   },
   sqs: {
-    adapter: "sqs",
+    adapter: "aws-sdk",
     region: process.env.AWS_SQS_REGION,
     url: process.env.AWS_SQS_URL,
   },

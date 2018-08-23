@@ -2,7 +2,7 @@
 // import { SQS } from "aws-sdk"
 
 export interface SqsQueueConfig extends RawAwsConfigurationOptions {
-  readonly adapter: "sqs"
+  readonly adapter: "aws-sdk"
   url: string
   endpoint?: string
   params?: {
