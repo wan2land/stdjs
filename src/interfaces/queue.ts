@@ -1,6 +1,7 @@
 
 export interface Queue<P> {
   flush(): Promise<boolean>
+  close(): Promise<void>
   send(payload: P, options?: SendQueueOptions): Promise<boolean>
   receive(): Promise<Job<P> | undefined>
   delete(job: Job<P>): Promise<boolean>

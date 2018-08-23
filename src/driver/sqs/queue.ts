@@ -9,6 +9,10 @@ export class SqsQueue<P> implements Queue<P> {
   constructor(public client: SQS, public url: string) {
   }
 
+  public async close(): Promise<void> {
+    //
+  }
+
   public async flush(): Promise<boolean> {
     try {
       await purgeQueue(this.client, {

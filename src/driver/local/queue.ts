@@ -11,6 +11,10 @@ export class LocalQueue<P> implements Queue<P> {
   constructor(public timeout = 6000) {
   }
 
+  public async close(): Promise<void> {
+    //
+  }
+
   public async flush(): Promise<boolean> {
     this.jobs = []
     return true
