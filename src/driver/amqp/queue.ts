@@ -15,6 +15,9 @@ export class AmqpQueue<P> implements Queue<P> {
   }
 
   public async close(): Promise<void> {
+    if (this.channel) {
+      await this.channel.close()
+    }
     if (this.connection) {
       await this.connection.close()
     } else {
@@ -47,8 +50,15 @@ export class AmqpQueue<P> implements Queue<P> {
     const channel = await this.getChannel()
     const message = await channel.get(this.queue)
     if (message) {
-      const payload = JSON.parse(message.content.toString())
-      return new AmqpJob(this, message, payload)
+      try {
+        const payload = JSON.parse(message.content.toString())
+        return new AmqpJob(this, message, payload)
+      } catch (e) {
+        if (e instanceof SyntaxError) {
+          return new AmqpJob(this, message, message.content.toString() as any)
+        }
+        throw e
+      }
     }
     return
   }
