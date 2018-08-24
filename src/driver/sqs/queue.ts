@@ -13,28 +13,18 @@ export class SqsQueue<P> implements Queue<P> {
     //
   }
 
-  public async flush(): Promise<boolean> {
-    try {
-      await purgeQueue(this.client, {
-        QueueUrl: this.url,
-      })
-      return true
-    } catch (e) {
-      return false
-    }
+  public async flush(): Promise<void> {
+    await purgeQueue(this.client, {
+      QueueUrl: this.url,
+    })
   }
 
-  public async send(payload: P, options?: SendQueueOptions): Promise<boolean> {
-    try {
-      await sendMessage(this.client, {
-        QueueUrl: this.url,
-        MessageBody: JSON.stringify(payload),
-        DelaySeconds: (options && options.delay) ? Math.max(Math.floor(options.delay / 1000), 900) : void 0,
-      })
-      return true
-    } catch (e) {
-      return false
-    }
+  public async send(payload: P, options?: SendQueueOptions): Promise<void> {
+    await sendMessage(this.client, {
+      QueueUrl: this.url,
+      MessageBody: JSON.stringify(payload),
+      DelaySeconds: (options && options.delay) ? Math.max(Math.floor(options.delay / 1000), 900) : void 0,
+    })
   }
 
   public async receive(): Promise<SqsJob<P> | undefined> {
@@ -50,18 +40,18 @@ export class SqsQueue<P> implements Queue<P> {
     return new SqsJob(this.url, message.ReceiptHandle as string, this, JSON.parse(message.Body as string))
   }
 
-  public delete(job: SqsJob<P>): Promise<boolean> {
-    return new Promise((resolve) => {
+  public delete(job: SqsJob<P>): Promise<void> {
+    return new Promise((resolve, reject) => {
       this.client.deleteMessage({
         QueueUrl: job.url,
         ReceiptHandle: job.id,
       }, (err) => {
         if (err) {
-          resolve(false)
+          reject(err)
           return
         }
         job.isDeleted = true
-        resolve(true)
+        resolve()
       })
     })
   }

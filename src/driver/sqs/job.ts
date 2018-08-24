@@ -8,7 +8,7 @@ export class SqsJob<P> implements Job<P> {
   constructor(public url: string, public id: string, public queue: Queue<P>, public payload: P) {
   }
 
-  public delete(): Promise<boolean> {
+  public done(): Promise<void> {
     return this.queue.delete(this)
   }
 }

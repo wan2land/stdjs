@@ -10,7 +10,7 @@ export class AmqpJob<P> implements Job<P> {
   constructor(public queue: AmqpQueue<P>, public message: Message, public payload: P) {
   }
 
-  public delete(): Promise<boolean> {
+  public done(): Promise<void> {
     return this.queue.delete(this)
   }
 }

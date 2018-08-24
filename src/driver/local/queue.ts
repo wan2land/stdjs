@@ -15,12 +15,11 @@ export class LocalQueue<P> implements Queue<P> {
     //
   }
 
-  public async flush(): Promise<boolean> {
+  public async flush(): Promise<void> {
     this.jobs = []
-    return true
   }
 
-  public async send(payload: P, options?: SendQueueOptions): Promise<boolean> {
+  public async send(payload: P, options?: SendQueueOptions): Promise<void> {
     const job = new LocalJob(this, payload)
     if (options && options.delay) {
       setTimeout(() => {
@@ -29,7 +28,6 @@ export class LocalQueue<P> implements Queue<P> {
     } else {
       this.jobs.push(job)
     }
-    return true
   }
 
   public async receive(): Promise<LocalJob<P> | undefined> {
@@ -47,12 +45,11 @@ export class LocalQueue<P> implements Queue<P> {
     return job
   }
 
-  public async delete(job: LocalJob<P>): Promise<boolean> {
+  public async delete(job: LocalJob<P>): Promise<void> {
     const index = this.runningJobs.indexOf(job)
     if (index > -1) {
       this.runningJobs.splice(index, 1)
     }
     job.isDeleted = true
-    return true
   }
 }

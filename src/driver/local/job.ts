@@ -9,7 +9,7 @@ export class LocalJob<P> implements Job<P> {
   constructor(public queue: LocalQueue<P>, public payload: P) {
   }
 
-  public delete(): Promise<boolean> {
+  public done(): Promise<void> {
     return this.queue.delete(this)
   }
 }

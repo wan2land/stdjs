@@ -28,22 +28,13 @@ export class BeanstalkdQueue<P> implements Queue<P> {
     this.isConnected = true
   }
 
-  public async flush(): Promise<boolean> {
+  public async flush(): Promise<void> {
     await this.connect()
-    let error = null
-    do {
-      error = null
-      try {
-        const res = await this.client.peekReady()
-        await this.client.delete(res[0])
-      } catch (e) {
-        error = e
-      }
-    } while (!error)
-    return true
+    const res = await this.client.peekReady()
+    await this.client.delete(res[0])
   }
 
-  public async send(payload: P, options?: SendQueueOptions): Promise<boolean> {
+  public async send(payload: P, options?: SendQueueOptions): Promise<void> {
     await this.connect()
     await this.client.put(
       (options && options.priority) || DEFAULT_PRIORITY,
@@ -51,7 +42,6 @@ export class BeanstalkdQueue<P> implements Queue<P> {
       DEFAULT_TTR,
       JSON.stringify(payload)
     )
-    return true
   }
 
   public async receive(): Promise<BeanstalkdJob<P> | undefined> {
@@ -68,10 +58,9 @@ export class BeanstalkdQueue<P> implements Queue<P> {
     }
   }
 
-  public async delete(job: BeanstalkdJob<P>): Promise<boolean> {
+  public async delete(job: BeanstalkdJob<P>): Promise<void> {
     await this.connect()
     await this.client.delete(job.id)
     job.isDeleted = true
-    return true
   }
 }

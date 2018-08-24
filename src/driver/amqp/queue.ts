@@ -17,6 +17,8 @@ export class AmqpQueue<P> implements Queue<P> {
   public async close(): Promise<void> {
     if (this.connection) {
       await this.connection.close()
+    } else {
+      await (await this.connecting).close()
     }
   }
 
@@ -29,22 +31,16 @@ export class AmqpQueue<P> implements Queue<P> {
     return this.channel
   }
 
-  public async flush(): Promise<boolean> {
+  public async flush(): Promise<void> {
     const channel = await this.getChannel()
-    try {
-      await channel.purgeQueue(this.queue)
-      return true
-    } catch (e) {
-      return false
-    }
+    await channel.purgeQueue(this.queue)
   }
 
-  public async send(payload: P, options?: SendQueueOptions): Promise<boolean> {
+  public async send(payload: P, options?: SendQueueOptions): Promise<void> {
     const channel = await this.getChannel()
     await channel.sendToQueue(this.queue, new Buffer(JSON.stringify(payload)), {
       priority: (options && options.priority) || DEFAULT_PRIORITY,
     })
-    return true
   }
 
   public async receive(): Promise<AmqpJob<P> | undefined> {
@@ -57,10 +53,9 @@ export class AmqpQueue<P> implements Queue<P> {
     return
   }
 
-  public async delete(job: AmqpJob<P>): Promise<boolean> {
+  public async delete(job: AmqpJob<P>): Promise<void> {
     const channel = await this.getChannel()
     channel.ack(job.message)
     job.isDeleted = true
-    return true
   }
 }
