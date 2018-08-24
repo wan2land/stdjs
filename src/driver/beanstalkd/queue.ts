@@ -30,8 +30,15 @@ export class BeanstalkdQueue<P> implements Queue<P> {
 
   public async flush(): Promise<void> {
     await this.connect()
-    const res = await this.client.peekReady()
-    await this.client.delete(res[0])
+    try {
+      const res = await this.client.peekReady()
+      await this.client.delete(res[0])
+    } catch (e) {
+      if (e.message === "NOT_FOUND") {
+        return
+      }
+      throw e
+    }
   }
 
   public async send(payload: P, options?: SendQueueOptions): Promise<void> {
