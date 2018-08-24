@@ -3,6 +3,7 @@ import { QueueConfig } from "./interfaces/config"
 import { Queue } from "./interfaces/queue"
 
 // drivers
+import { AmqpQueue } from "./driver/amqp/queue"
 import { BeanstalkdQueue } from "./driver/beanstalkd/queue"
 import { LocalQueue } from "./driver/local/queue"
 import { SqsQueue } from "./driver/sqs/queue"
@@ -44,6 +45,10 @@ export function create(config: any): any {
     const Beanstalkd = require("beanstalkd").default
     const beans = new Beanstalkd(config.host || "localhost", config.port || 11300)
     return new BeanstalkdQueue(beans, config.tube)
+  } else if (config.adapter === "amqplib") {
+    const {adapter, queue, ...remainConfig} = config
+    const amqp = require("amqplib")
+    return new AmqpQueue(amqp.connect(remainConfig), queue)
   }
   throw new Error(`cannot resolve adapter named "${config.adapter}"`)
 }

@@ -25,6 +25,7 @@ export class BeanstalkdQueue<P> implements Queue<P> {
       await this.client.connect()
     }
     await this.client.use(this.tube)
+    this.isConnected = true
   }
 
   public async flush(): Promise<boolean> {

@@ -4,3 +4,7 @@ services:
     image: schickling/beanstalkd
     ports:
       - 11300:11300
+  rabbitmq:
+    image: rabbitmq:alpine
+    ports:
+      - 5672:5672

@@ -40,6 +40,7 @@ create({
 - local
 - AWS, SQS (require `npm install aws-sdk --save`)
 - beanstalkd (require `npm install beanstalkd --save`)
+- amqp (such as, RabbitMQ) (require `npm install amqplib --save`)
 
 ### Create Connection
 
@@ -50,8 +51,9 @@ Use `adapter` parameter of `create` function`s config
 | adapter      | delays        | priority | timeout        |
 |--------------|---------------|----------|----------------|
 | `local`      | O             | ..todo.. | O              |
-| `aws-sdk`        | O (Max 15min) |          | By AWS Console |
+| `aws-sdk`    | O (Max 15min) |          | By AWS Console |
 | `beanstalkd` | O             | O        |                |
+| `amqplib`    |               | O        |                |
 
 ## License
 

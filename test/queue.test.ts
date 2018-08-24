@@ -5,7 +5,7 @@ import { create, QueueConfig } from "../dist"
 
 require("dotenv").config(process.cwd()) // tslint:disable-line
 
-const testcases = ["local", "beanstalkd"]
+const testcases = ["local", "beanstalkd", "rabbitmq"]
 if (process.env.AWS_ACCESS_KEY_ID
   && process.env.AWS_SECRET_ACCESS_KEY
   && process.env.AWS_SQS_URL
@@ -27,6 +27,10 @@ const configs: {[testcase: string]: QueueConfig} = {
     adapter: "beanstalkd",
     host: "localhost",
     tube: "jest",
+  },
+  rabbitmq: {
+    adapter: "amqplib",
+    queue: "jest",
   },
 }
 
