@@ -1,11 +1,14 @@
 {
   "name": "async-queue-adapter",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Async Queue Adapter for Javascript(& Typescript).",
   "keywords": [
     "queue-adapter",
     "queue",
     "q",
+    "rabbitmq",
+    "amqp",
+    "amqplib",
     "beanstalkd",
     "sqs",
     "aws",
