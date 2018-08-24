@@ -25,18 +25,21 @@ export function create<P>(configs: {[name: string]: QueueConfig}): {[name: strin
 export function create<P>(config: QueueConfig): Queue<P>
 export function create(config: any): any {
   if (isArrayOfConfig(config)) {
-    return config.map(conf => create(conf))
+    return config.map(conf => createQueue(conf))
   }
   if (isMapOfConfig(config)) {
     const connections: {[name: string]: Queue<{}>} = {}
     Object.keys(config).map((key) => {
-      connections[key] = create(config[key])
+      connections[key] = createQueue(config[key])
     })
     return connections
   }
+  return createQueue(config)
+}
 
+function createQueue<P>(config: QueueConfig): Queue<P> {
   if (config.adapter === "local") {
-    return new LocalQueue(config)
+    return new LocalQueue(config.timeout)
   } else if (config.adapter === "aws-sdk") {
     const {adapter, url, ...remainConfig} = config
     const aws = require("aws-sdk")
@@ -50,5 +53,5 @@ export function create(config: any): any {
     const amqp = require("amqplib")
     return new AmqpQueue(amqp.connect(remainConfig), queue)
   }
-  throw new Error(`cannot resolve adapter named "${config.adapter}"`)
+  throw new Error(`cannot resolve adapter named "${(config as any).adapter}"`)
 }
