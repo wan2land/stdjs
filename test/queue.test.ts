@@ -1,7 +1,7 @@
 
 import "jest"
 
-import { create, QueueConfig } from "../dist"
+import { create, Priority, QueueConfig } from "../dist"
 
 require("dotenv").config(process.cwd()) // tslint:disable-line
 
@@ -61,7 +61,7 @@ describe("queue", () => {
         if (i % 2 === 0) {
           await queue.delete(job)
         } else {
-          await job.delete()
+          await job.done()
         }
 
         expect(job.isDeleted).toBeTruthy()
@@ -86,7 +86,7 @@ describe("queue", () => {
         for (let i = 0; i < 10; i++) {
           const job = await queue.receive()
           if (i % 2 === 1) {
-            await job.delete()
+            await job.done()
           }
         }
 
@@ -95,9 +95,37 @@ describe("queue", () => {
         for (let i = 0; i < 5; i++) {
           const job = await queue.receive()
           expect(job.payload).toEqual(`message ${i * 2}`)
-          await job.delete()
+          await job.done()
         }
 
+        queue.close()
+      })
+    }
+
+    if (["beanstalkd"].indexOf(testcase) > -1) {
+      it(`test ${testcase} priority`, async () => {
+        const queue = create(configs[testcase])
+        await queue.flush()
+
+        await queue.send(`message normal`, {priority: Priority.Normal})
+        await queue.send(`message high`, {priority: Priority.High})
+        await queue.send(`message highest`, {priority: Priority.Highest})
+
+        {
+          const job = await queue.receive()
+          expect(job.payload).toEqual(`message highest`)
+          await job.done()
+        }
+        {
+          const job = await queue.receive()
+          expect(job.payload).toEqual(`message high`)
+          await job.done()
+        }
+        {
+          const job = await queue.receive()
+          expect(job.payload).toEqual(`message normal`)
+          await job.done()
+        }
         queue.close()
       })
     }

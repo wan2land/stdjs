@@ -1,4 +1,10 @@
 
+export enum Priority {
+  Normal = 10,
+  High = 30,
+  Highest = 50,
+}
+
 export interface Queue<P> {
   close(): Promise<void>
   flush(): Promise<void>

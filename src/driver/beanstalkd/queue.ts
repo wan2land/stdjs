@@ -1,10 +1,13 @@
 
-import { Queue, SendQueueOptions } from "../../interfaces/queue"
+import { Priority, Queue, SendQueueOptions } from "../../interfaces/queue"
+import { priorityScale } from "../../utils"
 import { BeanstalkdJob } from "./job"
 
-const DEFAULT_PRIORITY = 1024
+const DEFAULT_PRIORITY = Priority.Normal
 const DEFAULT_DELAY = 0
 const DEFAULT_TTR = 1
+
+const scale = priorityScale([0, 255], [255, 0])
 
 export class BeanstalkdQueue<P> implements Queue<P> {
 
@@ -30,21 +33,23 @@ export class BeanstalkdQueue<P> implements Queue<P> {
 
   public async flush(): Promise<void> {
     await this.connect()
-    try {
-      const res = await this.client.peekReady()
-      await this.client.delete(res[0])
-    } catch (e) {
-      if (e.message === "NOT_FOUND") {
-        return
+    while (1) {
+      try {
+        const res = await this.client.peekReady()
+        await this.client.delete(res[0])
+      } catch (e) {
+        if (e.message === "NOT_FOUND") {
+          break
+        }
+        throw e
       }
-      throw e
     }
   }
 
   public async send(payload: P, options?: SendQueueOptions): Promise<void> {
     await this.connect()
     await this.client.put(
-      (options && options.priority) || DEFAULT_PRIORITY,
+      scale((options && options.priority) || DEFAULT_PRIORITY),
       (options && options.delay) || DEFAULT_DELAY,
       DEFAULT_TTR,
       JSON.stringify(payload)

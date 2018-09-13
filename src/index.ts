@@ -2,8 +2,7 @@
 export { create} from "./create"
 
 export { QueueConfig } from "./interfaces/config"
-export { Job, Queue } from "./interfaces/queue"
-
+export { Job, Priority, Queue, SendQueueOptions } from "./interfaces/queue"
 
 export * from "./driver/amqp/interfaces"
 export { AmqpQueue } from "./driver/amqp/queue"
