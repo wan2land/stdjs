@@ -1,7 +1,7 @@
 
-import { Channel, Connection } from "amqplib"
 import { Priority, Queue, SendQueueOptions } from "../../interfaces/queue"
 import { priorityScale } from "../../utils"
+import { RawAmqpChannel, RawAmqpConnection } from "./interfaces"
 import { AmqpJob } from "./job"
 
 const DEFAULT_PRIORITY = Priority.Normal
@@ -10,11 +10,11 @@ const scale = priorityScale([0, 255], [0, 255])
 
 export class AmqpQueue<P> implements Queue<P> {
 
-  public connection?: Connection
+  public connection?: RawAmqpConnection
 
-  public channel?: Channel
+  public channel?: RawAmqpChannel
 
-  constructor(public connecting: Promise<Connection>, public queue = "default") {
+  constructor(public connecting: Promise<RawAmqpConnection>, public queue = "default") {
   }
 
   public async close(): Promise<void> {
@@ -28,7 +28,7 @@ export class AmqpQueue<P> implements Queue<P> {
     }
   }
 
-  public async getChannel(): Promise<Channel> {
+  public async getChannel(): Promise<RawAmqpChannel> {
     if (!this.channel) {
       this.connection = await this.connecting
       this.channel = await this.connection.createChannel()
