@@ -1,9 +1,12 @@
 
 import { Channel, Connection } from "amqplib"
-import { Queue, SendQueueOptions } from "../../interfaces/queue"
+import { Priority, Queue, SendQueueOptions } from "../../interfaces/queue"
+import { priorityScale } from "../../utils"
 import { AmqpJob } from "./job"
 
-const DEFAULT_PRIORITY = 10
+const DEFAULT_PRIORITY = Priority.Normal
+
+const scale = priorityScale([0, 255], [0, 255])
 
 export class AmqpQueue<P> implements Queue<P> {
 
@@ -29,7 +32,9 @@ export class AmqpQueue<P> implements Queue<P> {
     if (!this.channel) {
       this.connection = await this.connecting
       this.channel = await this.connection.createChannel()
-      await this.channel.assertQueue(this.queue)
+      await this.channel.assertQueue(this.queue, {
+        maxPriority: 255,
+      })
     }
     return this.channel
   }
@@ -42,7 +47,7 @@ export class AmqpQueue<P> implements Queue<P> {
   public async send(payload: P, options?: SendQueueOptions): Promise<void> {
     const channel = await this.getChannel()
     await channel.sendToQueue(this.queue, new Buffer(JSON.stringify(payload)), {
-      priority: (options && options.priority) || DEFAULT_PRIORITY,
+      priority: scale((options && options.priority) || DEFAULT_PRIORITY),
     })
   }
 

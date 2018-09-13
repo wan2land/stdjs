@@ -6,12 +6,12 @@ import { create, Priority, QueueConfig } from "../dist"
 require("dotenv").config(process.cwd()) // tslint:disable-line
 
 const testcases = ["local", "beanstalkd", "rabbitmq"]
-if (process.env.AWS_ACCESS_KEY_ID
-  && process.env.AWS_SECRET_ACCESS_KEY
-  && process.env.AWS_SQS_URL
-  && process.env.AWS_SQS_REGION) {
-  testcases.push("sqs")
-}
+// if (process.env.AWS_ACCESS_KEY_ID
+//   && process.env.AWS_SECRET_ACCESS_KEY
+//   && process.env.AWS_SQS_URL
+//   && process.env.AWS_SQS_REGION) {
+//   testcases.push("sqs")
+// }
 
 const configs: {[testcase: string]: QueueConfig} = {
   local: {
@@ -102,31 +102,34 @@ describe("queue", () => {
       })
     }
 
-    if (["beanstalkd"].indexOf(testcase) > -1) {
+    if (["beanstalkd", "rabbitmq"].indexOf(testcase) > -1) {
       it(`test ${testcase} priority`, async () => {
-        const queue = create(configs[testcase])
-        await queue.flush()
+        const producer = create(configs[testcase])
+        const consumer = create(configs[testcase])
+        await producer.flush()
 
-        await queue.send(`message normal`, {priority: Priority.Normal})
-        await queue.send(`message high`, {priority: Priority.High})
-        await queue.send(`message highest`, {priority: Priority.Highest})
+        await producer.send(`message normal`, {priority: Priority.Normal})
+        await producer.send(`message high`, {priority: Priority.High})
+        await producer.send(`message highest`, {priority: Priority.Highest})
+        producer.close()
 
         {
-          const job = await queue.receive()
+          const job = await consumer.receive()
           expect(job.payload).toEqual(`message highest`)
           await job.done()
         }
         {
-          const job = await queue.receive()
+          const job = await consumer.receive()
           expect(job.payload).toEqual(`message high`)
           await job.done()
         }
         {
-          const job = await queue.receive()
+          const job = await consumer.receive()
           expect(job.payload).toEqual(`message normal`)
           await job.done()
         }
-        queue.close()
+
+        consumer.close()
       })
     }
   })
