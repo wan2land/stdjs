@@ -4,7 +4,7 @@
 [![Version](https://img.shields.io/npm/v/@stdjs/queue.svg)](https://www.npmjs.com/package/@stdjs/queue)
 [![License](https://img.shields.io/npm/l/@stdjs/queue.svg)](https://www.npmjs.com/package/@stdjs/queue)
 
-[![NPM](https://nodei.co/npm/@stdjs/queue.png)](https://www.npmjs.com/package/@stdjs/queue)
+[![NPM](https://nodeico.herokuapp.com/@stdjs/queue.svg)](https://www.npmjs.com/package/@stdjs/queue)
 
 Queue Adapter with Async/Promise for Javascript(& Typescript).
 
