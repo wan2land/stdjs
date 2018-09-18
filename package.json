@@ -1,7 +1,7 @@
 {
-  "name": "async-queue-adapter",
-  "version": "0.3.0",
-  "description": "Async Queue Adapter for Javascript(& Typescript).",
+  "name": "@stdjs/queue",
+  "version": "1.0.0",
+  "description": "Queue Adapter with Async/Promise for Javascript(& Typescript).",
   "keywords": [
     "queue-adapter",
     "queue",
@@ -14,6 +14,7 @@
     "aws",
     "adapter",
     "async",
+    "promise",
     "typescript"
   ],
   "author": "Cris <corgidisco@gmail.com>",
