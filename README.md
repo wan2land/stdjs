@@ -1,6 +1,5 @@
 # STDJS - Queue
 
-[![Build](https://travis-ci.org/corgidisco/async-queue-adapter.svg?branch=master)](https://travis-ci.org/corgidisco/async-queue-adapter)
 [![Downloads](https://img.shields.io/npm/dt/@stdjs/queue.svg)](https://npmcharts.com/compare/@stdjs/queue?minimal=true)
 [![Version](https://img.shields.io/npm/v/@stdjs/queue.svg)](https://www.npmjs.com/package/@stdjs/queue)
 [![License](https://img.shields.io/npm/l/@stdjs/queue.svg)](https://www.npmjs.com/package/@stdjs/queue)
