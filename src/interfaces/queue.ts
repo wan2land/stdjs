@@ -7,6 +7,8 @@ export enum Priority {
 
 export interface Queue<P> {
   close(): Promise<void>
+  countWaiting(): Promise<number>
+  countRunning(): Promise<number>
   flush(): Promise<void>
   send(payload: P, options?: SendQueueOptions): Promise<void>
   receive(): Promise<Job<P> | undefined>

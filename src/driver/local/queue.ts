@@ -11,6 +11,14 @@ export class LocalQueue<P> implements Queue<P> {
   constructor(public timeout = 6000) {
   }
 
+  public async countWaiting(): Promise<number> {
+    return this.jobs.length
+  }
+
+  public async countRunning(): Promise<number> {
+    return this.runningJobs.length
+  }
+
   public async close(): Promise<void> {
     //
   }

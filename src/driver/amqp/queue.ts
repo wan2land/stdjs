@@ -1,20 +1,24 @@
 
+import { Channel, Connection } from "amqplib"
 import { Priority, Queue, SendQueueOptions } from "../../interfaces/queue"
 import { priorityScale } from "../../utils"
-import { RawAmqpChannel, RawAmqpConnection } from "./interfaces"
 import { AmqpJob } from "./job"
 
 const DEFAULT_PRIORITY = Priority.Normal
 
 const scale = priorityScale([0, 255], [0, 255])
 
+const assertProps = {
+  maxPriority: 255,
+}
+
 export class AmqpQueue<P> implements Queue<P> {
 
-  public connection?: RawAmqpConnection
+  public connection?: Connection
 
-  public channel?: RawAmqpChannel
+  public channel?: Channel
 
-  constructor(public connecting: Promise<RawAmqpConnection>, public queue = "default") {
+  constructor(public connecting: Promise<Connection>, public queue = "default") {
   }
 
   public async close(): Promise<void> {
@@ -28,15 +32,23 @@ export class AmqpQueue<P> implements Queue<P> {
     }
   }
 
-  public async getChannel(): Promise<RawAmqpChannel> {
+  public async getChannel(): Promise<Channel> {
     if (!this.channel) {
       this.connection = await this.connecting
       this.channel = await this.connection.createChannel()
-      await this.channel.assertQueue(this.queue, {
-        maxPriority: 255,
-      })
     }
+    await this.channel.assertQueue(this.queue, assertProps)
     return this.channel
+  }
+
+  public async countWaiting(): Promise<number> {
+    const channel = await this.getChannel()
+    const result = await channel.assertQueue(this.queue, assertProps)
+    return result.messageCount
+  }
+
+  public async countRunning(): Promise<number> {
+    throw new Error("unsupport count running jobs")
   }
 
   public async flush(): Promise<void> {

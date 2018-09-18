@@ -20,6 +20,22 @@ export class BeanstalkdQueue<P> implements Queue<P> {
     await this.client.quit()
   }
 
+  public async countWaiting(): Promise<number> {
+    const stats = await this.client.stats()
+    if (stats["current-jobs-ready"]) {
+      return parseInt(stats["current-jobs-ready"], 10)
+    }
+    throw new Error("cannot count waiting jobs")
+  }
+
+  public async countRunning(): Promise<number> {
+    const stats = await this.client.stats()
+    if (stats["current-jobs-reserved"]) {
+      return parseInt(stats["current-jobs-reserved"], 10)
+    }
+    throw new Error("cannot count running jobs")
+  }
+
   public async connect(): Promise<void> {
     if (this.isConnected) {
       return

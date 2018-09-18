@@ -2,7 +2,7 @@
 import { SQS } from "aws-sdk"
 import { Queue, SendQueueOptions } from "../../interfaces/queue"
 import { SqsJob } from "./job"
-import { purgeQueue, receiveMessages, sendMessage } from "./promise"
+import { getQueueAttributes, purgeQueue, receiveMessages, sendMessage } from "./promise"
 
 export class SqsQueue<P> implements Queue<P> {
 
@@ -11,6 +11,32 @@ export class SqsQueue<P> implements Queue<P> {
 
   public async close(): Promise<void> {
     //
+  }
+
+  public async countWaiting(): Promise<number> {
+    const attrs = await getQueueAttributes(this.client, {
+      QueueUrl: this.url,
+      AttributeNames: [
+        "ApproximateNumberOfMessages",
+      ],
+    })
+    if (attrs.Attributes && attrs.Attributes.ApproximateNumberOfMessages) {
+      return parseInt(attrs.Attributes.ApproximateNumberOfMessages, 10)
+    }
+    throw new Error("cannot count waiting jobs")
+  }
+
+  public async countRunning(): Promise<number> {
+    const attrs = await getQueueAttributes(this.client, {
+      QueueUrl: this.url,
+      AttributeNames: [
+        "ApproximateNumberOfMessagesNotVisible",
+      ],
+    })
+    if (attrs.Attributes && attrs.Attributes.ApproximateNumberOfMessagesNotVisible) {
+      return parseInt(attrs.Attributes.ApproximateNumberOfMessagesNotVisible, 10)
+    }
+    throw new Error("cannot count running jobs")
   }
 
   public async flush(): Promise<void> {

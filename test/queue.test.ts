@@ -132,5 +132,33 @@ describe("queue", () => {
         consumer.close()
       })
     }
+
+    if (["local", "sqs", "beanstalkd", "rabbitmq"].indexOf(testcase) > -1) {
+      it(`test ${testcase} count`, async () => {
+        const queue = create(configs[testcase])
+        await queue.flush()
+
+        for (let i = 0; i < 10; i++) {
+          await queue.send(`message ${i}`)
+        }
+
+        expect(await queue.countWaiting()).toBe(10)
+
+        for (let i = 0; i < 4; i++) {
+          await queue.receive()
+        }
+
+        expect(await queue.countWaiting()).toBe(6)
+        try {
+          expect(await queue.countRunning()).toBe(4)
+        } catch (e) {
+          if (e.message !== "unsupport count running jobs") {
+            throw e
+          }
+        }
+
+        queue.close()
+      })
+    }
   })
 })

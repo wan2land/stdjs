@@ -1,6 +1,18 @@
 
 import { SQS } from "aws-sdk"
 
+export function getQueueAttributes(client: SQS, request: SQS.GetQueueAttributesRequest): Promise<SQS.GetQueueAttributesResult> {
+  return new Promise((resolve, reject) => {
+    client.getQueueAttributes(request, (err, params) => {
+      if (err) {
+        reject(err)
+        return
+      }
+      resolve(params)
+    })
+  })
+}
+
 export function purgeQueue(client: SQS, request: SQS.PurgeQueueRequest): Promise<void> {
   return new Promise((resolve, reject) => {
     client.purgeQueue(request, (err) => {
