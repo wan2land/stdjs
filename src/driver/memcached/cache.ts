@@ -24,18 +24,19 @@ export class MemcachedCache implements Cache {
   }
 
   public set<P>(key: string, value: P, ttl?: number): Promise<boolean> {
-    const expire = typeof ttl !== "undefined" && ttl > 0
-      ? Math.floor(ttl / 1000)
-      : 2592000
-
     return new Promise((resolve, reject) => {
-      this.memcached.set(key, value, expire, (err, result) => {
-        if (err) {
-          reject(err)
-          return
+      this.memcached.set(
+        key,
+        value,
+        typeof ttl !== "undefined" && ttl >= 0 ? ttl : 2592000,
+        (err, result) => {
+          if (err) {
+            reject(err)
+            return
+          }
+          resolve(result)
         }
-        resolve(result)
-      })
+      )
     })
   }
 

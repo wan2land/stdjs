@@ -19,8 +19,8 @@ export class LocalCache implements Cache {
 
   public async set<P>(key: string, value: P, ttl?: number): Promise<boolean> {
     this.values.set(key, value)
-    const expire = typeof ttl !== "undefined" && ttl > 0
-      ? new Date().getTime() + ttl
+    const expire = typeof ttl !== "undefined" && ttl >= 0
+      ? new Date().getTime() + ttl * 1000
       : Number.MAX_SAFE_INTEGER
     this.expires.set(key, expire)
     return true

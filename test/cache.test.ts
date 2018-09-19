@@ -3,7 +3,7 @@ import "jest"
 
 import { CacheConfig, create } from "../dist"
 
-const testcases = ["local", "memcached"]
+const testcases = ["local", "memcached", "redis"]
 
 const configs: {[testcase: string]: CacheConfig} = {
   local: {
@@ -12,6 +12,11 @@ const configs: {[testcase: string]: CacheConfig} = {
   memcached: {
     adapter: "memcached",
     location: "127.0.0.1:11211",
+  },
+  redis: {
+    adapter: "redis",
+    host: "127.0.0.1",
+    port: 6379,
   },
 }
 
@@ -55,8 +60,10 @@ describe("cache", () => {
       await cache.clear()
 
       for (let i = 0; i < 10; i++) {
-        await cache.set(`item_${i}`, `data ${i}`, 1000)
+        await cache.set(`item_${i}`, `data ${i}`, 2)
       }
+
+      await timeout(1300)
 
       for (let i = 0; i < 10; i++) {
         await expect(cache.has(`item_${i}`)).resolves.toBeTruthy()

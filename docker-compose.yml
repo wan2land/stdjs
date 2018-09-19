@@ -4,3 +4,7 @@ services:
     image: memcached:alpine
     ports:
       - 11211:11211
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
