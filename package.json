@@ -6,6 +6,8 @@
     "cache-adapter",
     "cache",
     "adapter",
+    "redis",
+    "memcached",
     "async",
     "promise",
     "typescript"
