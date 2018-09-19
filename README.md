@@ -35,6 +35,27 @@ export interface Cache {
 }
 ```
 
+## Usage
+
+You can create as follows:
+
+(Please refer to the Config section for config.)
+
+```javascript
+const cache = require("@stdjs/cache")
+const storage = cache.create({
+  adapter: "local"
+  /* config */
+})
+
+// or
+import { create } from "@stdjs/cache"
+const storage = create({
+  adapter: "local"
+  /* config */
+})
+```
+
 ## License
 
 MIT
