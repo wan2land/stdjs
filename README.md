@@ -8,16 +8,31 @@
 
 Cache Adapter with Async/Promise for Javascript(& Typescript).
 
-
-### Support Cache
-
-- local
-
+There are a lot of cache libraries. Even older libraries may not support **Promise**. I've gathered most cache libraries into one interface.
 
 ## Installation
 
 ```bash
 npm install @stdjs/cache --save
+```
+
+## Support Cache
+
+- local
+- (todo) memcached
+- (todo) redis
+
+## Interfaces
+
+```typescript
+export interface Cache {
+  close(): Promise<boolean>
+  get<P>(key: string, defaultValue?: P): Promise<P | undefined>
+  set<P>(key: string, value: P, ttl?: number): Promise<boolean>
+  has(key: string): Promise<boolean>
+  delete(key: string): Promise<boolean>
+  clear(): Promise<boolean>
+}
 ```
 
 ## License
