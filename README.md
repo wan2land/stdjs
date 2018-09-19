@@ -20,7 +20,7 @@ npm install @stdjs/cache --save
 
 - local
 - memcached (require `npm install memcached --save`)
-- (todo) redis
+- redis (require `npm install redis --save`)
 
 ## Interfaces
 
@@ -76,6 +76,17 @@ const storage = create({
   location: "127.0.0.1:11211",
 
   // https://www.npmjs.com/package/memcached#options
+  ...options,
+})
+```
+
+### Create Redis Cache
+
+```ts
+const storage = create({
+  adapter: "redis",
+
+  // https://www.npmjs.com/package/redis#rediscreateclient
   ...options,
 })
 ```

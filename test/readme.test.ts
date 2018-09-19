@@ -1,7 +1,7 @@
 
 import "jest"
 
-import { create, LocalCache, MemcachedCache } from "../dist"
+import { create, LocalCache, MemcachedCache, RedisCache } from "../dist"
 
 describe("readmd", () => {
   it("test create local", async () => {
@@ -29,5 +29,23 @@ describe("readmd", () => {
     // endsection
 
     expect(storage instanceof MemcachedCache).toBeTruthy()
+  })
+
+  it("test create redis", async () => {
+    const options = {
+      host: "127.0.0.1",
+      port: 6379,
+    }
+
+    // section:create-redis
+    const storage = create({
+      adapter: "redis",
+
+      // https://www.npmjs.com/package/redis#rediscreateclient
+      ...options,
+    })
+    // endsection
+
+    expect(storage instanceof RedisCache).toBeTruthy()
   })
 })

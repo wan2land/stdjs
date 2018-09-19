@@ -20,7 +20,7 @@ npm install @stdjs/cache --save
 
 - local
 - memcached (require `npm install memcached --save`)
-- (todo) redis
+- redis (require `npm install redis --save`)
 
 ## Interfaces
 
@@ -56,6 +56,10 @@ const storage = create({
 Memcached's ttl has a maximum value of 30 days. Even if you do not specify ttl, it is automatically set to 30 days.
 
 @code("test/readme.test.ts@create-memcached")
+
+### Create Redis Cache
+
+@code("test/readme.test.ts@create-redis")
 
 ## License
 
