@@ -19,7 +19,7 @@ npm install @stdjs/cache --save
 ## Support Cache
 
 - local
-- (todo) memcached
+- memcached (require `npm install memcached --save`)
 - (todo) redis
 
 ## Interfaces
@@ -46,6 +46,16 @@ const storage = create({
   /* config */
 })
 ```
+
+### Create Local Cache
+
+@code("test/readme.test.ts@create-local")
+
+### Create Memcached Cache
+
+Memcached's ttl has a maximum value of 30 days. Even if you do not specify ttl, it is automatically set to 30 days.
+
+@code("test/readme.test.ts@create-memcached")
 
 ## License
 

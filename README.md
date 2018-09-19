@@ -19,7 +19,7 @@ npm install @stdjs/cache --save
 ## Support Cache
 
 - local
-- (todo) memcached
+- memcached (require `npm install memcached --save`)
 - (todo) redis
 
 ## Interfaces
@@ -53,6 +53,30 @@ import { create } from "@stdjs/cache"
 const storage = create({
   adapter: "local"
   /* config */
+})
+```
+
+### Create Local Cache
+
+```ts
+const storage = create({
+  adapter: "local",
+})
+```
+
+### Create Memcached Cache
+
+Memcached's ttl has a maximum value of 30 days. Even if you do not specify ttl, it is automatically set to 30 days.
+
+```ts
+const storage = create({
+  adapter: "memcached",
+
+  // https://www.npmjs.com/package/memcached#server-locations
+  location: "127.0.0.1:11211",
+
+  // https://www.npmjs.com/package/memcached#options
+  ...options,
 })
 ```
 
