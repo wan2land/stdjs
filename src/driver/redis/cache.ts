@@ -8,6 +8,7 @@ export class RedisCache implements Cache {
   }
 
   public async close(): Promise<boolean> {
+    this.redis.end()
     return true // nothing to close :-)
   }
 

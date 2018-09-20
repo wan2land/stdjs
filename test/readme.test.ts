@@ -13,6 +13,8 @@ describe("readmd", () => {
     // endsection
 
     expect(storage instanceof LocalCache).toBeTruthy()
+
+    storage.close()
   })
 
   it("test create memcached", async () => {
@@ -32,6 +34,8 @@ describe("readmd", () => {
     // endsection
 
     expect(storage instanceof MemcachedCache).toBeTruthy()
+
+    storage.close()
   })
 
   it("test create redis", async () => {
@@ -51,5 +55,7 @@ describe("readmd", () => {
     // endsection
 
     expect(storage instanceof RedisCache).toBeTruthy()
+
+    storage.close()
   })
 })

@@ -8,7 +8,8 @@ export class MemcachedCache implements Cache {
   }
 
   public async close(): Promise<boolean> {
-    return true // nothing to close :-)
+    this.memcached.end()
+    return true
   }
 
   public get<P>(key: string, defaultValue?: P): Promise<P | undefined> {
