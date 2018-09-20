@@ -6,7 +6,7 @@ import { LocalCache } from "./driver/local/cache"
 import { MemcachedCache } from "./driver/memcached/cache"
 import { RedisCache } from "./driver/redis/cache"
 
-export function create<P>(config: CacheConfig): Cache {
+export function create(config: CacheConfig): Cache {
   if (config.adapter === "local") {
     return new LocalCache()
   } else if (config.adapter === "memcached") {
