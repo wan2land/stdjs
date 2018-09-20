@@ -1,7 +1,8 @@
 
 import "jest"
+import { getConfig, timeout } from "./helper"
 
-import { create, LocalCache, MemcachedCache, RedisCache } from "../dist"
+import { create, LocalCache, MemcachedCache, MemcachedCacheConfig, RedisCache, RedisCacheConfig } from "../dist"
 
 describe("readmd", () => {
   it("test create local", async () => {
@@ -16,12 +17,14 @@ describe("readmd", () => {
 
   it("test create memcached", async () => {
     const options = {}
+    const location = ((await getConfig("memcached")) as MemcachedCacheConfig).location
+
     // section:create-memcached
     const storage = create({
       adapter: "memcached",
 
       // https://www.npmjs.com/package/memcached#server-locations
-      location: "127.0.0.1:11211",
+      location, // like, "127.0.0.1:11211", ["127.0.0.1:11211", "127.0.0.1:11212"] ...
 
       // https://www.npmjs.com/package/memcached#options
       ...options,
@@ -32,9 +35,10 @@ describe("readmd", () => {
   })
 
   it("test create redis", async () => {
+    const port = ((await getConfig("redis")) as RedisCacheConfig).port
     const options = {
       host: "127.0.0.1",
-      port: 6379,
+      port,
     }
 
     // section:create-redis

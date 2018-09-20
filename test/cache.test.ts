@@ -1,34 +1,16 @@
 
 import "jest"
+import { getConfig, timeout } from "./helper"
 
-import { CacheConfig, create } from "../dist"
+import { create } from "../dist"
 
 const testcases = ["local", "memcached", "redis"]
-
-const configs: {[testcase: string]: CacheConfig} = {
-  local: {
-    adapter: "local",
-  },
-  memcached: {
-    adapter: "memcached",
-    location: "127.0.0.1:11211",
-  },
-  redis: {
-    adapter: "redis",
-    host: "127.0.0.1",
-    port: 6379,
-  },
-}
-
-function timeout(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
 
 describe("cache", () => {
 
   testcases.forEach(testcase => {
     it(`test ${testcase} basic methods`, async () => {
-      const cache = create(configs[testcase])
+      const cache = create(await getConfig(testcase))
       await expect(cache.clear()).resolves.toBeTruthy()
 
       for (let i = 0; i < 10; i++) {
@@ -56,7 +38,7 @@ describe("cache", () => {
     })
 
     it(`test ${testcase} expire`, async () => {
-      const cache = create(configs[testcase])
+      const cache = create(await getConfig(testcase))
       await cache.clear()
 
       for (let i = 0; i < 10; i++) {

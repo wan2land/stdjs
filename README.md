@@ -73,7 +73,7 @@ const storage = create({
   adapter: "memcached",
 
   // https://www.npmjs.com/package/memcached#server-locations
-  location: "127.0.0.1:11211",
+  location, // like, "127.0.0.1:11211", ["127.0.0.1:11211", "127.0.0.1:11212"] ...
 
   // https://www.npmjs.com/package/memcached#options
   ...options,
