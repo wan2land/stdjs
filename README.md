@@ -1,5 +1,6 @@
 # STDJS - Cache
 
+[![Build](https://travis-ci.org/corgidisco/stdjs-cache.svg?branch=master)](https://travis-ci.org/corgidisco/stdjs-cache)
 [![Downloads](https://img.shields.io/npm/dt/@stdjs/cache.svg)](https://npmcharts.com/compare/@stdjs/cache?minimal=true)
 [![Version](https://img.shields.io/npm/v/@stdjs/cache.svg)](https://www.npmjs.com/package/@stdjs/cache)
 [![License](https://img.shields.io/npm/l/@stdjs/cache.svg)](https://www.npmjs.com/package/@stdjs/cache)
