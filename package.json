@@ -8,6 +8,7 @@
     "adapter",
     "redis",
     "memcached",
+    "elasticache",
     "async",
     "promise",
     "typescript"
