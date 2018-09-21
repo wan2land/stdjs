@@ -1,4 +1,5 @@
 
+// section:interface
 export enum Priority {
   Normal = 10,
   High = 30,
@@ -26,3 +27,4 @@ export interface Job<P> {
   isDeleted: boolean
   done(): Promise<void>
 }
+// endsection
