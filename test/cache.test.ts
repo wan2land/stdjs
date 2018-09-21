@@ -45,14 +45,14 @@ describe("cache", () => {
         await cache.set(`item_${i}`, `data ${i}`, 2)
       }
 
-      await timeout(1300)
+      await timeout(500)
 
       for (let i = 0; i < 10; i++) {
         await expect(cache.has(`item_${i}`)).resolves.toBeTruthy()
         await expect(cache.get(`item_${i}`)).resolves.toBe(`data ${i}`)
       }
 
-      await timeout(1000)
+      await timeout(2000)
 
       for (let i = 0; i < 10; i++) {
         await expect(cache.has(`item_${i}`)).resolves.toBeFalsy()
