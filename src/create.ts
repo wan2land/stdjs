@@ -6,6 +6,7 @@ import { Queue } from "./interfaces/queue"
 import { AmqpQueue } from "./driver/amqp/queue"
 import { BeanstalkdQueue } from "./driver/beanstalkd/queue"
 import { LocalQueue } from "./driver/local/queue"
+import { MixQueue } from "./driver/mix/queue"
 import { SqsQueue } from "./driver/sqs/queue"
 
 function isArrayOfConfig(config: any): config is QueueConfig[] {
@@ -20,24 +21,7 @@ function isMapOfConfig(config: any): config is {[name: string]: QueueConfig} {
   return !config.adapter && config[keys[0]].adapter
 }
 
-export function create<P>(configs: QueueConfig[]): Array<Queue<P>>
-export function create<P>(configs: {[name: string]: QueueConfig}): {[name: string]: Queue<P>}
-export function create<P>(config: QueueConfig): Queue<P>
-export function create(config: any): any {
-  if (isArrayOfConfig(config)) {
-    return config.map(conf => createQueue(conf))
-  }
-  if (isMapOfConfig(config)) {
-    const connections: {[name: string]: Queue<{}>} = {}
-    Object.keys(config).map((key) => {
-      connections[key] = createQueue(config[key])
-    })
-    return connections
-  }
-  return createQueue(config)
-}
-
-function createQueue<P>(config: QueueConfig): Queue<P> {
+export function create<P>(config: QueueConfig): Queue<P> {
   if (config.adapter === "local") {
     return new LocalQueue(config.timeout)
   } else if (config.adapter === "aws-sdk") {
@@ -52,6 +36,15 @@ function createQueue<P>(config: QueueConfig): Queue<P> {
     const {adapter, queue, ...remainConfig} = config
     const amqp = require("amqplib")
     return new AmqpQueue(amqp.connect(remainConfig), queue)
+  } else if (config.adapter === "mix") {
+    const {adapter, queues} = config
+    return new MixQueue(queues.map(queueConfig => {
+      const {priority, ...remains} = queueConfig
+      return {
+        priority,
+        queue: create<P>(remains),
+      }
+    }))
   }
   throw new Error(`cannot resolve adapter named "${(config as any).adapter}"`)
 }
