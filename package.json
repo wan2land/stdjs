@@ -34,7 +34,7 @@
   },
   "jest": {
     "transform": {
-      "^.+\\.tsx?$": "./node_modules/ts-jest/preprocessor.js"
+      "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "[^/]*\\.(test|spec)\\.(j|t)sx?$",
     "moduleFileExtensions": [

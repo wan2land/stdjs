@@ -19,3 +19,6 @@ export { LocalJob } from "./driver/local/job"
 export * from "./driver/sqs/interfaces"
 export { SqsQueue } from "./driver/sqs/queue"
 export { SqsJob } from "./driver/sqs/job"
+
+export * from "./driver/mix/interfaces"
+export { MixQueue } from "./driver/mix/queue"

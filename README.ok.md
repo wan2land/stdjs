@@ -22,7 +22,7 @@ npm install @stdjs/queue --save
 - AWS, SQS (require `npm install aws-sdk --save`)
 - beanstalkd (require `npm install beanstalkd --save`)
 - AMQP (such as, RabbitMQ) (require `npm install amqplib --save`)
-- (TODO) mix (Mix multiple queues for use Priority)
+- mix (Mix multiple queues for use Priority)
 
 ### Support Options
 
@@ -59,9 +59,27 @@ create({
 })
 ```
 
-### Create Connection
+### Create Local Queue
 
-Use `adapter` parameter of `create` function`s config
+@code("test/readme.test.ts@create-local")
+
+### Create Aws SQS Queue
+
+@code("test/readme.test.ts@create-sqs")
+
+### Create RabbitMQ(AMQP) Queue
+
+@code("test/readme.test.ts@create-rabbitmq")
+
+### Create Beanstalkd Queue
+
+@code("test/readme.test.ts@create-beanstalkd")
+
+### Create Mix Queue
+
+`mix` allows you to set the priority based on other default queues.
+
+@code("test/readme.test.ts@create-mix")
 
 ## License
 

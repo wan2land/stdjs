@@ -22,7 +22,7 @@ npm install @stdjs/queue --save
 - AWS, SQS (require `npm install aws-sdk --save`)
 - beanstalkd (require `npm install beanstalkd --save`)
 - AMQP (such as, RabbitMQ) (require `npm install amqplib --save`)
-- (TODO) mix (Mix multiple queues for use Priority)
+- mix (Mix multiple queues for use Priority)
 
 ### Support Options
 
@@ -87,9 +87,88 @@ create({
 })
 ```
 
-### Create Connection
+### Create Local Queue
 
-Use `adapter` parameter of `create` function`s config
+```ts
+const connection = create({
+  adapter: "local",
+
+  // https://github.com/corgidisco/stdjs-queue/blob/master/src/driver/local/interfaces.ts
+  ...options,
+})
+```
+
+### Create Aws SQS Queue
+
+```ts
+const connection = create({
+  adapter: "aws-sdk",
+
+  // SQS URL
+  url, // like "https://sqs.{region}.amazonaws.com/012345678910/your-sqs-name"
+
+  // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SQS.html#constructor-property
+  ...options,
+})
+```
+
+### Create RabbitMQ(AMQP) Queue
+
+```ts
+const connection = create({
+  adapter: "amqplib",
+
+  // AMQP Queue Name
+  queue, // like "amqp-queue-name",
+
+  // http://www.squaremobius.net/amqp.node/channel_api.html#connecting-with-an-object-instead-of-a-url
+  ...options,
+})
+```
+
+### Create Beanstalkd Queue
+
+```ts
+const connection = create({
+  adapter: "beanstalkd",
+
+  // beanstalkd connection
+  host, // default "localhost"
+  port, // default 11300
+
+  // tube name
+  tube,
+})
+```
+
+### Create Mix Queue
+
+`mix` allows you to set the priority based on other default queues.
+
+```ts
+const connection = create({
+  adapter: "mix",
+  queues: [
+    {
+      priority: Priority.Highest, // Priority Highest is 50
+
+      // The following options are the same as the Queue create options.
+      adapter: "local",
+      timeout: 100,
+    },
+    {
+      priority: Priority.High, // Priority High is 30
+      adapter: "local",
+      timeout: 100,
+    },
+    {
+      priority: Priority.Normal, // Priority Normal is 10
+      adapter: "local",
+      timeout: 100,
+    },
+  ],
+})
+```
 
 ## License
 

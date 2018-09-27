@@ -2,66 +2,22 @@
 import "jest"
 
 import { create, Priority, QueueConfig } from "../dist"
+import { getConfig, timeout } from "./helper"
 
 require("dotenv").config(process.cwd()) // tslint:disable-line
 
 const testcases = ["local", "beanstalkd", "rabbitmq", "mix"]
-// if (process.env.AWS_ACCESS_KEY_ID
-//   && process.env.AWS_SECRET_ACCESS_KEY
-//   && process.env.AWS_SQS_URL
-//   && process.env.AWS_SQS_REGION) {
-//   testcases.push("sqs")
-// }
-
-const configs: {[testcase: string]: QueueConfig} = {
-  local: {
-    adapter: "local",
-    timeout: 100,
-  },
-  sqs: {
-    adapter: "aws-sdk",
-    region: process.env.AWS_SQS_REGION,
-    url: process.env.AWS_SQS_URL,
-  },
-  beanstalkd: {
-    adapter: "beanstalkd",
-    host: "localhost",
-    tube: "jest",
-  },
-  rabbitmq: {
-    adapter: "amqplib",
-    queue: "jest",
-  },
-  mix: {
-    adapter: "mix",
-    queues: [
-      {
-        priority: Priority.Highest,
-        adapter: "local",
-        timeout: 100,
-      },
-      {
-        priority: Priority.High,
-        adapter: "local",
-        timeout: 100,
-      },
-      {
-        priority: Priority.Normal,
-        adapter: "local",
-        timeout: 100,
-      },
-    ],
-  },
-}
-
-function timeout(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms))
+if (process.env.AWS_ACCESS_KEY_ID
+  && process.env.AWS_SECRET_ACCESS_KEY
+  && process.env.AWS_SQS_URL
+  && process.env.AWS_SQS_REGION) {
+  // testcases.push("sqs")
 }
 
 describe("queue", () => {
   testcases.forEach(testcase => {
     it(`test ${testcase} basic functions`, async () => {
-      const queue = create(configs[testcase])
+      const queue = create(await getConfig(testcase))
       await queue.flush()
 
       const messages = []
@@ -97,7 +53,7 @@ describe("queue", () => {
 
     if (["local", "mix"].indexOf(testcase) > -1) {
       it(`test ${testcase} timeout`, async () => {
-        const queue = create(configs[testcase])
+        const queue = create(await getConfig(testcase))
         await queue.flush()
 
         for (let i = 0; i < 10; i++) {
@@ -124,8 +80,8 @@ describe("queue", () => {
 
     if (["beanstalkd", "rabbitmq"].indexOf(testcase) > -1) {
       it(`test ${testcase} priority`, async () => {
-        const producer = create(configs[testcase])
-        const consumer = create(configs[testcase])
+        const producer = create(await getConfig(testcase))
+        const consumer = create(await getConfig(testcase))
         await producer.flush()
 
         await producer.send(`message normal`, {priority: Priority.Normal})
@@ -155,7 +111,7 @@ describe("queue", () => {
 
     if (["mix"].indexOf(testcase) > -1) {
       it(`test ${testcase} priority`, async () => {
-        const queue = create(configs[testcase])
+        const queue = create(await getConfig(testcase))
         await queue.flush()
 
         await queue.send(`message normal`, {priority: Priority.Normal})
@@ -184,7 +140,7 @@ describe("queue", () => {
 
     if (["local", "sqs", "beanstalkd", "rabbitmq", "mix"].indexOf(testcase) > -1) {
       it(`test ${testcase} count`, async () => {
-        const queue = create(configs[testcase])
+        const queue = create(await getConfig(testcase))
         await queue.flush()
 
         for (let i = 0; i < 10; i++) {
