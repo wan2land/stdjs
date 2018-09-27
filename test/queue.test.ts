@@ -5,7 +5,7 @@ import { create, Priority, QueueConfig } from "../dist"
 
 require("dotenv").config(process.cwd()) // tslint:disable-line
 
-const testcases = ["local", "beanstalkd", "rabbitmq"]
+const testcases = ["local", "beanstalkd", "rabbitmq", "mix"]
 // if (process.env.AWS_ACCESS_KEY_ID
 //   && process.env.AWS_SECRET_ACCESS_KEY
 //   && process.env.AWS_SQS_URL
@@ -31,6 +31,26 @@ const configs: {[testcase: string]: QueueConfig} = {
   rabbitmq: {
     adapter: "amqplib",
     queue: "jest",
+  },
+  mix: {
+    adapter: "mix",
+    queues: [
+      {
+        priority: Priority.Highest,
+        adapter: "local",
+        timeout: 100,
+      },
+      {
+        priority: Priority.High,
+        adapter: "local",
+        timeout: 100,
+      },
+      {
+        priority: Priority.Normal,
+        adapter: "local",
+        timeout: 100,
+      },
+    ],
   },
 }
 
@@ -75,7 +95,7 @@ describe("queue", () => {
       queue.close()
     })
 
-    if (["local"].indexOf(testcase) > -1) {
+    if (["local", "mix"].indexOf(testcase) > -1) {
       it(`test ${testcase} timeout`, async () => {
         const queue = create(configs[testcase])
         await queue.flush()
@@ -133,7 +153,36 @@ describe("queue", () => {
       })
     }
 
-    if (["local", "sqs", "beanstalkd", "rabbitmq"].indexOf(testcase) > -1) {
+    if (["mix"].indexOf(testcase) > -1) {
+      it(`test ${testcase} priority`, async () => {
+        const queue = create(configs[testcase])
+        await queue.flush()
+
+        await queue.send(`message normal`, {priority: Priority.Normal})
+        await queue.send(`message high`, {priority: Priority.High})
+        await queue.send(`message highest`, {priority: Priority.Highest})
+
+        {
+          const job = await queue.receive()
+          expect(job.payload).toEqual(`message highest`)
+          await job.done()
+        }
+        {
+          const job = await queue.receive()
+          expect(job.payload).toEqual(`message high`)
+          await job.done()
+        }
+        {
+          const job = await queue.receive()
+          expect(job.payload).toEqual(`message normal`)
+          await job.done()
+        }
+
+        queue.close()
+      })
+    }
+
+    if (["local", "sqs", "beanstalkd", "rabbitmq", "mix"].indexOf(testcase) > -1) {
       it(`test ${testcase} count`, async () => {
         const queue = create(configs[testcase])
         await queue.flush()

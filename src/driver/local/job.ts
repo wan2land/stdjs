@@ -6,6 +6,8 @@ export class LocalJob<P> implements Job<P> {
 
   public isDeleted = false
 
+  public timer?: NodeJS.Timer
+
   constructor(public queue: LocalQueue<P>, public payload: P) {
   }
 

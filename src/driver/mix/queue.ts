@@ -48,7 +48,7 @@ export class MixQueue<P> implements Queue<P> {
     }
     const priority = (options && options.priority) || DEFAULT_PRIORITY
     for (const pair of this.queues) {
-      if (pair.priority < priority) {
+      if (pair.priority <= priority) {
         pair.queue.send(payload, {
           delay: (options && options.delay) || undefined,
         })

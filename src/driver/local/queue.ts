@@ -42,9 +42,10 @@ export class LocalQueue<P> implements Queue<P> {
     const job = this.jobs.shift()
     if (job) {
       this.runningJobs.push(job)
-      setTimeout(() => {
+      job.timer = setTimeout(() => {
         const indexJob = this.runningJobs.indexOf(job)
         if (indexJob > -1) {
+          delete job.timer
           this.runningJobs.splice(indexJob, 1)
           this.jobs.push(job) // not completed, re-push to queue.
         }
@@ -55,6 +56,10 @@ export class LocalQueue<P> implements Queue<P> {
 
   public async delete(job: LocalJob<P>): Promise<void> {
     const index = this.runningJobs.indexOf(job)
+    if (job.timer) {
+      clearTimeout(job.timer) // clear timeout :-)
+      delete job.timer
+    }
     if (index > -1) {
       this.runningJobs.splice(index, 1)
     }
