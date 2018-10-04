@@ -41,3 +41,27 @@ export interface RawRedisRetryStrategyOptions {
   times_connected: number
   attempt: number
 }
+
+export interface RawRedisClient {
+  exists: RawRedisOverloadedCommand<string, number, boolean>
+  del: RawRedisOverloadedCommand<string, number, boolean>
+  end(flush?: boolean): void
+  get(key: string, cb?: RawRedisCallback<string>): boolean
+  set(key: string, value: string, cb?: RawRedisCallback<"OK">): boolean
+  set(key: string, value: string, flag: string, cb?: RawRedisCallback<"OK">): boolean
+  set(key: string, value: string, mode: string, duration: number, cb?: RawRedisCallback<"OK" | undefined>): boolean
+  set(key: string, value: string, mode: string, duration: number, flag: string, cb?: RawRedisCallback<"OK" | undefined>): boolean
+  flushall(cb?: RawRedisCallback<string>): boolean
+}
+
+export type RawRedisCallback<T> = (err: Error | null, reply: T) => void
+
+export interface RawRedisOverloadedCommand<T, U, R> {
+  (arg1: T, arg2: T, arg3: T, arg4: T, arg5: T, arg6: T, cb?: RawRedisCallback<U>): R
+  (arg1: T, arg2: T, arg3: T, arg4: T, arg5: T, cb?: RawRedisCallback<U>): R
+  (arg1: T, arg2: T, arg3: T, arg4: T, cb?: RawRedisCallback<U>): R
+  (arg1: T, arg2: T, arg3: T, cb?: RawRedisCallback<U>): R
+  (arg1: T, arg2: T | T[], cb?: RawRedisCallback<U>): R
+  (arg1: T | T[], cb?: RawRedisCallback<U>): R
+  (...args: Array<T | RawRedisCallback<U>>): R
+}

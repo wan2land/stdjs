@@ -1,10 +1,10 @@
 
-import * as Memcached from "memcached"
 import { Cache } from "../../interfaces/cache"
+import { RawMemcached } from "./interfaces"
 
 export class MemcachedCache implements Cache {
 
-  public constructor(public memcached: Memcached) {
+  public constructor(public memcached: RawMemcached) {
   }
 
   public async close(): Promise<boolean> {
@@ -19,7 +19,7 @@ export class MemcachedCache implements Cache {
           reject(err)
           return
         }
-        resolve(data)
+        resolve(typeof data !== "undefined" ? data : defaultValue)
       })
     })
   }
