@@ -1,6 +1,7 @@
 
-import { SQS } from "aws-sdk"
+// import { SQS } from "aws-sdk"
 import { Queue, SendQueueOptions } from "../../interfaces/queue"
+import { RawAwsSqs as SQS } from "./interfaces"
 import { SqsJob } from "./job"
 import { getQueueAttributes, purgeQueue, receiveMessages, sendMessage } from "./promise"
 

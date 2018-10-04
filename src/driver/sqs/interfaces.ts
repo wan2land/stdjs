@@ -1,4 +1,5 @@
 
+// tslint:disable no-namespace
 // import { SQS } from "aws-sdk"
 
 export interface SqsQueueConfig extends RawAwsConfigurationOptions {
@@ -43,4 +44,73 @@ export interface RawAwsConfigurationOptions {
   systemClockOffset?: number
   useAccelerateEndpoint?: boolean
   dynamoDbCrc32?: boolean
+}
+
+export interface RawAwsSqs {
+  getQueueAttributes(params: RawAwsSqs.GetQueueAttributesRequest, callback?: (err: Error, data: RawAwsSqs.GetQueueAttributesResult) => void): void
+
+  purgeQueue(params: RawAwsSqs.PurgeQueueRequest, callback?: (err: Error, data: {}) => void): void
+
+  sendMessage(params: RawAwsSqs.SendMessageRequest, callback?: (err: Error, data: RawAwsSqs.SendMessageResult) => void): void
+
+  receiveMessage(params: RawAwsSqs.ReceiveMessageRequest, callback?: (err: Error, data: RawAwsSqs.ReceiveMessageResult) => void): void
+
+  deleteMessage(params: RawAwsSqs.DeleteMessageRequest, callback?: (err: Error, data: {}) => void): void
+}
+
+export declare namespace RawAwsSqs {
+  export interface GetQueueAttributesRequest {
+    QueueUrl: string
+    AttributeNames?: string[]
+  }
+
+  export interface GetQueueAttributesResult {
+    Attributes?: {[key: string]: string}
+  }
+
+  export interface PurgeQueueRequest {
+    QueueUrl: string
+  }
+
+  export interface SendMessageRequest {
+    QueueUrl: string
+    MessageBody: string
+    DelaySeconds?: number
+    MessageDeduplicationId?: string
+    MessageGroupId?: string
+  }
+
+  export interface SendMessageResult {
+    MD5OfMessageBody?: string
+    MD5OfMessageAttributes?: string
+    MessageId?: string
+    SequenceNumber?: string
+  }
+
+  export interface ReceiveMessageRequest {
+    QueueUrl: string
+    AttributeNames?: string[]
+    MessageAttributeNames?: string[]
+    MaxNumberOfMessages?: number
+    VisibilityTimeout?: number
+    WaitTimeSeconds?: number
+    ReceiveRequestAttemptId?: string
+  }
+
+  export interface ReceiveMessageResult {
+    Messages?: Message[]
+  }
+
+  export interface Message {
+    MessageId?: string
+    ReceiptHandle?: string
+    MD5OfBody?: string
+    Body?: string
+    MD5OfMessageAttributes?: string
+  }
+
+  export interface DeleteMessageRequest {
+    QueueUrl: string
+    ReceiptHandle: string
+  }
 }

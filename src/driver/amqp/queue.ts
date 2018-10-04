@@ -1,7 +1,8 @@
 
-import { Channel, Connection } from "amqplib"
+// import { Channel, Connection } from "amqplib"
 import { Priority, Queue, SendQueueOptions } from "../../interfaces/queue"
 import { priorityScale } from "../../utils"
+import { RawAmqpChannel as Channel, RawAmqpConnection as Connection } from "./interfaces"
 import { AmqpJob } from "./job"
 
 const DEFAULT_PRIORITY = Priority.Normal

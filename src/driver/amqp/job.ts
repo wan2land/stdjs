@@ -1,6 +1,6 @@
 
-import { Message } from "amqplib"
 import { Job } from "../../interfaces/queue"
+import { RawAmqpMessage as Message } from "./interfaces"
 import { AmqpQueue } from "./queue"
 
 export class AmqpJob<P> implements Job<P> {

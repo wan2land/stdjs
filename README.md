@@ -4,6 +4,9 @@
 [![Version](https://img.shields.io/npm/v/@stdjs/queue.svg)](https://www.npmjs.com/package/@stdjs/queue)
 [![License](https://img.shields.io/npm/l/@stdjs/queue.svg)](https://www.npmjs.com/package/@stdjs/queue)
 
+[![dependencies Status](https://david-dm.org/corgidisco/stdjs-queue/status.svg)](https://david-dm.org/corgidisco/stdjs-queue)
+[![devDependencies Status](https://david-dm.org/corgidisco/stdjs-queue/dev-status.svg)](https://david-dm.org/corgidisco/stdjs-queue?type=dev)
+
 [![NPM](https://nodeico.herokuapp.com/@stdjs/queue.svg)](https://www.npmjs.com/package/@stdjs/queue)
 
 Queue Adapter with Async/Promise for Javascript(& Typescript).
