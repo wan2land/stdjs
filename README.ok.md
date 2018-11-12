@@ -5,6 +5,9 @@
 [![Version](https://img.shields.io/npm/v/bottler.svg)](https://www.npmjs.com/package/bottler)
 [![License](https://img.shields.io/npm/l/bottler.svg)](https://www.npmjs.com/package/bottler)
 
+[![dependencies Status](https://david-dm.org/corgidisco/bottler/status.svg)](https://david-dm.org/corgidisco/bottler)
+[![devDependencies Status](https://david-dm.org/corgidisco/bottler/dev-status.svg)](https://david-dm.org/corgidisco/bottler?type=dev)
+
 [![NPM](https://nodei.co/npm/bottler.png)](https://www.npmjs.com/package/bottler)
 
 Very simple ioc container for Javascript(& Typescript).

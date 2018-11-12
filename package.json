@@ -18,14 +18,15 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "prepublish": "npm run build",
+    "prepack": "npm run build",
     "build": "rimraf ./dist && tsc -p .",
-    "lint": "./node_modules/.bin/tslint -c ./tslint.json -p tsconfig.json 'src/**/*.ts' --format stylish",
-    "test": "npm run build && jest test"
+    "lint": "tslint -c ./tslint.json -p tsconfig.json 'src/**/*.ts' --format stylish",
+    "jest": "jest test",
+    "test": "npm run build && npm run lint && npm run jest"
   },
   "jest": {
     "transform": {
-      "^.+\\.tsx?$": "./node_modules/ts-jest/preprocessor.js"
+      "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "[^/]*\\.(test|spec)\\.(j|t)sx?$",
     "moduleFileExtensions": [
@@ -38,14 +39,14 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/jest": "^21.1.5",
-    "@types/node": "^10.1.0",
-    "jest": "^21.2.1",
+    "@types/jest": "^23.3.9",
+    "@types/node": "^10.12.5",
+    "jest": "^23.6.0",
     "rimraf": "^2.6.2",
-    "ts-jest": "^21.1.4",
-    "ts-node": "^3.3.0",
-    "tslint": "^5.7.0",
-    "tslint-language-service": "^0.9.6",
-    "typescript": "^2.5.3"
+    "ts-jest": "^23.10.4",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-language-service": "^0.9.9",
+    "typescript": "^2.9.2"
   }
 }
