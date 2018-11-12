@@ -1,5 +1,5 @@
+import { ContainerFluent } from "./interfaces"
 
-import {ContainerFluent} from "./interfaces"
 
 export class Descriptor<P> implements ContainerFluent<P> {
 

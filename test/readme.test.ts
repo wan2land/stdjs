@@ -1,7 +1,7 @@
 
 // tslint:disable typedef max-classes-per-file
 
-import {} from "jest"
+import "jest"
 
 import * as bottler from "../dist"
 
@@ -131,7 +131,7 @@ describe("tests for README", () => {
     container.bind("driver", Driver)
     container.bind("connection", Connection)
 
-    const connection = await container.get("connection")
+    const connection = await container.get<Connection>("connection")
     console.log(connection) // Connection { driver: Driver {} }
     console.log(connection.driver) // Driver {}
     // endsection

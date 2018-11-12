@@ -1,8 +1,8 @@
+import { inject } from "./annotations/inject"
+import { Container } from "./container"
+import { create } from "./create"
+import { Containable, ContainerFluent, Provider } from "./interfaces"
 
-import {create} from "./create"
-import {ContainerFluent, Containable, Provider} from "./interfaces"
-import {Container} from "./container"
-import {inject} from "./annotations/inject"
 
 const shared = create()
 

@@ -1,6 +1,6 @@
+import { Identifier } from "../interfaces"
+import { inject as injectMetadata } from "./metadata"
 
-import {inject as injectMetadata} from "./metadata"
-import {Identifier} from "../interfaces"
 
 export function inject(name: Identifier): (target: any, targetKey: string, index?: number) => void {
   return (target: any, targetKey?: string, index?: number) => {

@@ -93,7 +93,7 @@ class Connection {
 container.bind("driver", Driver)
 container.bind("connection", Connection)
 
-const connection = await container.get("connection")
+const connection = await container.get<Connection>("connection")
 console.log(connection) // Connection { driver: Driver {} }
 console.log(connection.driver) // Driver {}
 ```

@@ -1,7 +1,12 @@
+import { inject as injectMetadata } from "./annotations/metadata"
+import { Descriptor } from "./descriptor"
+import {
+  Containable,
+  ContainerFluent,
+  Identifier,
+  Provider
+  } from "./interfaces"
 
-import {Containable, ContainerFluent, Identifier, Provider} from "./interfaces"
-import {Descriptor} from "./descriptor"
-import {inject as injectMetadata} from "./annotations/metadata"
 
 export class Container implements Containable {
 
@@ -52,8 +57,9 @@ export class Container implements Containable {
     if (this.instances.has(name)) {
       return this.instances.get(name) as P
     }
+
     if (!this.descriptors.has(name)) {
-      throw new Error(`"${name}" is not defined!`)
+      throw new Error(`"${typeof name === "symbol" ? name.toString() : name}" is not defined!`)
     }
 
     const descriptor = this.descriptors.get(name)!
@@ -70,7 +76,7 @@ export class Container implements Containable {
       }
       instance = new cls(...params)
     } else {
-      throw new Error(`"${name}" is not defined!`)
+      throw new Error(`"${typeof name === "symbol" ? name.toString() : name}" is not defined!`)
     }
 
     if (instance instanceof Promise) {
@@ -94,7 +100,7 @@ export class Container implements Containable {
       if (this.descriptors.has(name)) {
         const descriptor = this.descriptors.get(name) as Descriptor<any>
         if (descriptor.isFrozen) {
-          throw new Error(`cannot change ${name}`)
+          throw new Error(`cannot change ${typeof name === "symbol" ? name.toString() : name}`)
         }
         this.descriptors.delete(name)
       }
