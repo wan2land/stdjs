@@ -1,6 +1,6 @@
 {
   "name": "bottler",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Very simple ioc container for Javascript(& Typescript).",
   "keywords": [
     "di",
