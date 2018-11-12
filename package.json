@@ -5,9 +5,11 @@
   "keywords": [
     "di",
     "ioc",
-    "typescript",
     "dependency injection",
-    "inversion of control"
+    "inversion of control",
+    "inversify",
+    "ninject",
+    "typescript"
   ],
   "author": "Cris <corgidisco@gmail.com>",
   "license": "MIT",

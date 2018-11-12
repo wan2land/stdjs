@@ -28,6 +28,7 @@
       }
     ],
     "no-consecutive-blank-lines": [true, 2],
+    "no-console": false,
     "no-inferrable-types": true,
     "no-string-literal": false,
     "object-literal-sort-keys": false,
