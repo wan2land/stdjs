@@ -18,8 +18,8 @@ export class Sqlite3Connection implements Connection {
     })
   }
 
-  public first(query: string, values?: any): Promise<Row|undefined> {
-    return new Promise<Row[]>((resolve, reject) => {
+  public first<P extends Row>(query: string, values?: any): Promise<P|undefined> {
+    return new Promise<P|undefined>((resolve, reject) => {
       this.connection.get(query, values || [], (err, row) => {
         if (err) {
           return reject(err)
@@ -29,8 +29,8 @@ export class Sqlite3Connection implements Connection {
     })
   }
 
-  public select(query: string, values?: any): Promise<Row[]> {
-    return new Promise<Row[]>((resolve, reject) => {
+  public select<P extends Row>(query: string, values?: any): Promise<P[]> {
+    return new Promise<P[]>((resolve, reject) => {
       this.connection.all(query, values || [], (err, rows) => {
         if (err) {
           return reject(err)

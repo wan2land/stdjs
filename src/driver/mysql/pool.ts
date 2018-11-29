@@ -24,12 +24,12 @@ export class MysqlPool implements Pool {
     })
   }
 
-  public async first(query: string, values?: any): Promise<Row|undefined> {
-    const items = await this.select(query, values)
+  public async first<P extends Row>(query: string, values?: any): Promise<P|undefined> {
+    const items = await this.select<P>(query, values)
     return items[0]
   }
 
-  public select(query: string, values?: any): Promise<Row[]> {
+  public select<P extends Row>(query: string, values?: any): Promise<P[]> {
     return new Promise((resolve, reject) => {
       this.pool.query(query, values, (err, rows: any) => {
         if (err) {

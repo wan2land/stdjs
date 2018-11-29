@@ -150,20 +150,27 @@ const connections = create({
 All adapter objects inherit the following interfaces:
 
 ```typescript
-type TransactionHandler<P> = (connection: Connection) => Promise<P>|P
 
-// mysql-pool, mysql2-pool, pg-pool
-interface Pool extends Connection {
-  getConnection(): Promise<Connection>
+export type TransactionHandler<P> = (connection: Connection) => Promise<P>|P
+
+export interface Pool extends Connection {
+  getConnection(): Promise<PoolConnection>
 }
 
-// mysql, mysql2, pg, sqlite3
-interface Connection {
+export interface PoolConnection extends Connection {
+  release(): Promise<void>
+}
+
+export interface Connection {
   close(): Promise<void>
   query(query: string, values?: any): Promise<any>
-  select(query: string, values?: any): Promise<Row[]>
-  first(query: string, values?: any): Promise<Row|undefined>
+  select<P extends Row>(query: string, values?: any): Promise<P[]>
+  first<P>(query: string, values?: any): Promise<P|undefined>
   transaction<P>(handler: TransactionHandler<P>): Promise<P>
+}
+
+export interface Row {
+  [key: string]: any
 }
 ```
 

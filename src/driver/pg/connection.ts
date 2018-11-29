@@ -17,12 +17,12 @@ export class PgConnection implements Connection {
     }
   }
 
-  public async first(query: string, values?: any): Promise<Row|undefined> {
-    const rows = await this.select(query, values)
-    return rows[0]
+  public async first<P extends Row>(query: string, values?: any): Promise<P|undefined> {
+    const items = await this.select<P>(query, values)
+    return items[0]
   }
 
-  public async select(query: string, values?: any): Promise<Row[]> {
+  public async select<P extends Row>(query: string, values?: any): Promise<P[]> {
     await this.connect()
     const res = await this.client.query(query, values || [])
     return res.rows

@@ -12,8 +12,8 @@ export interface PoolConnection extends Connection {
 export interface Connection {
   close(): Promise<void>
   query(query: string, values?: any): Promise<any>
-  select(query: string, values?: any): Promise<Row[]>
-  first(query: string, values?: any): Promise<Row|undefined>
+  select<P extends Row>(query: string, values?: any): Promise<P[]>
+  first<P>(query: string, values?: any): Promise<P|undefined>
   transaction<P>(handler: TransactionHandler<P>): Promise<P>
 }
 

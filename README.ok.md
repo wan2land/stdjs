@@ -77,23 +77,7 @@ Use `adapter`, `pool` parameter of `create` function`s config
 
 All adapter objects inherit the following interfaces:
 
-```typescript
-type TransactionHandler<P> = (connection: Connection) => Promise<P>|P
-
-// mysql-pool, mysql2-pool, pg-pool
-interface Pool extends Connection {
-  getConnection(): Promise<Connection>
-}
-
-// mysql, mysql2, pg, sqlite3
-interface Connection {
-  close(): Promise<void>
-  query(query: string, values?: any): Promise<any>
-  select(query: string, values?: any): Promise<Row[]>
-  first(query: string, values?: any): Promise<Row|undefined>
-  transaction<P>(handler: TransactionHandler<P>): Promise<P>
-}
-```
+@code("./src/interfaces/database.ts", "typescript")
 
 ### Config
 
