@@ -2,7 +2,11 @@
 export type TransactionHandler<P> = (connection: Connection) => Promise<P>|P
 
 export interface Pool extends Connection {
-  getConnection(): Promise<Connection>
+  getConnection(): Promise<PoolConnection>
+}
+
+export interface PoolConnection extends Connection {
+  release(): Promise<void>
 }
 
 export interface Connection {

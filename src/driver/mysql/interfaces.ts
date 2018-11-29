@@ -65,10 +65,14 @@ export interface MysqlRawConnection {
   rollback(callback: (err: Error|undefined) => void): void
 }
 
+export interface MysqlRawPoolConnection extends MysqlRawConnection {
+  release(): void
+}
+
 export interface MysqlRawPool {
   query(options: string, values: any, callback?: MysqlRawQueryCb): any
   end(callback?: (err: Error|undefined, ...args: any[]) => void): void
-  getConnection(callback: (err: Error|undefined, connection: MysqlRawConnection) => void): void
+  getConnection(callback: (err: Error|undefined, connection: MysqlRawPoolConnection) => void): void
 }
 
 export interface MysqlRawResult {

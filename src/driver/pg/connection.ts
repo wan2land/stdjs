@@ -1,10 +1,6 @@
-
 import { Connection, Row, TransactionHandler } from "../../interfaces/database"
-import {
-  PgRawClient,
-  PgRawClientBase,
-  PgRawPoolClient
-} from "./interfaces"
+import { PgRawClient, PgRawClientBase, PgRawPoolClient } from "./interfaces"
+
 
 export class PgConnection implements Connection {
 

@@ -98,7 +98,7 @@ const insertManySqls: {[testcase: string]: [string, string[]]} = {
   "sqlite3": ["INSERT INTO tests_sqlite3(text) VALUES (?), (?)", ["hello2", "hello3"]],
 }
 
-const insertNullSqls: {[testcase: string]: [string, string[]]} = {
+const insertNullSqls: {[testcase: string]: [string, any[]]} = {
   "mysql": ["INSERT INTO `tests_mysql`(`text`) VALUES (?), (?)", [null, undefined]],
   "mysql-pool": ["INSERT INTO `tests_mysql_pool`(`text`) VALUES (?), (?)", [null, undefined]],
   "mysql2": ["INSERT INTO `tests_mysql2`(`text`) VALUES (?), (?)", [null, undefined]],

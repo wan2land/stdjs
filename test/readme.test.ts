@@ -127,7 +127,7 @@ describe("readmd", () => {
     // endsection
 
     expect(connections.length).toEqual(3)
-    expect(connections[0]).toBeInstanceOf(MysqlPool)
+    expect(connections[0]).toBeInstanceOf(Mysql2Pool)
     expect(connections[1]).toBeInstanceOf(PgPool)
     expect(connections[2]).toBeInstanceOf(Sqlite3Connection)
 
@@ -154,7 +154,7 @@ describe("readmd", () => {
     }) // return instanceof {default: MysqlPool, pg: PgPool, sqlite: Sqlite3Connection}
     // endsection
 
-    expect(connections.default).toBeInstanceOf(MysqlPool)
+    expect(connections.default).toBeInstanceOf(Mysql2Pool)
     expect(connections.pg).toBeInstanceOf(PgPool)
     expect(connections.sqlite).toBeInstanceOf(Sqlite3Connection)
 

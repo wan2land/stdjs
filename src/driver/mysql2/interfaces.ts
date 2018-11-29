@@ -1,6 +1,4 @@
 
-import { MysqlRawConnection, MysqlRawPool } from "../mysql/interfaces"
-
 export interface Mysql2RawQuery {
   sql: string
   values?: string[]
@@ -8,13 +6,22 @@ export interface Mysql2RawQuery {
 
 export type Mysql2RawQueryCb = (err: Error|undefined, results?: Mysql2RawResult) => void
 
-export interface Mysql2RawConnection extends MysqlRawConnection {
+export interface Mysql2RawConnection {
   execute(options: string, values: any, callback?: Mysql2RawQueryCb): any
+  end(callback?: (err: Error|undefined, ...args: any[]) => void): void
+  beginTransaction(callback: (err: Error|undefined) => void): void
+  commit(callback: (err: Error|undefined) => void): void
+  rollback(callback: (err: Error|undefined) => void): void
 }
 
-export interface Mysql2RawPool extends MysqlRawPool {
+export interface Mysql2RawPoolConnection extends Mysql2RawConnection {
+  release(): void
+}
+
+export interface Mysql2RawPool {
   execute(options: string, values: any, callback?: Mysql2RawQueryCb): any
-  getConnection(callback: (err: Error|undefined, connection: Mysql2RawConnection) => void): void
+  end(callback?: (err: Error|undefined, ...args: any[]) => void): void
+  getConnection(callback: (err: Error|undefined, connection: Mysql2RawPoolConnection) => void): void
 }
 
 export interface Mysql2RawResult {

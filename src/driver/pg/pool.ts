@@ -1,7 +1,12 @@
-
-import { Connection, Pool, Row, TransactionHandler } from "../../interfaces/database"
-import { PgConnection } from "./connection"
+import {
+  Pool,
+  PoolConnection,
+  Row,
+  TransactionHandler
+  } from "../../interfaces/database"
 import { PgRawPool } from "./interfaces"
+import { PgPoolConnection } from "./pool-connection"
+
 
 export class PgPool implements Pool {
 
@@ -28,20 +33,17 @@ export class PgPool implements Pool {
 
   public async transaction<P>(handler: TransactionHandler<P>): Promise<P> {
     const connection = await this.getConnection()
-    await connection.query("BEGIN")
     try {
-      const result = await handler(connection)
-      await connection.query("COMMIT")
-      await connection.close()
+      const result = connection.transaction(handler)
+      await connection.release()
       return result
     } catch (e) {
-      await connection.query("ROLLBACK")
-      await connection.close()
+      await connection.release()
       throw e
     }
   }
 
-  public async getConnection(): Promise<Connection> {
-    return new PgConnection(await this.pool.connect())
+  public async getConnection(): Promise<PoolConnection> {
+    return new PgPoolConnection(await this.pool.connect())
   }
 }

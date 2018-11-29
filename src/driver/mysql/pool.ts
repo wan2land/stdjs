@@ -1,7 +1,12 @@
-
-import { Connection, Pool, Row } from "../../interfaces/database"
-import { MysqlConnection } from "./connection"
+import {
+  Connection,
+  Pool,
+  PoolConnection,
+  Row
+  } from "../../interfaces/database"
 import { MysqlRawPool } from "./interfaces"
+import { MysqlPoolConnection } from "./pool-connection"
+
 
 export class MysqlPool implements Pool {
 
@@ -48,16 +53,23 @@ export class MysqlPool implements Pool {
 
   public async transaction<P>(handler: (connection: Connection) => Promise<any>): Promise<any> {
     const connection = await this.getConnection()
-    return connection.transaction(handler)
+    try {
+      const result = connection.transaction(handler)
+      await connection.release()
+      return result
+    } catch (e) {
+      await connection.release()
+      throw e
+    }
   }
 
-  public getConnection(): Promise<Connection> {
+  public getConnection(): Promise<PoolConnection> {
     return new Promise((resolve, reject) => {
       this.pool.getConnection((err, conn) => {
         if (err) {
           return reject(err)
         }
-        resolve(new MysqlConnection(conn))
+        resolve(new MysqlPoolConnection(conn))
       })
     })
   }

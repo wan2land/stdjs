@@ -1,13 +1,32 @@
-
-import { Connection, Row } from "../../interfaces/database"
-import { MysqlPool } from "../mysql/pool"
-import { Mysql2Connection } from "./connection"
+import {
+  Connection,
+  Pool,
+  PoolConnection,
+  Row
+  } from "../../interfaces/database"
 import { Mysql2RawPool } from "./interfaces"
+import { Mysql2PoolConnection } from "./pool-connection"
 
-export class Mysql2Pool extends MysqlPool {
+
+export class Mysql2Pool implements Pool {
 
   constructor(protected pool: Mysql2RawPool) {
-    super(pool)
+  }
+
+  public close(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.pool.end((err) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve()
+      })
+    })
+  }
+
+  public async first(query: string, values?: any): Promise<Row|undefined> {
+    const items = await this.select(query, values)
+    return items[0]
   }
 
   public select(query: string, values?: any): Promise<Row[]> {
@@ -38,13 +57,25 @@ export class Mysql2Pool extends MysqlPool {
     })
   }
 
-  public getConnection(): Promise<Connection> {
+  public async transaction<P>(handler: (connection: Connection) => Promise<any>): Promise<any> {
+    const connection = await this.getConnection()
+    try {
+      const result = connection.transaction(handler)
+      await connection.release()
+      return result
+    } catch (e) {
+      await connection.release()
+      throw e
+    }
+  }
+
+  public getConnection(): Promise<PoolConnection> {
     return new Promise((resolve, reject) => {
       this.pool.getConnection((err, conn) => {
         if (err) {
           return reject(err)
         }
-        resolve(new Mysql2Connection(conn))
+        resolve(new Mysql2PoolConnection(conn))
       })
     })
   }

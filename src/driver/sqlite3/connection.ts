@@ -1,6 +1,6 @@
-
 import { Connection, Row, TransactionHandler } from "../../interfaces/database"
 import { Sqlite3RawConnection } from "./interfaces"
+
 
 export class Sqlite3Connection implements Connection {
 
