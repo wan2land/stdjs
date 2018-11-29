@@ -34,7 +34,7 @@
   },
   "jest": {
     "transform": {
-      "^.+\\.tsx?$": "./node_modules/ts-jest/preprocessor.js"
+      "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "[^/]*\\.(test|spec)\\.(j|t)sx?$",
     "moduleFileExtensions": [
@@ -58,10 +58,10 @@
     "pg": "^7.4.3",
     "rimraf": "^2.6.2",
     "sqlite3": "^4.0.1",
-    "ts-jest": "^21.1.4",
-    "ts-node": "^3.3.0",
-    "tslint": "^5.7.0",
-    "tslint-language-service": "^0.9.6",
-    "typescript": "^2.5.3"
+    "ts-jest": "^23.10.5",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-language-service": "^0.9.9",
+    "typescript": "^3.1.6"
   }
 }
