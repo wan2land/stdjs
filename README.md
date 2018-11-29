@@ -1,18 +1,57 @@
 # Async DB Adapter
 
-[![Build](https://travis-ci.org/corgidisco/async-db-adapter.svg?branch=master)](https://travis-ci.org/corgidisco/async-db-adapter)
-[![Downloads](https://img.shields.io/npm/dt/async-db-adapter.svg)](https://npmcharts.com/compare/async-db-adapter?minimal=true)
-[![Version](https://img.shields.io/npm/v/async-db-adapter.svg)](https://www.npmjs.com/package/async-db-adapter)
-[![License](https://img.shields.io/npm/l/async-db-adapter.svg)](https://www.npmjs.com/package/async-db-adapter)
+[![Build](https://travis-ci.org/corgidisco/stdjs-database.svg?branch=master)](https://travis-ci.org/corgidisco/stdjs-database)
+[![Downloads](https://img.shields.io/npm/dt/@stdjs/database.svg)](https://npmcharts.com/compare/@stdjs/database?minimal=true)
+[![Version](https://img.shields.io/npm/v/@stdjs/database.svg)](https://www.npmjs.com/package/@stdjs/database)
+[![License](https://img.shields.io/npm/l/@stdjs/database.svg)](https://www.npmjs.com/package/@stdjs/database)
 
-[![NPM](https://nodei.co/npm/async-db-adapter.png)](https://www.npmjs.com/package/async-db-adapter)
+[![dependencies Status](https://david-dm.org/corgidisco/stdjs-database/status.svg)](https://david-dm.org/corgidisco/stdjs-database)
+[![devDependencies Status](https://david-dm.org/corgidisco/stdjs-database/dev-status.svg)](https://david-dm.org/corgidisco/stdjs-database?type=dev)
+
+[![NPM](https://nodei.co/npm/@stdjs/database.png)](https://www.npmjs.com/package/@stdjs/database)
 
 Async database adapter for Javascript(& Typescript).
 
 ## Installation
 
 ```bash
-npm install async-db-adapter --save
+npm install @stdjs/database --save
+```
+
+## Support Database Connection
+
+- mysql (require `npm install mysql --save`)
+- mysql2 (require `npm install mysql2 --save`)
+- pg (require `npm install pg --save`)
+- sqlite3 (require `npm install sqlite3 --save`)
+
+## Interfaces
+
+All adapter objects inherit the following interfaces:
+
+```typescript
+
+export type TransactionHandler<P> = (connection: Connection) => Promise<P>|P
+
+export interface Pool extends Connection {
+  getConnection(): Promise<PoolConnection>
+}
+
+export interface PoolConnection extends Connection {
+  release(): Promise<void>
+}
+
+export interface Connection {
+  close(): Promise<void>
+  query(query: string, values?: any): Promise<any>
+  select<P extends Row>(query: string, values?: any): Promise<P[]>
+  first<P>(query: string, values?: any): Promise<P|undefined>
+  transaction<P>(handler: TransactionHandler<P>): Promise<P>
+}
+
+export interface Row {
+  [key: string]: any
+}
 ```
 
 ## Usage
@@ -22,20 +61,19 @@ You can create as follows:
 (Please refer to the Config section for config.)
 
 ```javascript
-const connection = require("async-db-adapter").create({
+const database = require("@stdjs/database")
+const connection = database.create({
   adapter: "mysql"
   /* config */
 })
-// or import {create} from "async-db-adapter"
-// create(/* ... */)
+
+// or
+import { create } from "@stdjs/database"
+const connection = create({
+  adapter: "mysql"
+  /* config */
+})
 ```
-
-### Support Database Connection
-
-- mysql (require `npm install mysql --save`)
-- mysql2 (require `npm install mysql2 --save`)
-- pg (require `npm install pg --save`)
-- sqlite3 (require `npm install sqlite3 --save`)
 
 ### Create Connection
 
@@ -143,36 +181,6 @@ const connections = create({
 }) // return instanceof {default: MysqlPool, pg: PgPool, sqlite: Sqlite3Connection}
 ```
 
-
-
-### Methods
-
-All adapter objects inherit the following interfaces:
-
-```typescript
-
-export type TransactionHandler<P> = (connection: Connection) => Promise<P>|P
-
-export interface Pool extends Connection {
-  getConnection(): Promise<PoolConnection>
-}
-
-export interface PoolConnection extends Connection {
-  release(): Promise<void>
-}
-
-export interface Connection {
-  close(): Promise<void>
-  query(query: string, values?: any): Promise<any>
-  select<P extends Row>(query: string, values?: any): Promise<P[]>
-  first<P>(query: string, values?: any): Promise<P|undefined>
-  transaction<P>(handler: TransactionHandler<P>): Promise<P>
-}
-
-export interface Row {
-  [key: string]: any
-}
-```
 
 ### Config
 

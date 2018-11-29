@@ -1,7 +1,7 @@
 {
-  "name": "async-db-adapter",
-  "version": "0.5.1",
-  "description": "Async database adapter for Javascript(& Typescript).",
+  "name": "@stdjs/database",
+  "version": "1.0.0",
+  "description": "Database Adapter with Async/Promise for Javascript(& Typescript).",
   "keywords": [
     "database-adapter",
     "db-adapter",
@@ -21,7 +21,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/corgidisco/async-db-adapter.git"
+    "url": "git://github.com/corgidisco/stdjs-database.git"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
