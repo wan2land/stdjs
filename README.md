@@ -1,4 +1,4 @@
-# Async DB Adapter
+# STDJS - Database
 
 [![Build](https://travis-ci.org/corgidisco/stdjs-database.svg?branch=master)](https://travis-ci.org/corgidisco/stdjs-database)
 [![Downloads](https://img.shields.io/npm/dt/@stdjs/database.svg)](https://npmcharts.com/compare/@stdjs/database?minimal=true)
@@ -10,7 +10,7 @@
 
 [![NPM](https://nodei.co/npm/@stdjs/database.png)](https://www.npmjs.com/package/@stdjs/database)
 
-Async database adapter for Javascript(& Typescript).
+Database Adapter with Async/Promise for Javascript(& Typescript).
 
 ## Installation
 
