@@ -2,8 +2,10 @@ import {
   Connection,
   Pool,
   PoolConnection,
+  QueryBuilder,
   Row
   } from "../../interfaces/database"
+import { isQueryBuilder } from "../../utils"
 import { Mysql2RawPool } from "./interfaces"
 import { Mysql2PoolConnection } from "./pool-connection"
 
@@ -24,12 +26,18 @@ export class Mysql2Pool implements Pool {
     })
   }
 
-  public async first<P extends Row>(query: string, values?: any): Promise<P|undefined> {
-    const items = await this.select<P>(query, values)
-    return items[0]
+  public async first<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P|undefined> {
+    return (await this.select<P>(queryOrQb, values))[0]
   }
 
-  public select<P extends Row>(query: string, values?: any): Promise<P[]> {
+  public select<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P[]> {
+    let query: string
+    if (isQueryBuilder(queryOrQb)) {
+      query = queryOrQb.toSql()
+      values = queryOrQb.getBindings() || []
+    } else {
+      query = queryOrQb
+    }
     if (Array.isArray(values)) {
       values = values.map(value => typeof value  === "undefined" ? null : value)
     }
@@ -43,7 +51,14 @@ export class Mysql2Pool implements Pool {
     })
   }
 
-  public query(query: string, values?: any): Promise<any> {
+  public query(queryOrQb: string|QueryBuilder, values?: any): Promise<any> {
+    let query: string
+    if (isQueryBuilder(queryOrQb)) {
+      query = queryOrQb.toSql()
+      values = queryOrQb.getBindings() || []
+    } else {
+      query = queryOrQb
+    }
     if (Array.isArray(values)) {
       values = values.map(value => typeof value  === "undefined" ? null : value)
     }

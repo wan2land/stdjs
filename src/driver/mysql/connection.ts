@@ -1,10 +1,16 @@
-import { Connection, Row, TransactionHandler } from "../../interfaces/database"
+import {
+  Connection,
+  QueryBuilder,
+  Row,
+  TransactionHandler
+  } from "../../interfaces/database"
+import { isQueryBuilder } from "../../utils"
 import { MysqlRawConnection } from "./interfaces"
 
 
 export class MysqlConnection implements Connection {
 
-  constructor(protected connection: MysqlRawConnection) {
+  constructor(public connection: MysqlRawConnection) {
   }
 
   public close(): Promise<void> {
@@ -18,13 +24,19 @@ export class MysqlConnection implements Connection {
     })
   }
 
-  public async first<P extends Row>(query: string, values?: any): Promise<P|undefined> {
-    const items = await this.select<P>(query, values)
-    return items[0]
+  public async first<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P|undefined> {
+    return (await this.select<P>(queryOrQb, values))[0]
   }
 
-  public select<P extends Row>(query: string, values?: any): Promise<P[]> {
+  public select<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P[]> {
     return new Promise((resolve, reject) => {
+      let query: string
+      if (isQueryBuilder(queryOrQb)) {
+        query = queryOrQb.toSql()
+        values = queryOrQb.getBindings() || []
+      } else {
+        query = queryOrQb
+      }
       this.connection.query(query, values, (err, rows: any) => {
         if (err) {
           return reject(err)
@@ -34,8 +46,15 @@ export class MysqlConnection implements Connection {
     })
   }
 
-  public query(query: string, values?: any): Promise<any> {
+  public query(queryOrQb: string|QueryBuilder, values?: any): Promise<any> {
     return new Promise((resolve, reject) => {
+      let query: string
+      if (isQueryBuilder(queryOrQb)) {
+        query = queryOrQb.toSql()
+        values = queryOrQb.getBindings() || []
+      } else {
+        query = queryOrQb
+      }
       this.connection.query(query, values, (err, result) => {
         if (err) {
           return reject(err)

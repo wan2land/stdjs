@@ -5,7 +5,7 @@ import { PgRawPoolClient } from "./interfaces"
 
 export class PgPoolConnection extends PgConnection implements PoolConnection {
 
-  constructor(protected connection: PgRawPoolClient) {
+  constructor(public connection: PgRawPoolClient) {
     super(connection)
   }
 

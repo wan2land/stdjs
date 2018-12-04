@@ -8,7 +8,7 @@ export * from "./driver/mysql/interfaces"
 export { MysqlConnection } from "./driver/mysql/connection"
 export { MysqlPool } from "./driver/mysql/pool"
 
-// export * from "./driver/mysql2/interfaces"
+export * from "./driver/mysql2/interfaces"
 export { Mysql2Connection } from "./driver/mysql2/connection"
 export { Mysql2Pool } from "./driver/mysql2/pool"
 

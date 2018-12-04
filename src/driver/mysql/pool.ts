@@ -2,15 +2,17 @@ import {
   Connection,
   Pool,
   PoolConnection,
+  QueryBuilder,
   Row
   } from "../../interfaces/database"
+import { isQueryBuilder } from "../../utils"
 import { MysqlRawPool } from "./interfaces"
 import { MysqlPoolConnection } from "./pool-connection"
 
 
 export class MysqlPool implements Pool {
 
-  constructor(protected pool: MysqlRawPool) {
+  constructor(public pool: MysqlRawPool) {
   }
 
   public close(): Promise<void> {
@@ -24,13 +26,19 @@ export class MysqlPool implements Pool {
     })
   }
 
-  public async first<P extends Row>(query: string, values?: any): Promise<P|undefined> {
-    const items = await this.select<P>(query, values)
-    return items[0]
+  public async first<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P|undefined> {
+    return (await this.select<P>(queryOrQb, values))[0]
   }
 
-  public select<P extends Row>(query: string, values?: any): Promise<P[]> {
+  public select<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P[]> {
     return new Promise((resolve, reject) => {
+      let query: string
+      if (isQueryBuilder(queryOrQb)) {
+        query = queryOrQb.toSql()
+        values = queryOrQb.getBindings() || []
+      } else {
+        query = queryOrQb
+      }
       this.pool.query(query, values, (err, rows: any) => {
         if (err) {
           return reject(err)
@@ -40,8 +48,15 @@ export class MysqlPool implements Pool {
     })
   }
 
-  public query(query: string, values?: any): Promise<any> {
+  public query(queryOrQb: string|QueryBuilder, values?: any): Promise<any> {
     return new Promise((resolve, reject) => {
+      let query: string
+      if (isQueryBuilder(queryOrQb)) {
+        query = queryOrQb.toSql()
+        values = queryOrQb.getBindings() || []
+      } else {
+        query = queryOrQb
+      }
       this.pool.query(query, values, (err, result) => {
         if (err) {
           return reject(err)

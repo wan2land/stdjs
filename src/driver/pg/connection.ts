@@ -1,10 +1,16 @@
-import { Connection, Row, TransactionHandler } from "../../interfaces/database"
+import {
+  Connection,
+  QueryBuilder,
+  Row,
+  TransactionHandler
+  } from "../../interfaces/database"
+import { isQueryBuilder } from "../../utils"
 import { PgRawClient, PgRawClientBase, PgRawPoolClient } from "./interfaces"
 
 
 export class PgConnection implements Connection {
 
-  constructor(protected client: PgRawClientBase) {
+  constructor(public client: PgRawClientBase) {
   }
 
   public async close(): Promise<void> {
@@ -17,20 +23,21 @@ export class PgConnection implements Connection {
     }
   }
 
-  public async first<P extends Row>(query: string, values?: any): Promise<P|undefined> {
-    const items = await this.select<P>(query, values)
-    return items[0]
+  public async first<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P|undefined> {
+    return (await this.select<P>(queryOrQb, values))[0]
   }
 
-  public async select<P extends Row>(query: string, values?: any): Promise<P[]> {
-    await this.connect()
-    const res = await this.client.query(query, values || [])
-    return res.rows
+  public async select<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P[]> {
+    return (await this.query(queryOrQb, values)).rows
   }
 
-  public async query(query: string, values?: any): Promise<any> {
+  public async query(queryOrQb: string|QueryBuilder, values?: any): Promise<any> {
     await this.connect()
-    return await this.client.query(query, values || [])
+    if (isQueryBuilder(queryOrQb)) {
+      return await this.client.query(queryOrQb.toSql(), queryOrQb.getBindings() || [])
+    } else {
+      return await this.client.query(queryOrQb, values || [])
+    }
   }
 
   public async transaction<P>(handler: TransactionHandler<P>): Promise<P> {

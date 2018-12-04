@@ -1,9 +1,11 @@
 import {
   Pool,
   PoolConnection,
+  QueryBuilder,
   Row,
   TransactionHandler
   } from "../../interfaces/database"
+import { isQueryBuilder } from "../../utils"
 import { PgRawPool } from "./interfaces"
 import { PgPoolConnection } from "./pool-connection"
 
@@ -17,18 +19,20 @@ export class PgPool implements Pool {
     await this.pool.end()
   }
 
-  public async first<P extends Row>(query: string, values?: any): Promise<P|undefined> {
-    const items = await this.select<P>(query, values)
-    return items[0]
+  public async first<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P|undefined> {
+    return (await this.select<P>(queryOrQb, values))[0]
   }
 
-  public async select<P extends Row>(query: string, values?: any): Promise<P[]> {
-    const res = await this.pool.query(query, values || [])
-    return res.rows
+  public async select<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P[]> {
+    return (await this.query(queryOrQb, values)).rows
   }
 
-  public async query(query: string, values?: any): Promise<any> {
-    return await this.pool.query(query, values || [])
+  public async query(queryOrQb: string|QueryBuilder, values?: any): Promise<any> {
+    if (isQueryBuilder(queryOrQb)) {
+      return await this.pool.query(queryOrQb.toSql(), queryOrQb.getBindings() || [])
+    } else {
+      return await this.pool.query(queryOrQb, values || [])
+    }
   }
 
   public async transaction<P>(handler: TransactionHandler<P>): Promise<P> {

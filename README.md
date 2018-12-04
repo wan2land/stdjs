@@ -43,8 +43,12 @@ export interface PoolConnection extends Connection {
 
 export interface Connection {
   close(): Promise<void>
+  createQueryTemplate(): QueryTemplate
+  query(qb: QueryBuilder): Promise<any>
   query(query: string, values?: any): Promise<any>
+  select<P extends Row>(qb: QueryBuilder): Promise<P[]>
   select<P extends Row>(query: string, values?: any): Promise<P[]>
+  first<P>(qb: QueryBuilder): Promise<P|undefined>
   first<P>(query: string, values?: any): Promise<P|undefined>
   transaction<P>(handler: TransactionHandler<P>): Promise<P>
 }
@@ -52,6 +56,19 @@ export interface Connection {
 export interface Row {
   [key: string]: any
 }
+
+export interface QueryBuilder {
+  toSql(): string
+  getBindings(): any[]
+}
+
+export interface QueryTemplate {
+  (literals: TemplateStringsArray, ...placeholders: Array<QueryTemplatePlaceholder|null|undefined>): QueryBuilder
+  in(values: any[]): QueryTemplatePlaceholder
+  insert(values: any[]): QueryTemplatePlaceholder
+}
+
+export type QueryTemplatePlaceholder = [string, ...any[]]
 ```
 
 ## Usage

@@ -1,4 +1,10 @@
-import { Connection, Row, TransactionHandler } from "../../interfaces/database"
+import {
+  Connection,
+  QueryBuilder,
+  Row,
+  TransactionHandler
+  } from "../../interfaces/database"
+import { isQueryBuilder } from "../../utils"
 import { Sqlite3RawConnection } from "./interfaces"
 
 
@@ -18,8 +24,15 @@ export class Sqlite3Connection implements Connection {
     })
   }
 
-  public first<P extends Row>(query: string, values?: any): Promise<P|undefined> {
+  public first<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P|undefined> {
     return new Promise<P|undefined>((resolve, reject) => {
+      let query: string
+      if (isQueryBuilder(queryOrQb)) {
+        query = queryOrQb.toSql()
+        values = queryOrQb.getBindings() || []
+      } else {
+        query = queryOrQb
+      }
       this.connection.get(query, values || [], (err, row) => {
         if (err) {
           return reject(err)
@@ -29,8 +42,15 @@ export class Sqlite3Connection implements Connection {
     })
   }
 
-  public select<P extends Row>(query: string, values?: any): Promise<P[]> {
+  public select<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P[]> {
     return new Promise<P[]>((resolve, reject) => {
+      let query: string
+      if (isQueryBuilder(queryOrQb)) {
+        query = queryOrQb.toSql()
+        values = queryOrQb.getBindings() || []
+      } else {
+        query = queryOrQb
+      }
       this.connection.all(query, values || [], (err, rows) => {
         if (err) {
           return reject(err)
@@ -40,8 +60,15 @@ export class Sqlite3Connection implements Connection {
     })
   }
 
-  public query(query: string, values?: any): Promise<any> {
+  public query(queryOrQb: string|QueryBuilder, values?: any): Promise<any> {
     return new Promise((resolve, reject) => {
+      let query: string
+      if (isQueryBuilder(queryOrQb)) {
+        query = queryOrQb.toSql()
+        values = queryOrQb.getBindings() || []
+      } else {
+        query = queryOrQb
+      }
       // tslint:disable:only-arrow-functions
       this.connection.run(query, values || [], function(err: Error|null): void {
         if (err) {
