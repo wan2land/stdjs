@@ -1,7 +1,8 @@
+services:
+  - docker
 
-addons:
-  postgresql: '9.4'
-  mariadb: '10.0'
+env:
+  DOCKER_COMPOSE_VERSION: 1.23.2
 
 language: node_js
 node_js:
@@ -10,9 +11,15 @@ node_js:
   - 8
   - 6
 
-before_script:
-  - mysql -e 'CREATE DATABASE async_db_adapter CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
-  - psql -c 'CREATE DATABASE async_db_adapter;' -U postgres
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+
+install:
+  - docker-compose up -d
+  - npm install
 
 script:
   - npm test

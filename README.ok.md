@@ -29,7 +29,7 @@ npm install @stdjs/database --save
 
 All adapter objects inherit the following interfaces:
 
-@code("./src/interfaces/database.ts", "typescript")
+@code("./src/interfaces/database.ts@interfaces", "typescript")
 
 ## Usage
 

@@ -1,4 +1,6 @@
 
+// section:interfaces
+
 export type TransactionHandler<P> = (connection: Connection) => Promise<P>|P
 
 export interface Pool extends Connection {
@@ -28,3 +30,5 @@ export interface QueryBuilder {
   toSql(): string
   getBindings(): any[]
 }
+
+// endsection

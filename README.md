@@ -43,7 +43,6 @@ export interface PoolConnection extends Connection {
 
 export interface Connection {
   close(): Promise<void>
-  createQueryTemplate(): QueryTemplate
   query(qb: QueryBuilder): Promise<any>
   query(query: string, values?: any): Promise<any>
   select<P extends Row>(qb: QueryBuilder): Promise<P[]>
@@ -61,14 +60,6 @@ export interface QueryBuilder {
   toSql(): string
   getBindings(): any[]
 }
-
-export interface QueryTemplate {
-  (literals: TemplateStringsArray, ...placeholders: Array<QueryTemplatePlaceholder|null|undefined>): QueryBuilder
-  in(values: any[]): QueryTemplatePlaceholder
-  insert(values: any[]): QueryTemplatePlaceholder
-}
-
-export type QueryTemplatePlaceholder = [string, ...any[]]
 ```
 
 ## Usage

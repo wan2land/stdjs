@@ -2,17 +2,13 @@
 import "jest"
 
 import { create, Mysql2Connection, Mysql2Pool, MysqlConnection, MysqlPool, PgConnection, PgPool, Sqlite3Connection } from "../dist"
+import { config } from "./utils"
 
 describe("readmd", () => {
 
-  const mysqlConfig = {
-    host: "localhost",
-    user: "root",
-    database: "async_db_adapter",
-  }
-  const pgConfig = {}
-
   it("test create mysql connection", async () => {
+    const mysqlConfig = await config("mysql") as {}
+
     // section:create-mysql-connection
     const connection = create({
       adapter: "mysql",
@@ -26,6 +22,8 @@ describe("readmd", () => {
   })
 
   it("test create mysql pool connection", async () => {
+    const mysqlConfig = await config("mysql-pool") as {}
+
     // section:create-mysql-pool
     const connection = create({
       adapter: "mysql",
@@ -40,6 +38,8 @@ describe("readmd", () => {
   })
 
   it("test create mysql2 connection", async () => {
+    const mysqlConfig = await config("mysql2") as {}
+
     // section:create-mysql2-connection
     const connection = create({
       adapter: "mysql2",
@@ -53,6 +53,8 @@ describe("readmd", () => {
   })
 
   it("test create mysql2 pool connection", async () => {
+    const mysqlConfig = await config("mysql2-pool") as {}
+
     // section:create-mysql2-pool
     const connection = create({
       adapter: "mysql2",
@@ -67,6 +69,8 @@ describe("readmd", () => {
   })
 
   it("test create pg connection", async () => {
+    const pgConfig = await config("pg") as {}
+
     // section:create-pg-connection
     const connection = create({
       adapter: "pg",
@@ -80,6 +84,8 @@ describe("readmd", () => {
   })
 
   it("test create pg pool connection", async () => {
+    const pgConfig = await config("pg-pool") as {}
+
     // section:create-pg-pool
     const connection = create({
       adapter: "pg",
@@ -107,6 +113,9 @@ describe("readmd", () => {
   })
 
   it("test create array connections", async () => {
+    const mysqlConfig = await config("mysql2-pool") as {}
+    const pgConfig = await config("pg-pool") as {}
+
     // section:create-array-connections
     const connections = create([
       {
@@ -135,6 +144,9 @@ describe("readmd", () => {
   })
 
   it("test create object connections", async () => {
+    const pgConfig = await config("pg-pool") as {}
+    const mysqlConfig = await config("mysql2-pool") as {}
+
     // section:create-object-connections
     const connections = create({
       default: {

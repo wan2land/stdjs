@@ -1,82 +1,9 @@
 
 import "jest"
 
-import { ConnectionConfig, create } from "../dist"
+import { connect } from "./utils"
 
 const testcases = ["mysql", "mysql-pool", "mysql2", "mysql2-pool", "pg", "pg-pool", "sqlite3"]
-
-const configs: {[testcase: string]: ConnectionConfig} = {
-  "mysql": {
-    adapter: "mysql",
-    host: "localhost",
-    user: "root",
-    database: "async_db_adapter",
-  },
-  "mysql-pool": {
-    adapter: "mysql",
-    pool: true,
-    host: "localhost",
-    user: "root",
-    database: "async_db_adapter",
-  },
-  "mysql2": {
-    adapter: "mysql2",
-    host: "localhost",
-    user: "root",
-    database: "async_db_adapter",
-  },
-  "mysql2-pool": {
-    adapter: "mysql2",
-    pool: true,
-    host: "localhost",
-    user: "root",
-    database: "async_db_adapter",
-  },
-  "pg": {
-    adapter: "pg",
-    database: "async_db_adapter",
-  },
-  "pg-pool": {
-    adapter: "pg",
-    pool: true,
-    database: "async_db_adapter",
-  },
-  "sqlite3": {
-    adapter: "sqlite3",
-    filename: ":memory:",
-  },
-}
-
-const beforeSqls: {[testcase: string]: string[]} = {
-  "mysql": [
-    "DROP TABLE IF EXISTS `tests_mysql`",
-    "CREATE TABLE `tests_mysql`(`id` int(11) unsigned NOT NULL AUTO_INCREMENT, `text` varchar(20) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB",
-  ],
-  "mysql-pool": [
-    "DROP TABLE IF EXISTS `tests_mysql_pool`",
-    "CREATE TABLE `tests_mysql_pool`(`id` int(11) unsigned NOT NULL AUTO_INCREMENT, `text` varchar(20) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB",
-  ],
-  "mysql2": [
-    "DROP TABLE IF EXISTS `tests_mysql2`",
-    "CREATE TABLE `tests_mysql2`(`id` int(11) unsigned NOT NULL AUTO_INCREMENT, `text` varchar(20) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB",
-  ],
-  "mysql2-pool": [
-    "DROP TABLE IF EXISTS `tests_mysql2_pool`",
-    "CREATE TABLE `tests_mysql2_pool`(`id` int(11) unsigned NOT NULL AUTO_INCREMENT, `text` varchar(20) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB",
-  ],
-  "pg": [
-    "DROP TABLE IF EXISTS tests_pg",
-    "CREATE TABLE tests_pg(id serial PRIMARY KEY, text varchar(20) DEFAULT NULL)",
-  ],
-  "pg-pool": [
-    "DROP TABLE IF EXISTS tests_pg_pool",
-    "CREATE TABLE tests_pg_pool(id serial PRIMARY KEY, text varchar(20) DEFAULT NULL)",
-  ],
-  "sqlite3": [
-    "DROP TABLE IF EXISTS tests_sqlite3",
-    "CREATE TABLE tests_sqlite3(id INTEGER PRIMARY KEY, text TEXT)",
-  ],
-}
 
 const insertOneSqls: {[testcase: string]: string} = {
   "mysql": "INSERT INTO `tests_mysql`(`text`) VALUE (\"hello1\")",
@@ -119,15 +46,10 @@ const selectSqls: {[testcase: string]: string} = {
 }
 
 describe("connection", () => {
-  it("test select", async () => {
-    for (const testcase of testcases) {
-      const connection = create(configs[testcase])
-      for (const beforeSql of beforeSqls[testcase] || []) {
-        await connection.query(beforeSql)
-      }
-
+  for (const testcase of testcases) {
+    it(`test select on ${testcase}`, async () => {
+      const connection = await connect(testcase)
       try {
-
         await connection.query(insertOneSqls[testcase])
         await connection.query(insertManySqls[testcase][0], insertManySqls[testcase][1])
 
@@ -144,15 +66,10 @@ describe("connection", () => {
         await connection.close()
         throw e
       }
-    }
-  })
+    })
 
-  it("test first", async () => {
-    for (const testcase of testcases) {
-      const connection = create(configs[testcase])
-      for (const beforeSql of beforeSqls[testcase] || []) {
-        await connection.query(beforeSql)
-      }
+    it(`test first on ${testcase}`, async () => {
+      const connection = await connect(testcase)
 
       try {
         await connection.query(insertOneSqls[testcase])
@@ -166,15 +83,10 @@ describe("connection", () => {
         await connection.close()
         throw e
       }
-    }
-  })
+    })
 
-  it("test insert null", async () => {
-    for (const testcase of testcases) {
-      const connection = create(configs[testcase])
-      for (const beforeSql of beforeSqls[testcase] || []) {
-        await connection.query(beforeSql)
-      }
+    it(`test insert null on ${testcase}`, async () => {
+      const connection = await connect(testcase)
 
       try {
 
@@ -192,15 +104,10 @@ describe("connection", () => {
         await connection.close()
         throw e
       }
-    }
-  })
+    })
 
-  it("test transaction success", async () => {
-    for (const testcase of testcases) {
-      const connection = create(configs[testcase])
-      for (const beforeSql of beforeSqls[testcase] || []) {
-        await connection.query(beforeSql)
-      }
+    it(`test transaction success on ${testcase}`, async () => {
+      const connection = await connect(testcase)
 
       try {
         const result = await connection.transaction(async (conn) => {
@@ -218,15 +125,10 @@ describe("connection", () => {
         await connection.close()
         throw e
       }
-    }
-  })
+    })
 
-  it("test transaction fail", async () => {
-    for (const testcase of testcases) {
-      const connection = create(configs[testcase])
-      for (const beforeSql of beforeSqls[testcase] || []) {
-        await connection.query(beforeSql)
-      }
+    it(`test transaction fail on ${testcase}`, async () => {
+      const connection = await connect(testcase)
 
       try {
         try {
@@ -246,6 +148,6 @@ describe("connection", () => {
         await connection.close()
         throw e
       }
-    }
-  })
+    })
+  }
 })
