@@ -71,14 +71,14 @@ You can create as follows:
 ```javascript
 const database = require("@stdjs/database")
 const connection = database.create({
-  adapter: "mysql"
+  adapter: "mysql2"
   /* config */
 })
 
 // or
 import { create } from "@stdjs/database"
 const connection = create({
-  adapter: "mysql"
+  adapter: "mysql2"
   /* config */
 })
 ```
@@ -169,6 +169,7 @@ const connection = create({
 }) // return instanceof ClusterConnection
 ```
 
+The `select` and `first` methods use `read` connection and the `query` method uses `write` connection.
 
 ### Config
 
