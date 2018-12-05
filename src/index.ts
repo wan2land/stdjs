@@ -1,7 +1,7 @@
 
 export { create} from "./create"
 
-export { ConnectionConfig } from "./interfaces/config"
+export { ConnectionConfig, ClusterConnectionConfig, SingleConnectionConfig } from "./interfaces/config"
 export { Connection, Pool, Row, TransactionHandler } from "./interfaces/database"
 
 export * from "./driver/mysql/interfaces"
@@ -18,3 +18,5 @@ export { PgPool } from "./driver/pg/pool"
 
 export * from "./driver/sqlite3/interfaces"
 export { Sqlite3Connection } from "./driver/sqlite3/connection"
+
+export { ClusterConnection } from "./driver/cluster/connection"

@@ -24,6 +24,29 @@ function getDockerComposePort(service: string, port: number): Promise<[string, n
 export async function config(testcase: string): Promise<ConnectionConfig> {
   const [mariadb100Host, mariadb100Port] = await getDockerComposePort("mariadb10.0", 3306)
   const [postgres96Host, postgres96Port] = await getDockerComposePort("postgres9.6", 5432)
+  if (testcase === "cluster") {
+    return {
+      adapter: "cluster",
+      read: {
+        adapter: "mysql2",
+        pool: true,
+        host: "localhost",
+        port: mariadb100Port,
+        user: "root",
+        password: "mariadb",
+        database: "stdjs_database",
+      },
+      write: {
+        adapter: "mysql2",
+        pool: true,
+        host: "localhost",
+        port: mariadb100Port,
+        user: "root",
+        password: "mariadb",
+        database: "stdjs_database",
+      },
+    }
+  }
   if (testcase === "mysql") {
     return {
       adapter: "mysql",
@@ -97,7 +120,10 @@ export async function config(testcase: string): Promise<ConnectionConfig> {
 }
 export async function connect(testcase: string): Promise<Connection> {
   const connection = create(await config(testcase))
-  if (testcase === "mysql") {
+  if (testcase === "cluster") {
+    await connection.query("DROP TABLE IF EXISTS `tests_cluster`")
+    await connection.query("CREATE TABLE `tests_cluster`(`id` int(11) unsigned NOT NULL AUTO_INCREMENT, `text` varchar(20) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB")
+  } else if (testcase === "mysql") {
     await connection.query("DROP TABLE IF EXISTS `tests_mysql`")
     await connection.query("CREATE TABLE `tests_mysql`(`id` int(11) unsigned NOT NULL AUTO_INCREMENT, `text` varchar(20) DEFAULT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB")
   } else if (testcase === "mysql-pool") {

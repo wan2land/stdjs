@@ -1,8 +1,18 @@
-
 import "jest"
 
-import { create, Mysql2Connection, Mysql2Pool, MysqlConnection, MysqlPool, PgConnection, PgPool, Sqlite3Connection } from "../dist"
+import {
+  ClusterConnection,
+  create,
+  Mysql2Connection,
+  Mysql2Pool,
+  MysqlConnection,
+  MysqlPool,
+  PgConnection,
+  PgPool,
+  Sqlite3Connection
+  } from "../dist"
 import { config } from "./utils"
+
 
 describe("readmd", () => {
 
@@ -112,64 +122,29 @@ describe("readmd", () => {
     await connection.close()
   })
 
-  it("test create array connections", async () => {
-    const mysqlConfig = await config("mysql2-pool") as {}
-    const pgConfig = await config("pg-pool") as {}
-
-    // section:create-array-connections
-    const connections = create([
-      {
-        adapter: "mysql2",
-        pool: true,
-        ...mysqlConfig,
-      },
-      {
-        adapter: "pg",
-        pool: true,
-        ...pgConfig,
-      },
-      {
-        adapter: "sqlite3",
-        filename: ":memory:",
-      },
-    ]) // return instanceof [MysqlPool, PgPool, Sqlite3Connection]
-    // endsection
-
-    expect(connections.length).toEqual(3)
-    expect(connections[0]).toBeInstanceOf(Mysql2Pool)
-    expect(connections[1]).toBeInstanceOf(PgPool)
-    expect(connections[2]).toBeInstanceOf(Sqlite3Connection)
-
-    await Promise.all(connections.map(connection => connection.close()))
-  })
-
-  it("test create object connections", async () => {
-    const pgConfig = await config("pg-pool") as {}
+  it("test create cluster connection", async () => {
     const mysqlConfig = await config("mysql2-pool") as {}
 
-    // section:create-object-connections
-    const connections = create({
-      default: {
+    // section:create-cluster-connection
+    const connection = create({
+      adapter: "cluster",
+      write: {
         adapter: "mysql2",
         pool: true,
+        host: "stdjs-database.cluster-abcdef1234.ap-somewhere.rds.amazonaws.com",
         ...mysqlConfig,
       },
-      pg: {
-        adapter: "pg",
+      read: {
+        adapter: "mysql2",
         pool: true,
-        ...pgConfig,
+        host: "stdjs-database.cluster-ro-abcdef1234.ap-somewhere.rds.amazonaws.com",
+        ...mysqlConfig,
       },
-      sqlite: {
-        adapter: "sqlite3",
-        filename: ":memory:",
-      },
-    }) // return instanceof {default: MysqlPool, pg: PgPool, sqlite: Sqlite3Connection}
+    }) // return instanceof ClusterConnection
     // endsection
 
-    expect(connections.default).toBeInstanceOf(Mysql2Pool)
-    expect(connections.pg).toBeInstanceOf(PgPool)
-    expect(connections.sqlite).toBeInstanceOf(Sqlite3Connection)
+    expect(connection).toBeInstanceOf(ClusterConnection)
 
-    await Promise.all(Object.keys(connections).map(key => connections[key].close()))
+    await connection.close()
   })
 })

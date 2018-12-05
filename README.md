@@ -147,46 +147,26 @@ const connection = create({
 }) // return instanceof Sqlite3Connection
 ```
 
-#### Multiple Connection (Array)
+#### Cluster Connection
+
+If you are using the cluster as AWS Aurora DB, you can do the following:
 
 ```typescript
-const connections = create([
-  {
+const connection = create({
+  adapter: "cluster",
+  write: {
     adapter: "mysql2",
     pool: true,
+    host: "stdjs-database.cluster-abcdef1234.ap-somewhere.rds.amazonaws.com",
     ...mysqlConfig,
   },
-  {
-    adapter: "pg",
-    pool: true,
-    ...pgConfig,
-  },
-  {
-    adapter: "sqlite3",
-    filename: ":memory:",
-  },
-]) // return instanceof [MysqlPool, PgPool, Sqlite3Connection]
-```
-
-#### Multiple Connection (Object)
-
-```typescript
-const connections = create({
-  default: {
+  read: {
     adapter: "mysql2",
     pool: true,
+    host: "stdjs-database.cluster-ro-abcdef1234.ap-somewhere.rds.amazonaws.com",
     ...mysqlConfig,
   },
-  pg: {
-    adapter: "pg",
-    pool: true,
-    ...pgConfig,
-  },
-  sqlite: {
-    adapter: "sqlite3",
-    filename: ":memory:",
-  },
-}) // return instanceof {default: MysqlPool, pg: PgPool, sqlite: Sqlite3Connection}
+}) // return instanceof ClusterConnection
 ```
 
 

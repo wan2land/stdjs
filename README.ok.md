@@ -78,13 +78,11 @@ Use `adapter`, `pool` parameter of `create` function`s config
 
 @code("./test/readme.test.ts@create-sqlite3-connection", "typescript")
 
-#### Multiple Connection (Array)
+#### Cluster Connection
 
-@code("./test/readme.test.ts@create-array-connections", "typescript")
+If you are using the cluster as AWS Aurora DB, you can do the following:
 
-#### Multiple Connection (Object)
-
-@code("./test/readme.test.ts@create-object-connections", "typescript")
+@code("./test/readme.test.ts@create-cluster-connection", "typescript")
 
 
 ### Config

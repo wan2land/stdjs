@@ -3,9 +3,10 @@ import "jest"
 
 import { connect } from "./utils"
 
-const testcases = ["mysql", "mysql-pool", "mysql2", "mysql2-pool", "pg", "pg-pool", "sqlite3"]
+const testcases = ["cluster", "mysql", "mysql-pool", "mysql2", "mysql2-pool", "pg", "pg-pool", "sqlite3"]
 
 const insertOneSqls: {[testcase: string]: string} = {
+  "cluster": "INSERT INTO `tests_cluster`(`text`) VALUE (\"hello1\")",
   "mysql": "INSERT INTO `tests_mysql`(`text`) VALUE (\"hello1\")",
   "mysql-pool": "INSERT INTO `tests_mysql_pool`(`text`) VALUE (\"hello1\")",
   "mysql2": "INSERT INTO `tests_mysql2`(`text`) VALUE (\"hello1\")",
@@ -16,6 +17,7 @@ const insertOneSqls: {[testcase: string]: string} = {
 }
 
 const insertManySqls: {[testcase: string]: [string, string[]]} = {
+  "cluster": ["INSERT INTO `tests_cluster`(`text`) VALUES (?), (?)", ["hello2", "hello3"]],
   "mysql": ["INSERT INTO `tests_mysql`(`text`) VALUES (?), (?)", ["hello2", "hello3"]],
   "mysql-pool": ["INSERT INTO `tests_mysql_pool`(`text`) VALUES (?), (?)", ["hello2", "hello3"]],
   "mysql2": ["INSERT INTO `tests_mysql2`(`text`) VALUES (?), (?)", ["hello2", "hello3"]],
@@ -26,6 +28,7 @@ const insertManySqls: {[testcase: string]: [string, string[]]} = {
 }
 
 const insertNullSqls: {[testcase: string]: [string, any[]]} = {
+  "cluster": ["INSERT INTO `tests_cluster`(`text`) VALUES (?), (?)", [null, undefined]],
   "mysql": ["INSERT INTO `tests_mysql`(`text`) VALUES (?), (?)", [null, undefined]],
   "mysql-pool": ["INSERT INTO `tests_mysql_pool`(`text`) VALUES (?), (?)", [null, undefined]],
   "mysql2": ["INSERT INTO `tests_mysql2`(`text`) VALUES (?), (?)", [null, undefined]],
@@ -36,6 +39,7 @@ const insertNullSqls: {[testcase: string]: [string, any[]]} = {
 }
 
 const selectSqls: {[testcase: string]: string} = {
+  "cluster": "SELECT * FROM `tests_cluster` ORDER BY `id`",
   "mysql": "SELECT * FROM `tests_mysql` ORDER BY `id`",
   "mysql-pool": "SELECT * FROM `tests_mysql_pool` ORDER BY `id`",
   "mysql2": "SELECT * FROM `tests_mysql2` ORDER BY `id`",

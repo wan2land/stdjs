@@ -15,6 +15,10 @@
     "postgre",
     "sqlite3",
     "sqlite",
+    "aurora",
+    "auroradb",
+    "rds",
+    "aws",
     "typescript"
   ],
   "author": "Cris <corgidisco@gmail.com>",
