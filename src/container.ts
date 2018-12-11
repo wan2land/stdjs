@@ -1,4 +1,3 @@
-import { inject as injectMetadata } from "./annotations/metadata"
 import { Descriptor } from "./descriptor"
 import {
   Containable,
@@ -6,6 +5,7 @@ import {
   Identifier,
   Provider
   } from "./interfaces"
+import { metadataInject } from "./metadata"
 
 
 export class Container implements Containable {
@@ -71,7 +71,7 @@ export class Container implements Containable {
     } else if (this.binds.has(name)) {
       const cls = this.binds.get(name)!
       const params = []
-      for (const [index, identifier] of injectMetadata.get(cls) || []) {
+      for (const [index, identifier] of metadataInject.get(cls) || []) {
         params[index] = await this.get(identifier)
       }
       instance = new cls(...params)

@@ -24,10 +24,6 @@ function turnConsoleOn(): void {
 
 
 describe("tests for README", () => {
-  it("test to exists shared", () => {
-    expect(bottler.shared).toBeInstanceOf(bottler.Container)
-  })
-
   it("test to bind simple value", async () => {
     expect.assertions(4)
 
@@ -125,7 +121,7 @@ describe("tests for README", () => {
     }
 
     class Connection {
-      constructor(@bottler.inject("driver") public driver: Driver) {
+      constructor(@bottler.Inject("driver") public driver: Driver) {
       }
     }
     container.bind("driver", Driver)

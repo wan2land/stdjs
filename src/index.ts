@@ -1,17 +1,8 @@
-import { inject } from "./annotations/inject"
-import { Container } from "./container"
-import { create } from "./create"
-import { Containable, ContainerFluent, Provider } from "./interfaces"
 
+export { create } from "./create"
 
-const shared = create()
+export { Container } from "./container"
 
-export {
-  inject,
-  create,
-  shared,
-  Container,
-  ContainerFluent,
-  Containable,
-  Provider,
-}
+export { Inject } from "./decorators/inject"
+
+export * from "./interfaces"

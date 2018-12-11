@@ -87,7 +87,7 @@ class Driver {
 }
 
 class Connection {
-  constructor(@bottler.inject("driver") public driver: Driver) {
+  constructor(@bottler.Inject("driver") public driver: Driver) {
   }
 }
 container.bind("driver", Driver)
