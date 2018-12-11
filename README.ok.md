@@ -1,12 +1,12 @@
 # Bottler
 
-[![Build](https://travis-ci.org/corgidisco/bottler.svg?branch=master)](https://travis-ci.org/corgidisco/bottler)
+[![Build](https://img.shields.io/travis/corgidisco/bottler.svg)](https://travis-ci.org/corgidisco/bottler)
 [![Downloads](https://img.shields.io/npm/dt/bottler.svg)](https://npmcharts.com/compare/bottler?minimal=true)
 [![Version](https://img.shields.io/npm/v/bottler.svg)](https://www.npmjs.com/package/bottler)
 [![License](https://img.shields.io/npm/l/bottler.svg)](https://www.npmjs.com/package/bottler)
 
-[![dependencies Status](https://david-dm.org/corgidisco/bottler/status.svg)](https://david-dm.org/corgidisco/bottler)
-[![devDependencies Status](https://david-dm.org/corgidisco/bottler/dev-status.svg)](https://david-dm.org/corgidisco/bottler?type=dev)
+[![dependencies Status](https://img.shields.io/david/corgidisco/bottler.svg)](https://david-dm.org/corgidisco/bottler)
+[![devDependencies Status](https://img.shields.io/david/dev/corgidisco/bottler.svg)](https://david-dm.org/corgidisco/bottler?type=dev)
 
 [![NPM](https://nodei.co/npm/bottler.png)](https://www.npmjs.com/package/bottler)
 
@@ -53,3 +53,7 @@ Descriptor is very useful if you using factory or bind. this is example of singl
 ### After descriptor
 
 @code("./test/readme.test.ts@after-descriptor")
+
+## License
+
+MIT
