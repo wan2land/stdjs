@@ -63,11 +63,11 @@ export class Container implements Containable {
     }
 
     const descriptor = this.descriptors.get(name)!
-    let instance: P|Promise<P>
+    let instance: P
 
     if (this.factories.has(name)) {
       const factory = this.factories.get(name)!
-      instance = factory()
+      instance = await factory()
     } else if (this.binds.has(name)) {
       const cls = this.binds.get(name)!
       const params = []
@@ -79,15 +79,8 @@ export class Container implements Containable {
       throw new Error(`"${typeof name === "symbol" ? name.toString() : name}" is not defined!`)
     }
 
-    if (instance instanceof Promise) {
-      instance = await instance
-    }
-
     for (const afterHandler of descriptor.afterHandlers) {
-      const handlerResult = afterHandler(instance)
-      instance = (handlerResult instanceof Promise)
-        ? await handlerResult
-        : handlerResult
+      instance = await afterHandler(instance)
     }
     if (descriptor.isSingleton) {
       this.instances.set(name, instance) // caching
@@ -116,20 +109,12 @@ export class Container implements Containable {
 
   public async boot(): Promise<void> {
     if (!this.isBooted) {
-      for (const provider of this.providers) {
-        const registering = provider.register(this)
-        if (registering instanceof Promise) {
-          await registering
-        }
-      }
+      await Promise.all(this.providers.map(provider => provider.register(this)))
       for (const provider of this.providers) {
         if (!provider.boot) {
           continue
         }
-        const booting = provider.boot(this)
-        if (booting instanceof Promise) {
-          await booting
-        }
+        await provider.boot(this)
       }
       this.isBooted = true
     }
@@ -141,10 +126,7 @@ export class Container implements Containable {
         if (!provider.close) {
           continue
         }
-        const closing = provider.close(this)
-        if (closing instanceof Promise) {
-          await closing
-        }
+        await provider.close(this)
       }
       this.isBooted = false
     }
