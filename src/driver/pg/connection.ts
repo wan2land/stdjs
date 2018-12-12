@@ -45,7 +45,8 @@ export class PgConnection implements Connection {
     let insertId: any
     if (result.rows.length) {
       const firstRow = result.rows[0]
-      insertId = Object.values(firstRow)[0]
+      const keys = Object.keys(firstRow)
+      insertId = firstRow[keys[0]]
     }
     return {
       insertId,

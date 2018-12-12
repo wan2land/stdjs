@@ -5,9 +5,6 @@
 [![Version](https://img.shields.io/npm/v/@stdjs/database.svg)](https://www.npmjs.com/package/@stdjs/database)
 [![License](https://img.shields.io/npm/l/@stdjs/database.svg)](https://www.npmjs.com/package/@stdjs/database)
 
-
-https://img.shields.io/david/:user/:repo.svg
-
 [![dependencies Status](https://img.shields.io/david/corgidisco/stdjs-database.svg)](https://david-dm.org/corgidisco/stdjs-database)
 [![devDependencies Status](https://img.shields.io/david/dev/corgidisco/stdjs-database.svg)](https://david-dm.org/corgidisco/stdjs-database?type=dev)
 
