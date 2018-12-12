@@ -3,7 +3,7 @@
 
 import "jest"
 
-import * as bottler from "../dist"
+import * as di from "../dist"
 
 interface TestObject {
   message: string
@@ -27,7 +27,7 @@ describe("tests for README", () => {
   it("test to bind simple value", async () => {
     expect.assertions(4)
 
-    const container = bottler.create()
+    const container = di.create()
 
     turnConsoleOff()
     // section:bind-simple-value
@@ -52,7 +52,7 @@ describe("tests for README", () => {
   it("test to bind promise value", async () => {
     expect.assertions(4)
 
-    const container = bottler.create()
+    const container = di.create()
 
     turnConsoleOff()
     // section:bind-promise-value
@@ -84,7 +84,7 @@ describe("tests for README", () => {
   it("test to bind factory", async () => {
     expect.assertions(3)
 
-    const container = bottler.create()
+    const container = di.create()
 
     turnConsoleOff()
     // section:bind-factory
@@ -113,7 +113,7 @@ describe("tests for README", () => {
   it("test to bind class", async () => {
     expect.assertions(2)
 
-    const container = bottler.create()
+    const container = di.create()
 
     turnConsoleOff()
     // section:bind-class
@@ -121,7 +121,7 @@ describe("tests for README", () => {
     }
 
     class Connection {
-      constructor(@bottler.Inject("driver") public driver: Driver) {
+      constructor(@di.Inject("driver") public driver: Driver) {
       }
     }
     container.bind("driver", Driver)
@@ -140,7 +140,7 @@ describe("tests for README", () => {
   it("test singleton descriptor", async () => {
     expect.assertions(4)
 
-    const container = bottler.create()
+    const container = di.create()
 
     class Foo {
     }
@@ -174,7 +174,7 @@ describe("tests for README", () => {
   it("test after descriptor", async () => {
     expect.assertions(1)
 
-    const container = bottler.create()
+    const container = di.create()
 
     turnConsoleOff()
     // section:after-descriptor

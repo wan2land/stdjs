@@ -1,7 +1,7 @@
 {
-  "name": "bottler",
+  "name": "@stdjs/di",
   "version": "0.3.0",
-  "description": "Very simple ioc container for Javascript(& Typescript).",
+  "description": "Very simple ioc di for Javascript(& Typescript).",
   "keywords": [
     "di",
     "ioc",
@@ -15,7 +15,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/corgidisco/bottler.git"
+    "url": "git://github.com/corgidisco/stdjs-di.git"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

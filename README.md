@@ -1,31 +1,31 @@
-# Bottler
+# STDJS - DI
 
-[![Build](https://img.shields.io/travis/corgidisco/bottler.svg)](https://travis-ci.org/corgidisco/bottler)
-[![Downloads](https://img.shields.io/npm/dt/bottler.svg)](https://npmcharts.com/compare/bottler?minimal=true)
-[![Version](https://img.shields.io/npm/v/bottler.svg)](https://www.npmjs.com/package/bottler)
-[![License](https://img.shields.io/npm/l/bottler.svg)](https://www.npmjs.com/package/bottler)
+[![Build](https://img.shields.io/travis/corgidisco/stdjs-di.svg)](https://travis-ci.org/corgidisco/stdjs-di)
+[![Downloads](https://img.shields.io/npm/dt/@stdjs/di.svg)](https://npmcharts.com/compare/@stdjs/di?minimal=true)
+[![Version](https://img.shields.io/npm/v/@stdjs/di.svg)](https://www.npmjs.com/package/@stdjs/di)
+[![License](https://img.shields.io/npm/l/@stdjs/di.svg)](https://www.npmjs.com/package/@stdjs/di)
 
-[![dependencies Status](https://img.shields.io/david/corgidisco/bottler.svg)](https://david-dm.org/corgidisco/bottler)
-[![devDependencies Status](https://img.shields.io/david/dev/corgidisco/bottler.svg)](https://david-dm.org/corgidisco/bottler?type=dev)
+[![dependencies Status](https://img.shields.io/david/corgidisco/stdjs-di.svg)](https://david-dm.org/corgidisco/stdjs-di)
+[![devDependencies Status](https://img.shields.io/david/dev/corgidisco/stdjs-di.svg)](https://david-dm.org/corgidisco/stdjs-di?type=dev)
 
-[![NPM](https://nodei.co/npm/bottler.png)](https://www.npmjs.com/package/bottler)
+[![NPM](https://nodei.co/npm/@stdjs/di.png)](https://www.npmjs.com/package/@stdjs/di)
 
 Very simple ioc container for Javascript(& Typescript).
 
 ## Installation
 
 ```bash
-npm install bottler --save
+npm install @stdjs/di --save
 ```
 
 ## Usage
 
 ```javascript
-const bottler = require("bottler")
-// or import * as bottler from "bottler"
+const di = require("@stdjs/di")
+// or import * as di from "@stdjs/di"
 
-const container = bottler.create()
-// or const container = new bottler.Container()
+const container = di.create()
+// or const container = new di.Container()
 ```
 
 ### Bind simple value
@@ -87,7 +87,7 @@ class Driver {
 }
 
 class Connection {
-  constructor(@bottler.Inject("driver") public driver: Driver) {
+  constructor(@di.Inject("driver") public driver: Driver) {
   }
 }
 container.bind("driver", Driver)
