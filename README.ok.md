@@ -10,7 +10,7 @@
 
 [![NPM](https://nodei.co/npm/@stdjs/di.png)](https://www.npmjs.com/package/@stdjs/di)
 
-Very simple ioc container for Javascript(& Typescript).
+Super slim DI(Depdency Injection) container with Async/Promise for Javascript(& Typescript).
 
 ## Installation
 

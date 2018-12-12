@@ -1,7 +1,7 @@
 {
   "name": "@stdjs/di",
   "version": "0.3.0",
-  "description": "Very simple ioc di for Javascript(& Typescript).",
+  "description": "Super slim DI(Depdency Injection) container with Async/Promise for Javascript(& Typescript).",
   "keywords": [
     "di",
     "ioc",
