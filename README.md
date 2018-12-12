@@ -1,12 +1,15 @@
 # STDJS - Database
 
-[![Build](https://travis-ci.org/corgidisco/stdjs-database.svg?branch=master)](https://travis-ci.org/corgidisco/stdjs-database)
+[![Build](https://img.shields.io/travis/corgidisco/stdjs-database.svg)](https://travis-ci.org/corgidisco/stdjs-database)
 [![Downloads](https://img.shields.io/npm/dt/@stdjs/database.svg)](https://npmcharts.com/compare/@stdjs/database?minimal=true)
 [![Version](https://img.shields.io/npm/v/@stdjs/database.svg)](https://www.npmjs.com/package/@stdjs/database)
 [![License](https://img.shields.io/npm/l/@stdjs/database.svg)](https://www.npmjs.com/package/@stdjs/database)
 
-[![dependencies Status](https://david-dm.org/corgidisco/stdjs-database/status.svg)](https://david-dm.org/corgidisco/stdjs-database)
-[![devDependencies Status](https://david-dm.org/corgidisco/stdjs-database/dev-status.svg)](https://david-dm.org/corgidisco/stdjs-database?type=dev)
+
+https://img.shields.io/david/:user/:repo.svg
+
+[![dependencies Status](https://img.shields.io/david/corgidisco/stdjs-database.svg)](https://david-dm.org/corgidisco/stdjs-database)
+[![devDependencies Status](https://img.shields.io/david/dev/corgidisco/stdjs-database.svg)](https://david-dm.org/corgidisco/stdjs-database?type=dev)
 
 [![NPM](https://nodei.co/npm/@stdjs/database.png)](https://www.npmjs.com/package/@stdjs/database)
 
