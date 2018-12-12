@@ -1,6 +1,6 @@
 {
   "name": "@stdjs/database",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Database Adapter with Async/Promise for Javascript(& Typescript).",
   "keywords": [
     "database-adapter",
