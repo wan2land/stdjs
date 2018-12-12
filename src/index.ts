@@ -1,8 +1,8 @@
 
 export { create} from "./create"
 
-export { ConnectionConfig, ClusterConnectionConfig, SingleConnectionConfig } from "./interfaces/config"
-export { Connection, Pool, Row, TransactionHandler } from "./interfaces/database"
+export * from "./interfaces/config"
+export * from "./interfaces/database"
 
 export * from "./driver/mysql/interfaces"
 export { MysqlConnection } from "./driver/mysql/connection"
