@@ -1,7 +1,9 @@
 import {
   Connection,
   QueryBuilder,
+  QueryResult,
   Row,
+  Scalar,
   TransactionHandler
   } from "../../interfaces/database"
 import { isQueryBuilder } from "../../utils"
@@ -24,7 +26,7 @@ export class Sqlite3Connection implements Connection {
     })
   }
 
-  public first<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P|undefined> {
+  public first<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
     return new Promise<P|undefined>((resolve, reject) => {
       let query: string
       if (isQueryBuilder(queryOrQb)) {
@@ -42,7 +44,7 @@ export class Sqlite3Connection implements Connection {
     })
   }
 
-  public select<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P[]> {
+  public select<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P[]> {
     return new Promise<P[]>((resolve, reject) => {
       let query: string
       if (isQueryBuilder(queryOrQb)) {
@@ -60,7 +62,7 @@ export class Sqlite3Connection implements Connection {
     })
   }
 
-  public query(queryOrQb: string|QueryBuilder, values?: any): Promise<any> {
+  public query(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<QueryResult> {
     return new Promise((resolve, reject) => {
       let query: string
       if (isQueryBuilder(queryOrQb)) {
@@ -74,7 +76,11 @@ export class Sqlite3Connection implements Connection {
         if (err) {
           return reject(err)
         }
-        resolve(this)
+        resolve({
+          insertId: /^insert/i.test(query) ? this.lastID : undefined,
+          changes: this.changes,
+          raw: this,
+        })
       })
       // tslint:enable:only-arrow-functions
     })

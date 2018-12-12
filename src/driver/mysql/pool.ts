@@ -3,7 +3,9 @@ import {
   Pool,
   PoolConnection,
   QueryBuilder,
-  Row
+  QueryResult,
+  Row,
+  Scalar
   } from "../../interfaces/database"
 import { isQueryBuilder } from "../../utils"
 import { MysqlRawPool } from "./interfaces"
@@ -26,11 +28,11 @@ export class MysqlPool implements Pool {
     })
   }
 
-  public async first<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P|undefined> {
+  public async first<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
     return (await this.select<P>(queryOrQb, values))[0]
   }
 
-  public select<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P[]> {
+  public select<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P[]> {
     return new Promise((resolve, reject) => {
       let query: string
       if (isQueryBuilder(queryOrQb)) {
@@ -48,7 +50,7 @@ export class MysqlPool implements Pool {
     })
   }
 
-  public query(queryOrQb: string|QueryBuilder, values?: any): Promise<any> {
+  public query(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<QueryResult> {
     return new Promise((resolve, reject) => {
       let query: string
       if (isQueryBuilder(queryOrQb)) {
@@ -61,7 +63,11 @@ export class MysqlPool implements Pool {
         if (err) {
           return reject(err)
         }
-        resolve(result)
+        resolve({
+          insertId: result!.insertId || undefined,
+          changes: result!.affectedRows,
+          raw: result,
+        })
       })
     })
   }

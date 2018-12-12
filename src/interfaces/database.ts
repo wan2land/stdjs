@@ -1,6 +1,8 @@
 
 // section:interfaces
 
+export type Scalar = number | string | boolean | null
+
 export type TransactionHandler<P> = (connection: Connection) => Promise<P>|P
 
 export interface Pool extends Connection {
@@ -13,13 +15,19 @@ export interface PoolConnection extends Connection {
 
 export interface Connection {
   close(): Promise<void>
-  query(qb: QueryBuilder): Promise<any>
-  query(query: string, values?: any): Promise<any>
+  query(qb: QueryBuilder): Promise<QueryResult>
+  query(query: string, values?: Scalar[]): Promise<QueryResult>
   select<P extends Row>(qb: QueryBuilder): Promise<P[]>
-  select<P extends Row>(query: string, values?: any): Promise<P[]>
+  select<P extends Row>(query: string, values?: Scalar[]): Promise<P[]>
   first<P>(qb: QueryBuilder): Promise<P|undefined>
-  first<P>(query: string, values?: any): Promise<P|undefined>
+  first<P>(query: string, values?: Scalar[]): Promise<P|undefined>
   transaction<P>(handler: TransactionHandler<P>): Promise<P>
+}
+
+export interface QueryResult {
+  insertId?: number|string // insert query only
+  changes: number
+  raw: any
 }
 
 export interface Row {

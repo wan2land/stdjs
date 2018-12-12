@@ -2,7 +2,9 @@ import {
   Pool,
   PoolConnection,
   QueryBuilder,
+  QueryResult,
   Row,
+  Scalar,
   TransactionHandler
   } from "../../interfaces/database"
 import { isQueryBuilder } from "../../utils"
@@ -19,19 +21,31 @@ export class PgPool implements Pool {
     await this.pool.end()
   }
 
-  public async first<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P|undefined> {
+  public async first<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
     return (await this.select<P>(queryOrQb, values))[0]
   }
 
-  public async select<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P[]> {
-    return (await this.query(queryOrQb, values)).rows
+  public async select<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P[]> {
+    if (isQueryBuilder(queryOrQb)) {
+      return (await this.pool.query(queryOrQb.toSql(), queryOrQb.getBindings() || [])).rows
+    } else {
+      return (await this.pool.query(queryOrQb, values || [])).rows
+    }
   }
 
-  public async query(queryOrQb: string|QueryBuilder, values?: any): Promise<any> {
-    if (isQueryBuilder(queryOrQb)) {
-      return await this.pool.query(queryOrQb.toSql(), queryOrQb.getBindings() || [])
-    } else {
-      return await this.pool.query(queryOrQb, values || [])
+  public async query(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<QueryResult> {
+    const result = isQueryBuilder(queryOrQb)
+      ? await this.pool.query(queryOrQb.toSql(), queryOrQb.getBindings() || [])
+      : await this.pool.query(queryOrQb, values || [])
+    let insertId: any
+    if (result.rows.length) {
+      const firstRow = result.rows[0]
+      insertId = Object.values(firstRow)[0]
+    }
+    return {
+      insertId,
+      changes: result.rowCount,
+      raw: result,
     }
   }
 

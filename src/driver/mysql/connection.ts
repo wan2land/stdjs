@@ -1,7 +1,9 @@
 import {
   Connection,
   QueryBuilder,
+  QueryResult,
   Row,
+  Scalar,
   TransactionHandler
   } from "../../interfaces/database"
 import { isQueryBuilder } from "../../utils"
@@ -24,11 +26,11 @@ export class MysqlConnection implements Connection {
     })
   }
 
-  public async first<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P|undefined> {
+  public async first<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
     return (await this.select<P>(queryOrQb, values))[0]
   }
 
-  public select<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P[]> {
+  public select<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P[]> {
     return new Promise((resolve, reject) => {
       let query: string
       if (isQueryBuilder(queryOrQb)) {
@@ -46,7 +48,7 @@ export class MysqlConnection implements Connection {
     })
   }
 
-  public query(queryOrQb: string|QueryBuilder, values?: any): Promise<any> {
+  public query(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<QueryResult> {
     return new Promise((resolve, reject) => {
       let query: string
       if (isQueryBuilder(queryOrQb)) {
@@ -59,7 +61,11 @@ export class MysqlConnection implements Connection {
         if (err) {
           return reject(err)
         }
-        resolve(result)
+        resolve({
+          insertId: result!.insertId || undefined,
+          changes: result!.affectedRows,
+          raw: result,
+        })
       })
     })
   }

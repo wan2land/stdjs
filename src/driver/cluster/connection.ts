@@ -1,7 +1,9 @@
 import {
   Connection,
   QueryBuilder,
+  QueryResult,
   Row,
+  Scalar,
   TransactionHandler
   } from "../../interfaces/database"
 
@@ -18,15 +20,15 @@ export class ClusterConnection implements Connection {
     ])
   }
 
-  public first<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P|undefined> {
+  public first<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
     return this.read.first<P>(queryOrQb as any, values)
   }
 
-  public select<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P[]> {
+  public select<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P[]> {
     return this.read.select<P>(queryOrQb as any, values)
   }
 
-  public query(queryOrQb: string|QueryBuilder, values?: any): Promise<any> {
+  public query(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<QueryResult> {
     return this.write.query(queryOrQb as any, values)
   }
 

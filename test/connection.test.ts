@@ -27,6 +27,28 @@ const insertManySqls: {[testcase: string]: [string, string[]]} = {
   "sqlite3": ["INSERT INTO tests_sqlite3(text) VALUES (?), (?)", ["hello2", "hello3"]],
 }
 
+const updateSqls: {[testcase: string]: [string, any[]]} = {
+  "cluster": ["UPDATE `tests_cluster` SET `text` = ?", ["updated!"]],
+  "mysql": ["UPDATE `tests_mysql` SET `text` = ?", ["updated!"]],
+  "mysql-pool": ["UPDATE `tests_mysql_pool` SET `text` = ?", ["updated!"]],
+  "mysql2": ["UPDATE `tests_mysql2` SET `text` = ?", ["updated!"]],
+  "mysql2-pool": ["UPDATE `tests_mysql2_pool` SET `text` = ?", ["updated!"]],
+  "pg": ["UPDATE tests_pg SET text = $1", ["updated!"]], // not exists VALUE
+  "pg-pool": ["UPDATE tests_pg_pool SET text = $1", ["updated!"]], // not exists VALUE
+  "sqlite3": ["UPDATE tests_sqlite3 SET text = ?", ["updated!"]], // not exists VALUE
+}
+
+const deleteSqls: {[testcase: string]: string} = {
+  "cluster": "DELETE FROM `tests_cluster`",
+  "mysql": "DELETE FROM `tests_mysql`",
+  "mysql-pool": "DELETE FROM `tests_mysql_pool`",
+  "mysql2": "DELETE FROM `tests_mysql2`",
+  "mysql2-pool": "DELETE FROM `tests_mysql2_pool`",
+  "pg": "DELETE FROM tests_pg", // not exists VALUE
+  "pg-pool": "DELETE FROM tests_pg_pool", // not exists VALUE
+  "sqlite3": "DELETE FROM tests_sqlite3", // not exists VALUE
+}
+
 const insertNullSqls: {[testcase: string]: [string, any[]]} = {
   "cluster": ["INSERT INTO `tests_cluster`(`text`) VALUES (?), (?)", [null, undefined]],
   "mysql": ["INSERT INTO `tests_mysql`(`text`) VALUES (?), (?)", [null, undefined]],
@@ -51,6 +73,64 @@ const selectSqls: {[testcase: string]: string} = {
 
 describe("connection", () => {
   for (const testcase of testcases) {
+    it(`test insert on ${testcase}`, async () => {
+      const connection = await connect(testcase)
+      try {
+        const resultOne = await connection.query(insertOneSqls[testcase])
+        expect(resultOne.insertId).toEqual(1)
+        expect(resultOne.changes).toEqual(1)
+
+        const resultMany = await connection.query(insertManySqls[testcase][0], insertManySqls[testcase][1])
+        if (testcase === "sqlite3") {
+          // sqlite return last id
+          expect(resultMany.insertId).toEqual(3)
+        } else {
+          // else return first id
+          expect(resultMany.insertId).toEqual(2)
+        }
+        expect(resultMany.changes).toEqual(2)
+
+        await connection.close()
+      } catch (e) {
+        await connection.close()
+        throw e
+      }
+    })
+
+    it(`test update on ${testcase}`, async () => {
+      const connection = await connect(testcase)
+      try {
+        await connection.query(insertManySqls[testcase][0], insertManySqls[testcase][1])
+
+        const result = await connection.query(updateSqls[testcase][0], updateSqls[testcase][1])
+
+        expect(result.insertId).toBeUndefined()
+        expect(result.changes).toEqual(2)
+
+        await connection.close()
+      } catch (e) {
+        await connection.close()
+        throw e
+      }
+    })
+
+    it(`test delete on ${testcase}`, async () => {
+      const connection = await connect(testcase)
+      try {
+        await connection.query(insertManySqls[testcase][0], insertManySqls[testcase][1])
+
+        const result = await connection.query(deleteSqls[testcase])
+
+        expect(result.insertId).toBeUndefined()
+        expect(result.changes).toEqual(2)
+
+        await connection.close()
+      } catch (e) {
+        await connection.close()
+        throw e
+      }
+    })
+
     it(`test select on ${testcase}`, async () => {
       const connection = await connect(testcase)
       try {

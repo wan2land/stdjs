@@ -1,7 +1,9 @@
 import {
   Connection,
   QueryBuilder,
+  QueryResult,
   Row,
+  Scalar,
   TransactionHandler
   } from "../../interfaces/database"
 import { isQueryBuilder } from "../../utils"
@@ -24,11 +26,11 @@ export class Mysql2Connection implements Connection {
     })
   }
 
-  public async first<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P|undefined> {
+  public async first<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
     return (await this.select<P>(queryOrQb, values))[0]
   }
 
-  public select<P extends Row>(queryOrQb: string|QueryBuilder, values?: any): Promise<P[]> {
+  public select<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P[]> {
     if (Array.isArray(values)) {
       values = values.map(value => typeof value  === "undefined" ? null : value)
     }
@@ -49,7 +51,7 @@ export class Mysql2Connection implements Connection {
     })
   }
 
-  public query(queryOrQb: string|QueryBuilder, values?: any): Promise<any> {
+  public query(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<QueryResult> {
     if (Array.isArray(values)) {
       values = values.map(value => typeof value  === "undefined" ? null : value)
     }
@@ -65,7 +67,11 @@ export class Mysql2Connection implements Connection {
         if (err) {
           return reject(err)
         }
-        resolve(result)
+        resolve({
+          insertId: result!.insertId || undefined,
+          changes: result!.affectedRows,
+          raw: result,
+        })
       })
     })
   }
