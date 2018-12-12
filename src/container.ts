@@ -47,6 +47,14 @@ export class Container implements Containable {
     return descriptor
   }
 
+  public async create<P>(ctor: {new (...args: any[]): P}): Promise<P> {
+    const params = []
+    for (const [index, identifier] of metadataInject.get(ctor) || []) {
+      params[index] = await this.get(identifier)
+    }
+    return new ctor(...params)
+  }
+
   public async get<P>(name: Identifier): Promise<P> {
     if (this.descriptors.has(name)) {
       (this.descriptors.get(name) as Descriptor<P>).freeze()
@@ -69,12 +77,7 @@ export class Container implements Containable {
       const factory = this.factories.get(name)!
       instance = await factory()
     } else if (this.binds.has(name)) {
-      const cls = this.binds.get(name)!
-      const params = []
-      for (const [index, identifier] of metadataInject.get(cls) || []) {
-        params[index] = await this.get(identifier)
-      }
-      instance = new cls(...params)
+      instance = await this.create(this.binds.get(name)!)
     } else {
       throw new Error(`"${typeof name === "symbol" ? name.toString() : name}" is not defined!`)
     }
