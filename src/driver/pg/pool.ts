@@ -1,3 +1,4 @@
+import { RowNotFoundError } from "../../error/row-not-found-error"
 import {
   Pool,
   PoolConnection,
@@ -23,6 +24,14 @@ export class PgPool implements Pool {
 
   public async first<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
     return (await this.select<P>(queryOrQb, values))[0]
+  }
+
+  public async firstOrThrow<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
+    const rows = await this.select<P>(queryOrQb, values)
+    if (rows.length) {
+      return rows[0]
+    }
+    throw new RowNotFoundError()
   }
 
   public async select<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P[]> {

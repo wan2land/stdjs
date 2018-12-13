@@ -20,3 +20,5 @@ export * from "./driver/sqlite3/interfaces"
 export { Sqlite3Connection } from "./driver/sqlite3/connection"
 
 export { ClusterConnection } from "./driver/cluster/connection"
+
+export { RowNotFoundError } from "./error/row-not-found-error"

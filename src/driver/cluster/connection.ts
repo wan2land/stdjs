@@ -24,6 +24,10 @@ export class ClusterConnection implements Connection {
     return this.read.first<P>(queryOrQb as any, values)
   }
 
+  public firstOrThrow<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
+    return this.read.firstOrThrow<P>(queryOrQb as any, values)
+  }
+
   public select<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P[]> {
     return this.read.select<P>(queryOrQb as any, values)
   }

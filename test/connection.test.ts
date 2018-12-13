@@ -1,6 +1,7 @@
 
 import "jest"
 
+import { RowNotFoundError } from "../dist"
 import { connect } from "./utils"
 
 const testcases = ["cluster", "mysql", "mysql-pool", "mysql2", "mysql2-pool", "pg", "pg-pool", "sqlite3"]
@@ -156,11 +157,27 @@ describe("connection", () => {
       const connection = await connect(testcase)
 
       try {
+        // undefined!
+        expect(await connection.first(selectSqls[testcase])).toBeUndefined()
+
         await connection.query(insertOneSqls[testcase])
 
         const row = await connection.first(selectSqls[testcase])
 
         expect(row).toEqual({id: 1, text: "hello1"})
+
+        await connection.close()
+      } catch (e) {
+        await connection.close()
+        throw e
+      }
+    })
+
+    it(`test firstOrThrow on ${testcase}`, async () => {
+      const connection = await connect(testcase)
+
+      try {
+        await expect(connection.firstOrThrow(selectSqls[testcase])).rejects.toEqual(new RowNotFoundError())
 
         await connection.close()
       } catch (e) {

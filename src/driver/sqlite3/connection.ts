@@ -1,3 +1,4 @@
+import { RowNotFoundError } from "../../error/row-not-found-error"
 import {
   Connection,
   QueryBuilder,
@@ -38,6 +39,27 @@ export class Sqlite3Connection implements Connection {
       this.connection.get(query, values || [], (err, row) => {
         if (err) {
           return reject(err)
+        }
+        resolve(row)
+      })
+    })
+  }
+
+  public firstOrThrow<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
+    return new Promise<P|undefined>((resolve, reject) => {
+      let query: string
+      if (isQueryBuilder(queryOrQb)) {
+        query = queryOrQb.toSql()
+        values = queryOrQb.getBindings() || []
+      } else {
+        query = queryOrQb
+      }
+      this.connection.get(query, values || [], (err, row) => {
+        if (err) {
+          return reject(err)
+        }
+        if (!row) {
+          return reject(new RowNotFoundError())
         }
         resolve(row)
       })
