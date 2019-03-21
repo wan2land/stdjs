@@ -1,5 +1,5 @@
 import { Column, HasMany } from "../../src"
-import { City } from "./city"
+import { Article } from "./article"
 
 
 export class Country {
@@ -10,6 +10,6 @@ export class Country {
   @Column()
   public country!: string
 
-  @HasMany(type => City, {key: "country_id", relatedKey: "country_id"})
-  public cities?: City[]
+  @HasMany(type => Article, {key: "country_id", relatedKey: "country_id"})
+  public cities?: Article[]
 }

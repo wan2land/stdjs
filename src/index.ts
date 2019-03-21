@@ -9,4 +9,7 @@ export { BelongsTo } from "./decorators/belongs-to"
 export { HasMany } from "./decorators/has-many"
 export { HasOne } from "./decorators/has-one"
 
+export { createOptions } from "./relater/create-options"
+export { Mapper } from "./relater/mapper"
+
 export * from "./metadata"
