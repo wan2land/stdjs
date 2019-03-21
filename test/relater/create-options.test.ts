@@ -1,6 +1,6 @@
 import { createOptions } from "../../src/relater/create-options"
 import { Article } from "../stubs/article"
-import { Country } from "../stubs/country"
+import { User } from "../stubs/user"
 
 
 describe("testsuite of relater/create-options", () => {
@@ -32,10 +32,10 @@ describe("testsuite of relater/create-options", () => {
       relations: [
         {
           type: "one-to-one",
-          target: Country,
-          property: "country",
-          key: "country_id",
-          relatedKey: "country_id",
+          target: User,
+          property: "user",
+          key: "user_id",
+          relatedKey: "id",
         },
       ],
     })

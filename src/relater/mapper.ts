@@ -19,22 +19,6 @@ export class Mapper<Entity> {
         entity[column.property] = row[column.sourceKey]
       }
 
-      // const relations = this.options.relations || {}
-      // for (const key of Object.keys(relations)) {
-      //   if (!row[key]) {
-      //     continue // not exists cascades
-      //   }
-      //   const relation = relations[key]
-      //   if (relation.related && this.loader) {
-      //     const repo = this.loader.getRepository(relation.related)
-      //     entity[key] = relation.type === "one-to-one"
-      //       ? repo.hydrate([row[key]])[0]
-      //       : repo.hydrate(row[key] || [])
-      //   } else {
-      //     entity[key] = row[key]
-      //   }
-      // }
-
       Object.setPrototypeOf(entity, this.options.ctor.prototype)
       return entity
     })
