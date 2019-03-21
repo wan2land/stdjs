@@ -1,6 +1,6 @@
 {
   "name": "relater",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Decorator-based transformer of plain object to class constructors for Javascript(& Typescript).",
   "keywords": [
     "serialization",

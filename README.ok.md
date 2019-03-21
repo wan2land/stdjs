@@ -7,3 +7,13 @@
 [![NPM](https://nodei.co/npm/relater.png)](https://www.npmjs.com/package/relater)
 
 Decorator-based transformer of plain object to class constructors for Javascript(& Typescript).
+
+## Installation
+
+```bash
+npm i relater
+```
+
+## License
+
+MIT
