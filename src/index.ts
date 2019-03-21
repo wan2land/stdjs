@@ -11,5 +11,6 @@ export { HasOne } from "./decorators/has-one"
 
 export { createOptions } from "./relater/create-options"
 export { Mapper } from "./relater/mapper"
+export { mapTo } from "./relater/map-to"
 
 export * from "./metadata"

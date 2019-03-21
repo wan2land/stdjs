@@ -3,7 +3,7 @@ import { RelaterOptions } from "../interfaces/relater"
 import { metadataColumns, metadataRelations } from "../metadata"
 
 
-export function createOptions<P>(ctor: ConstructType<P>): RelaterOptions<P> {
+export function createOptions<Entity>(ctor: ConstructType<Entity>): RelaterOptions<Entity> {
   return {
     ctor,
     columns: (metadataColumns.get(ctor) || []).map(({property, type, name}) => ({

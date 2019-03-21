@@ -34,6 +34,7 @@ export class Mapper<Entity> {
       //     entity[key] = row[key]
       //   }
       // }
+
       Object.setPrototypeOf(entity, this.options.ctor.prototype)
       return entity
     })
