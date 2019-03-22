@@ -51,6 +51,7 @@
     "@typescript-eslint/eslint-plugin": "^1.4.0",
     "eslint": "^5.14.1",
     "jest": "^24.1.0",
+    "lodash.isplainobject": "^4.0.6",
     "rimraf": "^2.6.2",
     "ts-jest": "^24.0.0",
     "typescript": "^3.2.2"
