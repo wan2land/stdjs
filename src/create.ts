@@ -17,13 +17,15 @@ export function create(config: ConnectionConfig): Connection {
   if (config.adapter === "cluster") {
     return new ClusterConnection(create(config.read), create(config.write))
   } else if (config.adapter === "mysql") {
+    const lib = require("mysql")
     return config.pool
-      ? new MysqlPool(require(config.adapter).createPool(remainConfig))
-      : new MysqlConnection(require(config.adapter).createConnection(remainConfig))
+      ? new MysqlPool(lib.createPool(remainConfig))
+      : new MysqlConnection(lib.createConnection(remainConfig))
   } else if (config.adapter === "mysql2") {
+    const lib = require("mysql2")
     return config.pool
-      ? new Mysql2Pool(require(config.adapter).createPool(remainConfig))
-      : new Mysql2Connection(require(config.adapter).createConnection(remainConfig))
+      ? new Mysql2Pool(lib.createPool(remainConfig))
+      : new Mysql2Connection(lib.createConnection(remainConfig))
   } else if (config.adapter === "pg") {
     const pg = require("pg")
     return config.pool
