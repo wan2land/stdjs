@@ -16,7 +16,7 @@ export class Transformer<Entity, Source = any> {
     return rows.map((row: any) => {
       const entity: any = {}
       for (const column of this.options.columns) {
-        if (row[column.sourceKey]) {
+        if (typeof row[column.sourceKey] !== "undefined") {
           entity[column.property] = row[column.sourceKey]
         }
       }
@@ -37,7 +37,7 @@ export class Transformer<Entity, Source = any> {
     return entities.map((entity) => {
       const row: any = {}
       for (const column of this.options.columns) {
-        if (entity[column.property]) {
+        if (typeof entity[column.property] !== "undefined") {
           row[column.sourceKey] = entity[column.property]
         }
       }
