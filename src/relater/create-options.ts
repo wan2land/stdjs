@@ -7,10 +7,12 @@ import { metadataColumns, metadataRelations } from "../metadata"
 export function createOptions<Entity>(ctor: ConstructType<Entity>): RelaterOptions<Entity> {
   return {
     ctor,
-    columns: ((metadataColumns.get(ctor) || []) as MetadataColumn<Entity>[]).map(({property, type, name}) => ({
+    columns: ((metadataColumns.get(ctor) || []) as MetadataColumn<Entity>[]).map(({property, type, name, nullable, default: def}) => ({
       property,
       type,
       sourceKey: name,
+      nullable,
+      default: def,
     })),
     relations: ((metadataRelations.get(ctor) || []) as MetadataRelation<Entity>[]).map(({typeFactory, property, type, key, relatedKey}) => {
       const relationEntity = typeFactory(undefined)

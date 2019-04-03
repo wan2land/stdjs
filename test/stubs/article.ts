@@ -5,12 +5,12 @@ import { User } from "./user"
 export class Article {
 
   @Column({type: "int"})
-  public id?: number
+  public id!: number
 
   @Column()
   public title!: string
 
-  @Column()
+  @Column({nullable: true})
   public contents!: number
 
   @Column({name: "created_at"})

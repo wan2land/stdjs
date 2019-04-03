@@ -12,21 +12,25 @@ describe("testsuite of relater/create-options", () => {
           type: "int",
           property: "id",
           sourceKey: "id",
+          nullable: false,
         },
         {
           type: "string",
           property: "title",
           sourceKey: "title",
+          nullable: false,
         },
         {
           type: "string",
           property: "contents",
           sourceKey: "contents",
+          nullable: true,
         },
         {
           type: "string",
           property: "createdAt",
           sourceKey: "created_at",
+          nullable: false,
         },
       ],
       relations: [

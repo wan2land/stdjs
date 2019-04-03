@@ -1,11 +1,13 @@
 import { ColumnType, RelationType } from "./decorator"
-import { ConstructFactory } from "./utils"
+import { ConstructFactory, MaybeFactory } from "./utils"
 
 
 export interface MetadataColumn<P> {
   property: keyof P
   name: string
   type: ColumnType
+  nullable: boolean
+  default?: MaybeFactory<any>
 }
 
 export interface MetadataRelation<P> {

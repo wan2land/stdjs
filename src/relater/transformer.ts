@@ -16,8 +16,16 @@ export class Transformer<Entity, Source = any> {
     return rows.map((row: any) => {
       const entity: Partial<Entity> = {}
       for (const column of this.options.columns) {
-        if (typeof row[column.sourceKey] !== "undefined") {
-          entity[column.property] = row[column.sourceKey]
+        const defaultValue = typeof column.default === "function" ? column.default() : column.default
+        const value = typeof row[column.sourceKey] !== "undefined" ? row[column.sourceKey] : defaultValue
+        const isNull = value === null || typeof value === "undefined"
+        if (!column.nullable && isNull) {
+          throw new Error(`column(${column.property}) is not nullable.`)
+        }
+        if (column.nullable) {
+          entity[column.property] = !isNull ? value : null
+        } else {
+          entity[column.property] = value
         }
       }
 

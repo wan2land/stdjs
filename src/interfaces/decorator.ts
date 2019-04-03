@@ -1,4 +1,4 @@
-import { ConstructFactory } from "./utils"
+import { ConstructFactory, MaybeFactory } from "./utils"
 
 
 export type ColumnType = "string" | "number" | "int" | "float" | "boolean" | "object"
@@ -7,6 +7,8 @@ export type RelationType = "belongs-to" | "has-one" | "has-many"
 export interface ColumnDecoratorOptions {
   name?: string
   type?: ColumnType
+  nullable?: boolean
+  default?: MaybeFactory<any>
 }
 
 export interface RelationDecoratorOptions {

@@ -12,5 +12,7 @@ export const Column: ColumnDecoratorFactory = (options = {}) => (target, propert
     property,
     name: options.name || (typeof property === "string" ? property : property.toString()),
     type: options.type || "string",
+    nullable: options.nullable || false,
+    default: options.default,
   })
 }

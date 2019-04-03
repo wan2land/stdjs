@@ -8,7 +8,7 @@ describe("testsuite of relater/to-entity", () => {
 
     const article = toEntity(Article, {id: 10, title: "this is title", created_at: "2019-03-01 00:00:00"})
 
-    expect(article).toEqual({id: 10, title: "this is title", createdAt: "2019-03-01 00:00:00"})
+    expect(article).toEqual({id: 10, title: "this is title", contents: null, createdAt: "2019-03-01 00:00:00"})
     expect(article).toBeInstanceOf(Article)
   })
 
@@ -17,7 +17,7 @@ describe("testsuite of relater/to-entity", () => {
       {id: 10, title: "this is title", created_at: "2019-03-01 00:00:00"},
     ])
 
-    expect(articles).toEqual([{id: 10, title: "this is title", createdAt: "2019-03-01 00:00:00"}])
+    expect(articles).toEqual([{id: 10, title: "this is title", contents: null, createdAt: "2019-03-01 00:00:00"}])
     articles.map(row => expect(row).toBeInstanceOf(Article))
   })
 })

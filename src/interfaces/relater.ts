@@ -1,5 +1,5 @@
 import { ColumnType } from "./decorator"
-import { ConstructType } from "./utils"
+import { ConstructType, MaybeFactory } from "./utils"
 
 
 export interface RelaterOptions<P> {
@@ -8,6 +8,8 @@ export interface RelaterOptions<P> {
     property: keyof P
     sourceKey: string
     type: ColumnType // @todo transform
+    nullable: boolean
+    default?: MaybeFactory<any>
   }[]
   relations: {
     property: keyof P
