@@ -1,14 +1,16 @@
-import { ColumnType, ConstructType, Identifier } from "./common"
+import { ColumnType } from "./decorator"
+import { ConstructType } from "./utils"
+
 
 export interface RelaterOptions<P> {
   ctor: ConstructType<P>
   columns: {
-    property: Identifier
-    type: ColumnType // @todo transform
+    property: keyof P
     sourceKey: string
+    type: ColumnType // @todo transform
   }[]
   relations: {
-    property: Identifier
+    property: keyof P
     type: "one-to-one" | "one-to-many"
     target: ConstructType<any>
     key: string

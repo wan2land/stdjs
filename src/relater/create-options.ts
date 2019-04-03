@@ -1,17 +1,18 @@
-import { ConstructType } from "../interfaces/common"
+import { MetadataColumn, MetadataRelation } from "../interfaces/metadata"
 import { RelaterOptions } from "../interfaces/relater"
+import { ConstructType } from "../interfaces/utils"
 import { metadataColumns, metadataRelations } from "../metadata"
 
 
 export function createOptions<Entity>(ctor: ConstructType<Entity>): RelaterOptions<Entity> {
   return {
     ctor,
-    columns: (metadataColumns.get(ctor) || []).map(({property, type, name}) => ({
+    columns: ((metadataColumns.get(ctor) || []) as MetadataColumn<Entity>[]).map(({property, type, name}) => ({
       property,
       type,
       sourceKey: name,
     })),
-    relations: (metadataRelations.get(ctor) || []).map(({typeFactory, property, type, key, relatedKey}) => {
+    relations: ((metadataRelations.get(ctor) || []) as MetadataRelation<Entity>[]).map(({typeFactory, property, type, key, relatedKey}) => {
       const relationEntity = typeFactory(undefined)
       switch (type) {
         case "belongs-to":

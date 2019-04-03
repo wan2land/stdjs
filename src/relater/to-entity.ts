@@ -1,4 +1,4 @@
-import { ConstructType, MaybeArray } from "../interfaces/common"
+import { ConstructType, MaybeArray } from "../interfaces/utils"
 import { createOptions } from "./create-options"
 import { Transformer } from "./transformer"
 

@@ -1,5 +1,5 @@
-import { MaybeArray, DeepPartial } from "../interfaces/common"
 import { RelaterOptions } from "../interfaces/relater"
+import { MaybeArray } from "../interfaces/utils"
 
 
 export class Transformer<Entity, Source = any> {
@@ -14,7 +14,7 @@ export class Transformer<Entity, Source = any> {
       return this.toEntity([rows])[0]
     }
     return rows.map((row: any) => {
-      const entity: any = {}
+      const entity: Partial<Entity> = {}
       for (const column of this.options.columns) {
         if (typeof row[column.sourceKey] !== "undefined") {
           entity[column.property] = row[column.sourceKey]
@@ -22,14 +22,23 @@ export class Transformer<Entity, Source = any> {
       }
 
       Object.setPrototypeOf(entity, this.options.ctor.prototype)
-      return entity
+      return entity as Entity
     })
+  }
+
+  public assign(entity: Partial<Entity>[]): Entity[]
+  public assign(entity: Partial<Entity>): Entity
+  public assign(entity: MaybeArray<Partial<Entity>>): MaybeArray<Entity> {
+    if (!Array.isArray(entity)) {
+      return Object.setPrototypeOf(entity, this.options.ctor.prototype)
+    }
+    return entity.map((row) => this.assign(row))
   }
 
   public toPlain(entities: Entity[]): Source[]
   public toPlain(entities: Entity): Source
-  public toPlain(entities: DeepPartial<Entity>[]): Source[]
-  public toPlain(entities: DeepPartial<Entity>): Source
+  public toPlain(entities: Partial<Entity>[]): Source[]
+  public toPlain(entities: Partial<Entity>): Source
   public toPlain(entities: any): MaybeArray<Source> {
     if (!Array.isArray(entities)) {
       return this.toPlain([entities] as Entity[])[0]

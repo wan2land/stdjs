@@ -9,7 +9,6 @@ export const Column: ColumnDecoratorFactory = (options = {}) => (target, propert
     metadataColumns.set(target.constructor, columns)
   }
   columns.push({
-    target,
     property,
     name: options.name || (typeof property === "string" ? property : property.toString()),
     type: options.type || "string",

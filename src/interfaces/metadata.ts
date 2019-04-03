@@ -1,17 +1,16 @@
-import { ColumnType, Identifier, RelationType } from "./common"
-import { TypeFactory } from "./decorator"
+import { ColumnType, RelationType } from "./decorator"
+import { ConstructFactory } from "./utils"
 
-export interface MetadataColumn {
-  target: any
-  property: Identifier
+
+export interface MetadataColumn<P> {
+  property: keyof P
   name: string
   type: ColumnType
 }
 
-export interface MetadataRelation {
-  target: any
-  property: Identifier
-  typeFactory: TypeFactory
+export interface MetadataRelation<P> {
+  property: keyof P
+  typeFactory: ConstructFactory<any>
   type: RelationType
   key?: string
   relatedKey?: string

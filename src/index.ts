@@ -1,8 +1,8 @@
 
-export * from "./interfaces/common"
 export * from "./interfaces/decorator"
 export * from "./interfaces/metadata"
 export * from "./interfaces/relater"
+export * from "./interfaces/utils"
 
 export { Column } from "./decorators/column"
 export { BelongsTo } from "./decorators/belongs-to"

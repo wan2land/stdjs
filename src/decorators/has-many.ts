@@ -9,7 +9,6 @@ export const HasMany: RelationDecoratorFactory = (typeFactory, options = {}) => 
     metadataRelations.set(target.constructor, relations)
   }
   relations.push({
-    target,
     property,
     typeFactory,
     type: "has-many",
