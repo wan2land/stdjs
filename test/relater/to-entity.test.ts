@@ -1,4 +1,4 @@
-import { toEntity } from "../../src/relater/to-entity"
+import { toEntity } from "../../lib/relater/to-entity"
 import { Article } from "../stubs/article"
 
 

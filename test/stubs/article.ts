@@ -1,4 +1,4 @@
-import { BelongsTo, Column } from "../../src"
+import { BelongsTo, Column } from "../../lib"
 import { User } from "./user"
 
 

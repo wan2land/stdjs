@@ -1,4 +1,4 @@
-import { createOptions } from "../../src/relater/create-options"
+import { createOptions } from "../../lib/relater/create-options"
 import { Article } from "../stubs/article"
 import { User } from "../stubs/user"
 

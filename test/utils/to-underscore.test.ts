@@ -1,4 +1,4 @@
-import { toUnderscore } from "../../src/utils/to-underscore"
+import { toUnderscore } from "../../lib/utils/to-underscore"
 
 describe("testsuite utils.to-underscore.", () => {
   it("test plain text", async () => {

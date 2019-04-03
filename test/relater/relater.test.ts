@@ -1,4 +1,4 @@
-import { Relater } from "../../src/relater/relater"
+import { Relater } from "../../lib/relater/relater"
 
 
 describe("testsuite of relater/relater", () => {

@@ -1,5 +1,5 @@
-import { createOptions } from "../../src/relater/create-options"
-import { Transformer } from "../../src/relater/transformer"
+import { createOptions } from "../../lib/relater/create-options"
+import { Transformer } from "../../lib/relater/transformer"
 import { Article } from "../stubs/article"
 import { Something } from "../stubs/something"
 

@@ -1,4 +1,4 @@
-import { Column, HasMany } from "../../src"
+import { Column, HasMany } from "../../lib"
 import { Article } from "./article"
 
 

@@ -1,4 +1,4 @@
-import { toPlain } from "../../src/relater/to-plain"
+import { toPlain } from "../../lib/relater/to-plain"
 import { Article } from "../stubs/article"
 
 const isPlainObject = require("lodash.isplainobject") // eslint-disable-line
