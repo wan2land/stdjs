@@ -8,7 +8,7 @@ export interface OAuthStrategy {
 export interface OAuthToken {
   token: string
   refreshToken?: string
-  expiresIn: number
+  expiresIn?: number
   tokenType: string
   [key: string]: any
 }
