@@ -1,7 +1,7 @@
 import axios from "axios"
 import { escape, stringify } from "querystring"
 
-import { OAuthStrategy, OAuthToken, OAuthUser } from "../interfaces/oauth"
+import { OAuthStrategy, OAuthToken } from "../interfaces/oauth"
 
 interface TokenResponse {
   access_token: string
@@ -13,13 +13,13 @@ interface TokenResponse {
 }
 
 interface UserResponse {
-  id: number,
+  id: number
   properties: {
     nickname: string
     email?: string
     profile_image: string
     thumbnail_image: string
-  },
+  }
   kakao_account: {
     has_email: boolean
     email_needs_agreement: boolean
@@ -50,7 +50,7 @@ export class KakaoStrategy implements OAuthStrategy {
         refreshToken: response.data.refresh_token,
         expiresIn: response.data.expires_in,
         tokenType: response.data.token_type,
-        
+
         scope: response.data.scope,
         refreshTokenExpiresIn: response.data.refresh_token_expires_in,
       }
