@@ -7,7 +7,7 @@ export class Descriptor<P> implements ContainerFluent<P> {
 
   public isSingleton = false
 
-  public afterHandlers: Array<(context: P) => P|Promise<P>> = []
+  public afterHandlers: ((context: P) => P|Promise<P>)[] = []
 
   public freeze(): ContainerFluent<P> {
     this.isFrozen = true

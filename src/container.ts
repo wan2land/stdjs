@@ -1,10 +1,5 @@
 import { Descriptor } from "./descriptor"
-import {
-  Containable,
-  ContainerFluent,
-  Identifier,
-  Provider
-  } from "./interfaces"
+import { Containable, ContainerFluent, Identifier, Provider } from "./interfaces"
 import { metadataInject } from "./metadata"
 
 
@@ -18,7 +13,7 @@ export class Container implements Containable {
   protected providers: Provider[]
   protected isBooted = false
 
-  constructor() {
+  public constructor() {
     this.instances = new Map<Identifier, any>()
     this.descriptors = new Map<Identifier, Descriptor<any>>()
     this.factories = new Map<Identifier, () => any>()

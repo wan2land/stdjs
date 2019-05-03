@@ -1,4 +1,4 @@
 import { Identifier } from "./interfaces"
 
 
-export const metadataInject = new Map<any, Array<[number, Identifier]>>()
+export const metadataInject = new Map<any, ([number, Identifier])[]>()

@@ -1,13 +1,4 @@
-
-// tslint:disable typedef max-classes-per-file
-
-import "jest"
-
-import * as di from "../dist"
-
-interface TestObject {
-  message: string
-}
+import * as di from "../lib"
 
 function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))

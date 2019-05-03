@@ -1,7 +1,8 @@
+/node_modules
+/lib
+
 .vscode
 .idea
 
-/node_modules
-/dist
-
 npm-debug.log*
+yarn-error.log
