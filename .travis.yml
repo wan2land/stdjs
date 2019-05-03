@@ -3,10 +3,7 @@ language: node_js
 node_js:
   - 11
   - 10
-  - 9
   - 8
-  - 6
 
 script:
-  - npm run lint
   - npm test
