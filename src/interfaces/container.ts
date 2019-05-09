@@ -6,6 +6,8 @@ export interface Containable {
   bind<P>(name: PropertyKey, constructor: ConstructType<P>): ContainerFluent<P>
   get<P>(name: PropertyKey): Promise<P>
   register(provider: Provider): void
+  create<P>(ctor: ConstructType<P>): Promise<P>
+  invoke<P, R = any>(instance: P, method: keyof P): Promise<R>
 }
 
 export interface ContainerFluent<P> {

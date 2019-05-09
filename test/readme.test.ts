@@ -169,4 +169,55 @@ describe("testsuite for README", () => {
       {message: "this is origin maessage. and something appended."},
     ])
   })
-})
+
+  it("test create method", async () => {
+    const container = di.create()
+
+    startConsoleCapture()
+
+    // section:create-method
+    class Connection {
+    }
+
+    class Controller {
+      public constructor(@di.Inject("connection") public connection: Connection) {
+      }
+    }
+
+    container.bind("connection", Connection)
+
+    const controller = await container.create(Controller)
+
+    console.log(controller) // Controller { connection: Connection {} }
+    // endsection
+
+    const result = endConsoleCapture()
+    expect(result[0]).toBeInstanceOf(Controller)
+    expect(result[0].connection).toBeInstanceOf(Connection)
+  })
+
+  it("test invoke method", async () => {
+    const container = di.create()
+
+    startConsoleCapture()
+
+    // section:invoke-method
+    class Connection {
+    }
+
+    class Controller {
+      public retrieve(@di.Inject("connection") connection: Connection) {
+        return connection
+      }
+    }
+
+    container.bind("connection", Connection)
+
+    const controller = new Controller()
+
+    console.log(await container.invoke(controller, "retrieve")) // Connection { }
+    // endsection
+
+    const result = endConsoleCapture()
+    expect(result[0]).toBeInstanceOf(Connection)
+  })})

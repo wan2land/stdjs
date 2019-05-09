@@ -133,6 +133,43 @@ container
 console.log(await container.get("foo")) // {message: "this is origin maessage. and something appended."}
 ```
 
+### create
+
+```ts
+class Connection {
+}
+
+class Controller {
+  public constructor(@di.Inject("connection") public connection: Connection) {
+  }
+}
+
+container.bind("connection", Connection)
+
+const controller = await container.create(Controller)
+
+console.log(controller) // Controller { connection: Connection {} }
+```
+
+### invoke
+
+```ts
+class Connection {
+}
+
+class Controller {
+  public retrieve(@di.Inject("connection") connection: Connection) {
+    return connection
+  }
+}
+
+container.bind("connection", Connection)
+
+const controller = new Controller()
+
+console.log(await container.invoke(controller, "retrieve")) // Connection { }
+```
+
 ## License
 
 MIT

@@ -51,6 +51,15 @@ export class Container implements Containable {
     return new (ctor as any)(...params)
   }
 
+  public async invoke<P, R = any>(instance: P, method: keyof P): Promise<R> {
+    const params = []
+    const options = (MetadataInject.get(instance.constructor) || []).filter(({propertyKey}) => propertyKey === method)
+    for (const {index, name} of options) {
+      params[index] = await this.get(name)
+    }
+    return (instance as any)[method](...params)
+  }
+
   public async get<P>(name: PropertyKey): Promise<P> {
     if (this.descriptors.has(name)) {
       (this.descriptors.get(name) as Descriptor<P>).freeze()

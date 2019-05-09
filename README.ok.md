@@ -54,6 +54,14 @@ Descriptor is very useful if you using factory or bind. this is example of singl
 
 @code("./test/readme.test.ts@after-descriptor")
 
+### create
+
+@code("./test/readme.test.ts@create-method")
+
+### invoke
+
+@code("./test/readme.test.ts@invoke-method")
+
 ## License
 
 MIT
