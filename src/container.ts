@@ -5,13 +5,13 @@ import { metadataInject } from "./metadata"
 
 export class Container implements Containable {
 
-  protected descriptors: Map<PropertyKey, Descriptor<any>>
-  protected instances: Map<PropertyKey, any>
-  protected factories: Map<PropertyKey, () => any>
-  protected binds: Map<PropertyKey, {new (...args: any[]): any}>
-  protected aliases: Map<PropertyKey, string>
-  protected providers: Provider[]
-  protected isBooted = false
+  public descriptors: Map<PropertyKey, Descriptor<any>>
+  public instances: Map<PropertyKey, any>
+  public factories: Map<PropertyKey, () => any>
+  public binds: Map<PropertyKey, {new (...args: any[]): any}>
+  public aliases: Map<PropertyKey, string>
+  public providers: Provider[]
+  public isBooted = false
 
   public constructor() {
     this.instances = new Map<PropertyKey, any>()
