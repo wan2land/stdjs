@@ -106,8 +106,8 @@ export class Container implements Containable {
     this.providers.push(provider)
   }
 
-  public async boot(): Promise<void> {
-    if (!this.isBooted) {
+  public async boot(forced = false): Promise<void> {
+    if (!this.isBooted || forced) {
       await Promise.all(this.providers.map(provider => provider.register(this)))
       for (const provider of this.providers) {
         if (!provider.boot) {
