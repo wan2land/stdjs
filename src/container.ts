@@ -1,5 +1,5 @@
 import { Descriptor } from "./descriptor"
-import { Containable, ContainerFluent, Provider } from "./interfaces"
+import { Containable, ContainerFluent, Provider } from "./interfaces/container"
 import { metadataInject } from "./metadata"
 
 
