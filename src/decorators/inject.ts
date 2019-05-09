@@ -1,15 +1,16 @@
-import { metadataInject } from "../metadata"
+import { InjectDecoratorFactory } from "../interfaces/decorator"
+import { MetadataInject } from "../metadata"
 
-
-export function Inject(name: PropertyKey): (target: any, targetKey: string, index?: number) => void {
-  return (target: any, targetKey?: string, index?: number) => {
-    if (typeof targetKey !== "undefined" && typeof index !== "number") {
-      throw new Error("inject annotation must be in constructor parameters.")
-    }
-    if (!metadataInject.has(target)) {
-      metadataInject.set(target, [])
-    }
-    const params = metadataInject.get(target)!
-    params.push([index!, name])
+export const Inject: InjectDecoratorFactory = (name) => (target, propertyKey, index) => {
+  target = propertyKey ? target.constructor : target
+  let params = MetadataInject.get(target)
+  if (!params) {
+    params = []
+    MetadataInject.set(target, params)
   }
+  params.push({
+    propertyKey,
+    index,
+    name,
+  })
 }

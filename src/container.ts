@@ -1,8 +1,7 @@
 import { Descriptor } from "./descriptor"
 import { ConstructType } from "./interfaces/common"
 import { Containable, ContainerFluent, Provider } from "./interfaces/container"
-import { metadataInject } from "./metadata"
-
+import { MetadataInject } from "./metadata"
 
 export class Container implements Containable {
 
@@ -45,8 +44,9 @@ export class Container implements Containable {
 
   public async create<P>(ctor: ConstructType<P>): Promise<P> {
     const params = []
-    for (const [index, PropertyKey] of metadataInject.get(ctor) || []) {
-      params[index] = await this.get(PropertyKey)
+    const options = (MetadataInject.get(ctor) || []).filter(({propertyKey}) => !propertyKey)
+    for (const {index, name} of options) {
+      params[index] = await this.get(name)
     }
     return new (ctor as any)(...params)
   }

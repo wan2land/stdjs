@@ -1,2 +1,3 @@
+import { MetadataInjectOption } from "./interfaces/metadata"
 
-export const metadataInject = new Map<any, ([number, PropertyKey])[]>()
+export const MetadataInject = new Map<any, MetadataInjectOption[]>()

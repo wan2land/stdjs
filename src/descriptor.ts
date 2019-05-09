@@ -1,6 +1,5 @@
 import { ContainerFluent } from "./interfaces/container"
 
-
 export class Descriptor<P> implements ContainerFluent<P> {
 
   public isFrozen = false
