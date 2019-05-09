@@ -1,11 +1,9 @@
 
-export type Identifier = string | symbol
-
 export interface Containable {
-  instance<P>(name: Identifier, instance: P|Promise<P>): void
-  factory<P>(name: Identifier, factory: () => P|Promise<P>): ContainerFluent<P>
-  bind<P>(name: Identifier, constructor: {new (...args: any[]): P}): ContainerFluent<P>
-  get<P>(name: Identifier): Promise<P>
+  instance<P>(name: PropertyKey, instance: P|Promise<P>): void
+  factory<P>(name: PropertyKey, factory: () => P|Promise<P>): ContainerFluent<P>
+  bind<P>(name: PropertyKey, constructor: {new (...args: any[]): P}): ContainerFluent<P>
+  get<P>(name: PropertyKey): Promise<P>
   register(provider: Provider): void
 }
 
