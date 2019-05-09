@@ -1,4 +1,5 @@
 import { Descriptor } from "./descriptor"
+import { ConstructType } from "./interfaces/common"
 import { Containable, ContainerFluent, Provider } from "./interfaces/container"
 import { metadataInject } from "./metadata"
 
@@ -8,7 +9,7 @@ export class Container implements Containable {
   public descriptors: Map<PropertyKey, Descriptor<any>>
   public instances: Map<PropertyKey, any>
   public factories: Map<PropertyKey, () => any>
-  public binds: Map<PropertyKey, {new (...args: any[]): any}>
+  public binds: Map<PropertyKey, ConstructType<any>>
   public aliases: Map<PropertyKey, string>
   public providers: Provider[]
   public isBooted = false
@@ -17,7 +18,7 @@ export class Container implements Containable {
     this.instances = new Map<PropertyKey, any>()
     this.descriptors = new Map<PropertyKey, Descriptor<any>>()
     this.factories = new Map<PropertyKey, () => any>()
-    this.binds = new Map<PropertyKey, {new (...args: any[]): any}>()
+    this.binds = new Map<PropertyKey, ConstructType<any>>()
     this.aliases = new Map<PropertyKey, string>()
     this.providers = []
   }
@@ -34,7 +35,7 @@ export class Container implements Containable {
     return descriptor
   }
 
-  public bind<P>(name: PropertyKey, constructor: {new (...args: any[]): P}): ContainerFluent<P> {
+  public bind<P>(name: PropertyKey, constructor: ConstructType<P>): ContainerFluent<P> {
     this.delete(name)
     this.binds.set(name, constructor)
     const descriptor = new Descriptor<P>()
@@ -42,12 +43,12 @@ export class Container implements Containable {
     return descriptor
   }
 
-  public async create<P>(ctor: {new (...args: any[]): P}): Promise<P> {
+  public async create<P>(ctor: ConstructType<P>): Promise<P> {
     const params = []
     for (const [index, PropertyKey] of metadataInject.get(ctor) || []) {
       params[index] = await this.get(PropertyKey)
     }
-    return new ctor(...params)
+    return new (ctor as any)(...params)
   }
 
   public async get<P>(name: PropertyKey): Promise<P> {
