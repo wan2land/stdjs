@@ -7,6 +7,7 @@ export class Container implements Containable {
 
   public static instance = new Container()
 
+  public stack: any[]
   public descriptors: Map<PropertyKey, Descriptor<any>>
   public instances: Map<PropertyKey, any>
   public factories: Map<PropertyKey, () => any>
@@ -16,6 +17,7 @@ export class Container implements Containable {
   public isBooted = false
 
   public constructor() {
+    this.stack = []
     this.instances = new Map<PropertyKey, any>()
     this.descriptors = new Map<PropertyKey, Descriptor<any>>()
     this.factories = new Map<PropertyKey, () => any>()
@@ -81,6 +83,16 @@ export class Container implements Containable {
       throw new Error(`"${typeof name === "symbol" ? name.toString() : name}" is not defined!`)
     }
 
+    if (this.stack.indexOf(name) > -1) {
+      const stack = [...this.stack]
+      this.stack = [] // clear stack
+      throw Object.assign(new Error("circular reference found!"), {
+        code: "CIRCULAR_REFERENCE",
+        stack: stack
+      })
+    }
+    this.stack.push(name)
+
     const descriptor = this.descriptors.get(name)!
     let instance: P
 
@@ -90,6 +102,7 @@ export class Container implements Containable {
     } else if (this.binds.has(name)) {
       instance = await this.create(this.binds.get(name)!)
     } else {
+      this.stack.pop()
       throw new Error(`"${typeof name === "symbol" ? name.toString() : name}" is not defined!`)
     }
 
@@ -99,6 +112,7 @@ export class Container implements Containable {
     if (descriptor.isSingleton) {
       this.instances.set(name, instance) // caching
     }
+    this.stack.pop()
     return instance
   }
 
