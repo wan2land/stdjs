@@ -220,4 +220,18 @@ describe("testsuite for README", () => {
 
     const result = endConsoleCapture()
     expect(result[0]).toBeInstanceOf(Connection)
-  })})
+  })
+
+  it("test setToGlobal", () => {
+    const originContainer = di.Container.instance
+
+    expect(di.Container.instance).toBeInstanceOf(di.Container)
+    expect(di.Container.instance).toBe(di.Container.instance)
+
+    const container = new di.Container().setToGlobal()
+    expect(container).toBeInstanceOf(di.Container)
+    expect(container).toBe(di.Container.instance)
+
+    expect(container).not.toBe(originContainer)
+  })
+})

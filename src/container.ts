@@ -5,6 +5,8 @@ import { MetadataInject } from "./metadata"
 
 export class Container implements Containable {
 
+  public static instance = new Container()
+
   public descriptors: Map<PropertyKey, Descriptor<any>>
   public instances: Map<PropertyKey, any>
   public factories: Map<PropertyKey, () => any>
@@ -20,6 +22,10 @@ export class Container implements Containable {
     this.binds = new Map<PropertyKey, ConstructType<any>>()
     this.aliases = new Map<PropertyKey, string>()
     this.providers = []
+  }
+
+  public setToGlobal() {
+    return Container.instance = this
   }
 
   public instance<P>(name: PropertyKey, value: P | Promise<P>): void {
