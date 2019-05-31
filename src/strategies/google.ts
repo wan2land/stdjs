@@ -27,6 +27,7 @@ export interface GoogleStrategyOptions {
   clientId: string
   redirectUri: string
   clientSecret: string
+  scopes?: string[]
 }
 
 export class GoogleStrategy implements OAuthStrategy {
@@ -36,7 +37,8 @@ export class GoogleStrategy implements OAuthStrategy {
   ) {}
 
   public getCallbackUrl(redirectUri?: string) {
-    return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${this.options.clientId}&redirect_uri=${escape(redirectUri || this.options.redirectUri)}&scope=openid+profile+email&response_type=code`
+    const scopes = this.options.scopes || ["openid", "profile", "email"]
+    return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${this.options.clientId}&redirect_uri=${escape(redirectUri || this.options.redirectUri)}&scope=${escape(scopes.join(" "))}&response_type=code`
   }
 
   public async getToken(code: string, redirectUri?: string): Promise<OAuthToken> {

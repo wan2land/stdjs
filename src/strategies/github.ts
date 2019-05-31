@@ -52,6 +52,7 @@ export interface GithubStrategyOptions {
   clientId: string
   redirectUri: string
   clientSecret: string
+  scopes?: string[]
 }
 
 export class GithubStrategy implements OAuthStrategy {
@@ -61,7 +62,8 @@ export class GithubStrategy implements OAuthStrategy {
   ) {}
 
   public getCallbackUrl(redirectUri?: string) {
-    return `https://github.com/login/oauth/authorize?client_id=${this.options.clientId}&redirect_uri=${escape(redirectUri || this.options.redirectUri)}&scope=user`
+    const scopes = this.options.scopes || ["user"]
+    return `https://github.com/login/oauth/authorize?client_id=${this.options.clientId}&redirect_uri=${escape(redirectUri || this.options.redirectUri)}&scope=${escape(scopes.join(" "))}`
   }
 
   public async getToken(code: string, redirectUri?: string): Promise<OAuthToken> {
