@@ -1,7 +1,7 @@
 import axios from "axios"
 import { escape, stringify } from "querystring"
 
-import { OAuthStrategy, OAuthToken } from "../interfaces/oauth"
+import { OAuthStrategy, OAuthToken, OAuthUser } from "../interfaces/oauth"
 
 interface TokenResponse {
   access_token: string
@@ -26,17 +26,22 @@ interface UserResponse {
   }
 }
 
+export interface KakaoStrategyOptions {
+  clientId: string
+  redirectUri: string
+}
+
 export class KakaoStrategy implements OAuthStrategy {
 
   public constructor(
-    public options: {clientId: string, redirectUri: string}
+    public options: KakaoStrategyOptions
   ) {}
 
   public getCallbackUrl(redirectUri?: string) {
     return `https://kauth.kakao.com/oauth/authorize?client_id=${this.options.clientId}&redirect_uri=${escape(redirectUri || this.options.redirectUri)}&response_type=code`
   }
 
-  public async getToken(code: string, redirectUri?: string) {
+  public async getToken(code: string, redirectUri?: string): Promise<OAuthToken> {
     try {
       const response = await axios.post<TokenResponse>("https://kauth.kakao.com/oauth/token", stringify({
         grant_type: "authorization_code",
@@ -62,7 +67,7 @@ export class KakaoStrategy implements OAuthStrategy {
     }
   }
 
-  public async getUser(token: OAuthToken) {
+  public async getUser(token: OAuthToken): Promise<OAuthUser> {
     try {
       const response = await axios.get<UserResponse>("https://kapi.kakao.com/v2/user/me", {
         headers: {

@@ -1,7 +1,7 @@
 import axios from "axios"
 import { escape } from "querystring"
 
-import { OAuthStrategy, OAuthToken } from "../interfaces/oauth"
+import { OAuthStrategy, OAuthToken, OAuthUser } from "../interfaces/oauth"
 
 interface TokenResponse {
   access_token: string
@@ -25,17 +25,23 @@ interface UserResponse {
   }
 }
 
+export interface NaverStrategyInterface {
+  clientId: string
+  redirectUri: string
+  clientSecret: string
+}
+
 export class NaverStrategy implements OAuthStrategy {
 
   public constructor(
-    public options: {clientId: string, redirectUri: string, clientSecret: string}
+    public options: NaverStrategyInterface
   ) {}
 
   public getCallbackUrl(redirectUri?: string) {
     return `https://nid.naver.com/oauth2.0/authorize?client_id=${this.options.clientId}&redirect_uri=${escape(redirectUri || this.options.redirectUri)}&response_type=code&state=randomstate`
   }
 
-  public async getToken(code: string, redirectUri?: string) {
+  public async getToken(code: string, redirectUri?: string): Promise<OAuthToken> {
     try {
       const response = await axios.get<TokenResponse>("https://nid.naver.com/oauth2.0/token", {
         params: {
@@ -58,7 +64,7 @@ export class NaverStrategy implements OAuthStrategy {
     }
   }
 
-  public async getUser(token: OAuthToken) {
+  public async getUser(token: OAuthToken): Promise<OAuthUser> {
     try {
       const response = await axios.get<UserResponse>("https://openapi.naver.com/v1/nid/me", {
         headers: {

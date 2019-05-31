@@ -1,7 +1,7 @@
 import axios from "axios"
 import { escape, stringify } from "querystring"
 
-import { OAuthStrategy, OAuthToken } from "../interfaces/oauth"
+import { OAuthStrategy, OAuthToken, OAuthUser } from "../interfaces/oauth"
 
 interface TokenResponse {
   access_token: string
@@ -23,17 +23,23 @@ interface UserResponse {
   locale: string
 }
 
+export interface GoogleStrategyOptions {
+  clientId: string
+  redirectUri: string
+  clientSecret: string
+}
+
 export class GoogleStrategy implements OAuthStrategy {
 
   public constructor(
-    public options: {clientId: string, redirectUri: string, clientSecret: string}
+    public options: GoogleStrategyOptions
   ) {}
 
   public getCallbackUrl(redirectUri?: string) {
     return `https://accounts.google.com/o/oauth2/v2/auth?client_id=${this.options.clientId}&redirect_uri=${escape(redirectUri || this.options.redirectUri)}&scope=openid+profile+email&response_type=code`
   }
 
-  public async getToken(code: string, redirectUri?: string) {
+  public async getToken(code: string, redirectUri?: string): Promise<OAuthToken> {
     try {
       const response = await axios.post<TokenResponse>("https://www.googleapis.com/oauth2/v4/token", stringify({
         client_id: this.options.clientId,
@@ -54,7 +60,7 @@ export class GoogleStrategy implements OAuthStrategy {
     }
   }
 
-  public async getUser(token: OAuthToken) {
+  public async getUser(token: OAuthToken): Promise<OAuthUser> {
     try {
       const response = await axios.get<UserResponse>("https://www.googleapis.com/oauth2/v3/userinfo", {
         headers: {

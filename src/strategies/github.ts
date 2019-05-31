@@ -1,7 +1,7 @@
 import axios from "axios"
 import { escape, parse } from "querystring"
 
-import { OAuthStrategy, OAuthToken } from "../interfaces/oauth"
+import { OAuthStrategy, OAuthToken, OAuthUser } from "../interfaces/oauth"
 
 interface UserResponse {
   login: string
@@ -48,17 +48,23 @@ interface UserResponse {
   }
 }
 
+export interface GithubStrategyOptions {
+  clientId: string
+  redirectUri: string
+  clientSecret: string
+}
+
 export class GithubStrategy implements OAuthStrategy {
 
   public constructor(
-    public options: {clientId: string, redirectUri: string, clientSecret: string}
+    public options: GithubStrategyOptions
   ) {}
 
   public getCallbackUrl(redirectUri?: string) {
     return `https://github.com/login/oauth/authorize?client_id=${this.options.clientId}&redirect_uri=${escape(redirectUri || this.options.redirectUri)}&scope=user`
   }
 
-  public async getToken(code: string, redirectUri?: string) {
+  public async getToken(code: string, redirectUri?: string): Promise<OAuthToken> {
     try {
       const response = await axios.post<string>("https://github.com/login/oauth/access_token", {
         client_id: this.options.clientId,
@@ -77,7 +83,7 @@ export class GithubStrategy implements OAuthStrategy {
     }
   }
 
-  public async getUser(token: OAuthToken) {
+  public async getUser(token: OAuthToken): Promise<OAuthUser> {
     try {
       const response = await axios.get<UserResponse>("https://api.github.com/user", {
         params: {

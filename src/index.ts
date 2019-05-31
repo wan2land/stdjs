@@ -1,8 +1,8 @@
 
 export * from "./interfaces/oauth"
 
-export { FacebookStrategy } from "./strategies/facebook"
-export { GithubStrategy } from "./strategies/github"
-export { GoogleStrategy } from "./strategies/google"
-export { KakaoStrategy } from "./strategies/kakao"
-export { NaverStrategy } from "./strategies/naver"
+export { FacebookStrategy, FacebookStrategyOptions } from "./strategies/facebook"
+export { GithubStrategy, GithubStrategyOptions } from "./strategies/github"
+export { GoogleStrategy, GoogleStrategyOptions } from "./strategies/google"
+export { KakaoStrategy, KakaoStrategyOptions } from "./strategies/kakao"
+export { NaverStrategy, NaverStrategyInterface } from "./strategies/naver"

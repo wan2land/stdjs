@@ -1,7 +1,7 @@
 import axios from "axios"
 import { escape } from "querystring"
 
-import { OAuthStrategy, OAuthToken } from "../interfaces/oauth"
+import { OAuthStrategy, OAuthToken, OAuthUser } from "../interfaces/oauth"
 
 interface TokenResponse {
   access_token: string
@@ -15,17 +15,23 @@ interface UserResponse {
   email: string
 }
 
+export interface FacebookStrategyOptions {
+  clientId: string
+  redirectUri: string
+  clientSecret: string
+}
+
 export class FacebookStrategy implements OAuthStrategy {
 
   public constructor(
-    public options: {clientId: string, redirectUri: string, clientSecret: string}
+    public options: FacebookStrategyOptions
   ) {}
 
   public getCallbackUrl(redirectUri?: string) {
     return `https://www.facebook.com/v3.2/dialog/oauth?client_id=${this.options.clientId}&redirect_uri=${escape(redirectUri || this.options.redirectUri)}&response_type=code`
   }
 
-  public async getToken(code: string, redirectUri?: string) {
+  public async getToken(code: string, redirectUri?: string): Promise<OAuthToken> {
     try {
       const response = await axios.get<TokenResponse>("https://graph.facebook.com/v3.2/oauth/access_token", {
         params: {
@@ -49,7 +55,7 @@ export class FacebookStrategy implements OAuthStrategy {
 
   }
 
-  public async getUser(token: OAuthToken) {
+  public async getUser(token: OAuthToken): Promise<OAuthUser> {
     try {
       const response = await axios.get<UserResponse>("https://graph.facebook.com/v3.2/me", {
         params: {
