@@ -1,0 +1,14 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+	ignorecase = true
+	precomposeunicode = true
+[user]
+	name = Cris
+	email = corgidisco@gmail.com
+
+[remote "origin"]
+	url = corgidisco.github:corgidisco/graphity.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
