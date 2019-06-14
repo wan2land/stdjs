@@ -1,19 +1,12 @@
 import { RowNotFoundError } from "../../error/row-not-found-error"
-import {
-  Connection,
-  QueryBuilder,
-  QueryResult,
-  Row,
-  Scalar,
-  TransactionHandler
-  } from "../../interfaces/database"
+import { Connection, QueryBuilder, QueryResult, Row, Scalar, TransactionHandler } from "../../interfaces/database"
 import { isQueryBuilder } from "../../utils"
 import { Sqlite3RawConnection } from "./interfaces"
 
 
 export class Sqlite3Connection implements Connection {
 
-  constructor(protected connection: Sqlite3RawConnection) {
+  public constructor(public connection: Sqlite3RawConnection) {
   }
 
   public close(): Promise<void> {

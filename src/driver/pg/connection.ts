@@ -1,19 +1,12 @@
 import { RowNotFoundError } from "../../error/row-not-found-error"
-import {
-  Connection,
-  QueryBuilder,
-  QueryResult,
-  Row,
-  Scalar,
-  TransactionHandler
-  } from "../../interfaces/database"
+import { Connection, QueryBuilder, QueryResult, Row, Scalar, TransactionHandler } from "../../interfaces/database"
 import { isQueryBuilder } from "../../utils"
 import { PgRawClient, PgRawClientBase, PgRawPoolClient } from "./interfaces"
 
 
 export class PgConnection implements Connection {
 
-  constructor(public client: PgRawClientBase) {
+  public constructor(public client: PgRawClientBase) {
   }
 
   public async close(): Promise<void> {

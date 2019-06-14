@@ -1,13 +1,5 @@
 import { RowNotFoundError } from "../../error/row-not-found-error"
-import {
-  Connection,
-  Pool,
-  PoolConnection,
-  QueryBuilder,
-  QueryResult,
-  Row,
-  Scalar
-  } from "../../interfaces/database"
+import { Connection, Pool, PoolConnection, QueryBuilder, QueryResult, Row, Scalar } from "../../interfaces/database"
 import { isQueryBuilder } from "../../utils"
 import { MysqlRawPool } from "./interfaces"
 import { MysqlPoolConnection } from "./pool-connection"
@@ -15,7 +7,7 @@ import { MysqlPoolConnection } from "./pool-connection"
 
 export class MysqlPool implements Pool {
 
-  constructor(public pool: MysqlRawPool) {
+  public constructor(public pool: MysqlRawPool) {
   }
 
   public close(): Promise<void> {

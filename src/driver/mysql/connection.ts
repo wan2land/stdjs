@@ -1,19 +1,12 @@
 import { RowNotFoundError } from "../../error/row-not-found-error"
-import {
-  Connection,
-  QueryBuilder,
-  QueryResult,
-  Row,
-  Scalar,
-  TransactionHandler
-  } from "../../interfaces/database"
+import { Connection, QueryBuilder, QueryResult, Row, Scalar, TransactionHandler } from "../../interfaces/database"
 import { isQueryBuilder } from "../../utils"
 import { MysqlRawConnection } from "./interfaces"
 
 
 export class MysqlConnection implements Connection {
 
-  constructor(public connection: MysqlRawConnection) {
+  public constructor(public connection: MysqlRawConnection) {
   }
 
   public close(): Promise<void> {

@@ -1,16 +1,18 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "esnext",
     "module": "commonjs",
     "moduleResolution": "node",
     "lib": [
-      "es2017"
+      "es2017",
+      "esnext.asynciterable"
     ],
-    "outDir": "dist",
+    "outDir": "lib",
     "declaration": true,
     "pretty": true,
     "sourceMap": true,
     "strict": true,
+    "esModuleInterop": true,
     "noImplicitReturns": true
   },
   "include": [

@@ -7,13 +7,12 @@ import * as tls from "tls"
 
 // @ref @types/pg PoolConfig, ClientConfig, ConnectionConfig
 
-// section:config
-interface PgConnectionConfig extends PgBaseConfig {
+export interface PgConnectionConfig extends PgBaseConfig {
   readonly adapter: "pg"
   readonly pool?: false
 }
 
-interface PgPoolConfig extends PgBaseConfig {
+export interface PgPoolConfig extends PgBaseConfig {
   readonly adapter: "pg"
   readonly pool: true
 
@@ -26,7 +25,7 @@ interface PgPoolConfig extends PgBaseConfig {
   Promise?: PromiseConstructorLike
 }
 
-interface PgBaseConfig {
+export interface PgBaseConfig {
   ssl?: boolean | tls.TlsOptions
 
   user?: string
@@ -38,18 +37,11 @@ interface PgBaseConfig {
   keepAlive?: boolean
   stream?: stream.Duplex
 }
-// endsection
-
-export {
-  PgConnectionConfig,
-  PgPoolConfig,
-  PgBaseConfig,
-}
 
 export interface PgRawPool {
-    connect(): Promise<PgRawPoolClient>
-    end(): Promise<void>
-    query(queryTextOrConfig: string, values?: any[]): Promise<PgRawQueryResult>
+  connect(): Promise<PgRawPoolClient>
+  end(): Promise<void>
+  query(queryTextOrConfig: string, values?: any[]): Promise<PgRawQueryResult>
 }
 
 export interface PgRawClient extends PgRawClientBase {

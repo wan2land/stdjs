@@ -1,6 +1,5 @@
 *
-!/dist/**/*
+!/lib/**/*
 !/src/**/*
 *.md
 !README.md
-

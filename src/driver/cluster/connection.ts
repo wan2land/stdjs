@@ -1,16 +1,9 @@
-import {
-  Connection,
-  QueryBuilder,
-  QueryResult,
-  Row,
-  Scalar,
-  TransactionHandler
-  } from "../../interfaces/database"
+import { Connection, QueryBuilder, QueryResult, Row, Scalar, TransactionHandler } from "../../interfaces/database"
 
 
 export class ClusterConnection implements Connection {
 
-  constructor(public read: Connection, public write: Connection) {
+  public constructor(public read: Connection, public write: Connection) {
   }
 
   public async close(): Promise<void> {

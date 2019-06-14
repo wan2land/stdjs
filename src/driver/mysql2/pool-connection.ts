@@ -5,7 +5,7 @@ import { Mysql2RawPoolConnection } from "./interfaces"
 
 export class Mysql2PoolConnection extends Mysql2Connection implements PoolConnection {
 
-  constructor(protected connection: Mysql2RawPoolConnection) {
+  public constructor(public connection: Mysql2RawPoolConnection) {
     super(connection)
   }
 

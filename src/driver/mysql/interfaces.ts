@@ -1,16 +1,14 @@
-
 // only for developing
 // import "mysql"
 
 // @ref @types/mysql ConnectionOptions + ConnectionConfig
 
-// section:config
-interface MysqlConnectionConfig extends MysqlBaseConfig {
+export interface MysqlConnectionConfig extends MysqlBaseConfig {
   readonly adapter: "mysql" | "mysql2"
   readonly pool?: false
 }
 
-interface MysqlPoolConfig extends MysqlBaseConfig {
+export interface MysqlPoolConfig extends MysqlBaseConfig {
   readonly adapter: "mysql" | "mysql2"
   readonly pool: true
 
@@ -20,7 +18,7 @@ interface MysqlPoolConfig extends MysqlBaseConfig {
   queueLimit?: number
 }
 
-interface MysqlBaseConfig {
+export interface MysqlBaseConfig {
   host?: string
   port?: number
   user?: string
@@ -41,13 +39,6 @@ interface MysqlBaseConfig {
   multipleStatements?: boolean
   flags?: string[]
   queryFormat?(query: string, values: any): void
-}
-// endsection
-
-export {
-  MysqlConnectionConfig,
-  MysqlPoolConfig,
-  MysqlBaseConfig,
 }
 
 export interface MysqlRawQuery {

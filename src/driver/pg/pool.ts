@@ -1,13 +1,5 @@
 import { RowNotFoundError } from "../../error/row-not-found-error"
-import {
-  Pool,
-  PoolConnection,
-  QueryBuilder,
-  QueryResult,
-  Row,
-  Scalar,
-  TransactionHandler
-  } from "../../interfaces/database"
+import { Pool, PoolConnection, QueryBuilder, QueryResult, Row, Scalar, TransactionHandler } from "../../interfaces/database"
 import { isQueryBuilder } from "../../utils"
 import { PgRawPool } from "./interfaces"
 import { PgPoolConnection } from "./pool-connection"
@@ -15,7 +7,7 @@ import { PgPoolConnection } from "./pool-connection"
 
 export class PgPool implements Pool {
 
-  constructor(protected pool: PgRawPool) {
+  public constructor(public pool: PgRawPool) {
   }
 
   public async close(): Promise<void> {
