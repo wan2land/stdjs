@@ -1,0 +1,10 @@
+version: '3'
+services:
+  beanstalkd:
+    image: schickling/beanstalkd
+    ports:
+      - 11300
+  rabbitmq:
+    image: rabbitmq:alpine
+    ports:
+      - 5672
