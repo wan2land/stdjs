@@ -6,7 +6,11 @@
 
 ## Projects
 
+- [Cache](./packages/cache)
 - [Database](./packages/database)
+- [DI](./packages/di)
+- [OAuth](./packages/oauth)
+- [Queue](./packages/queue)
 
 ## License
 
