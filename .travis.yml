@@ -6,10 +6,10 @@ env:
 
 language: node_js
 node_js:
+  - 12
   - 11
   - 10
   - 8
-  - 6
 
 before_install:
   - sudo rm /usr/local/bin/docker-compose

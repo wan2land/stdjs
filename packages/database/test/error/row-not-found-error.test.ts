@@ -1,6 +1,4 @@
-import "jest"
-
-import { RowNotFoundError } from "../../dist"
+import { RowNotFoundError } from "../../lib"
 
 
 describe("row-not-found-error", () => {

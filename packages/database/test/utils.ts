@@ -1,5 +1,6 @@
 import { exec } from "child_process"
-import { Connection, ConnectionConfig, create } from "../dist"
+
+import { Connection, ConnectionConfig, create } from "../lib"
 
 const dockercache = new Map<string, [string, number]>()
 function getDockerComposePort(service: string, port: number): Promise<[string, number]> {

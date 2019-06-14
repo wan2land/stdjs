@@ -1,8 +1,6 @@
-
-import "jest"
-
-import { RowNotFoundError } from "../dist"
+import { RowNotFoundError } from "../lib"
 import { connect } from "./utils"
+
 
 const testcases = ["cluster", "mysql", "mysql-pool", "mysql2", "mysql2-pool", "pg", "pg-pool", "sqlite3"]
 

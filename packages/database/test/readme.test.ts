@@ -1,5 +1,3 @@
-import "jest"
-
 import {
   ClusterConnection,
   create,
@@ -9,8 +7,8 @@ import {
   MysqlPool,
   PgConnection,
   PgPool,
-  Sqlite3Connection
-  } from "../dist"
+  Sqlite3Connection,
+} from "../lib"
 import { config } from "./utils"
 
 
