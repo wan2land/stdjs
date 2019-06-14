@@ -17,3 +17,19 @@ services:
       MYSQL_DATABASE: stdjs_database
     ports:
       - 3306
+  memcached:
+    image: memcached:alpine
+    ports:
+      - 11211
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379
+  beanstalkd:
+    image: schickling/beanstalkd
+    ports:
+      - 11300
+  rabbitmq:
+    image: rabbitmq:alpine
+    ports:
+      - 5672

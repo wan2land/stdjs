@@ -1,5 +1,1 @@
-*
-!/lib/**/*
-!/src/**/*
-*.md
-!README.md
+test/**/*

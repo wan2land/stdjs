@@ -1,21 +1,9 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "lib": [
-      "es2017",
-      "esnext.asynciterable"
-    ],
-    "outDir": "lib",
-    "declaration": true,
-    "pretty": true,
-    "sourceMap": true,
-    "strict": true,
-    "noImplicitReturns": true,
-    "experimentalDecorators": true
-  },
+  "extends": "../../tsconfig.json",
   "include": [
-    "src/**/*"
-  ]
+    "src"
+  ],
+  "compilerOptions": {
+    "outDir": "lib"
+  }
 }
