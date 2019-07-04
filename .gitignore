@@ -1,4 +1,7 @@
 /node_modules
 /lib
 
+/packages/*/node_modules
+
 yarn-error.log
+lerna-debug.log

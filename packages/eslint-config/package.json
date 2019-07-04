@@ -1,0 +1,29 @@
+{
+  "name": "@stdjs/eslint-config",
+  "version": "0.6.0",
+  "description": "stdjs Eslint configs. support JS, TS.",
+  "keywords": [
+    "eslint",
+    "eslint config",
+    "typescript"
+  ],
+  "author": "Cris <corgidisco@gmail.com>",
+  "license": "MIT",
+  "repository": "https://github.com/corgidisco/stdjs/tree/master/packages/eslint-config",
+  "main": "index.js",
+  "scripts": {
+    "build": "rimraf ./lib && tsc && babel ./src --out-dir ./lib --extensions \".ts\" --source-maps inline"
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^1.11.0",
+    "@typescript-eslint/parser": "^1.11.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-unicorn": "^9.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.0"
+  },
+  "peerDependencies": {
+    "eslint": "^6.0.0"
+  }
+}
