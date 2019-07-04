@@ -1,3 +1,10 @@
+
+const extensions = [
+  '.mjs',
+  '.js',
+  '.jsx',
+]
+
 module.exports = {
   env: {
     browser: true,
@@ -13,18 +20,12 @@ module.exports = {
     'unicorn',
   ],
   settings: {
+    'import/extensions': extensions,
     'import/resolver': {
       node: {
-        extensions: ['.mjs', '.js', '.json']
-      }
+        extensions: extensions,
+      },
     },
-    'import/extensions': [
-      '.js',
-      '.mjs',
-      '.jsx',
-    ],
-    'import/core-modules': [
-    ],
     'import/ignore': [
       'node_modules',
       '\\.(coffee|scss|css|less|hbs|svg|json)$',
@@ -161,7 +162,7 @@ module.exports = {
     'no-undef-init': 'error',
     // 'no-undefined': 'off',
     'no-unused-vars': 'warn',
-    'no-use-before-define': 'error',
+    // 'no-use-before-define': 'off',
 
     // Node.js and CommonJS
     // 'callback-return': 'off',
@@ -298,7 +299,7 @@ module.exports = {
     'prefer-template': 'error',
     'require-yield': 'error',
     'rest-spread-spacing': 'error',
-    'sort-imports': 'error',
+    // 'sort-imports': 'off',
     'symbol-description': 'error',
     'template-curly-spacing': 'error',
     'yield-star-spacing': ['error', 'before'],
@@ -367,7 +368,7 @@ module.exports = {
     // 'unicorn/no-fn-reference-in-iterator': 'off',
     'unicorn/no-for-loop': 'error',
     // 'unicorn/no-hex-escape': 'off',
-    'unicorn/no-keyword-prefix': 'error',
+    // 'unicorn/no-keyword-prefix': 'off',
     'unicorn/no-new-buffer': 'error',
     // 'unicorn/no-process-exit': 'error',
     'unicorn/no-unreadable-array-destructuring': 'error',

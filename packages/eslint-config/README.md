@@ -15,5 +15,19 @@ npm install @stdjs/eslint-config -D
 
 ## Usage
 
-- `@stdjs/eslint-config/javascript`
+Available Configs.
+
+- `@stdjs/eslint-config/javascript` (default, alias `@stdjs`)
 - `@stdjs/eslint-config/typescript`
+
+`.eslintrc.js`
+
+```js
+module.exports = {
+  extends: [
+    '@stdjs',
+    '@stdjs/eslint-config/typescript',
+  ],
+  rules: {}
+}
+```

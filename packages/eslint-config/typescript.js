@@ -1,3 +1,13 @@
+
+const extensions = [
+  '.mjs',
+  '.js',
+  '.jsx',
+  '.ts',
+  '.tsx',
+  '.d.ts',
+]
+
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -7,6 +17,17 @@ module.exports = {
   plugins: [
     '@typescript-eslint',
   ],
+  settings: {
+    'import/extensions': extensions,
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx', '.d.ts'],
+    },
+    'import/resolver': {
+      node: {
+        extensions: extensions,
+      },
+    },
+  },
   rules: {
     // Do not remove comments
     // used for comparison.
@@ -20,7 +41,7 @@ module.exports = {
     '@typescript-eslint/camelcase': 'error',
     '@typescript-eslint/class-name-casing': 'error',
     '@typescript-eslint/consistent-type-definitions': 'error',
-    '@typescript-eslint/explicit-function-return-type': ['error', { allowExpressions: true, allowTypedFunctionExpressions: true }],
+    // '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-member-accessibility': 'error',
     'func-call-spacing': 'off',
     '@typescript-eslint/func-call-spacing': 'error',
@@ -114,8 +135,8 @@ module.exports = {
 
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
-    'no-use-before-define': 'off',
-    '@typescript-eslint/no-use-before-define': 'error',
+    // 'no-use-before-define': 'off',
+    // '@typescript-eslint/no-use-before-define': 'off',
     'no-useless-constructor': 'off',
     '@typescript-eslint/no-useless-constructor': 'error',
     '@typescript-eslint/no-var-requires': 'error',

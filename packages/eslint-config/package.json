@@ -1,6 +1,6 @@
 {
   "name": "@stdjs/eslint-config",
-  "version": "0.6.0",
+  "version": "0.1.0",
   "description": "stdjs Eslint configs. support JS, TS.",
   "keywords": [
     "eslint",
@@ -12,7 +12,7 @@
   "repository": "https://github.com/corgidisco/stdjs/tree/master/packages/eslint-config",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf ./lib && tsc && babel ./src --out-dir ./lib --extensions \".ts\" --source-maps inline"
+    "build": "echo \"done\""
   },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^1.11.0",
