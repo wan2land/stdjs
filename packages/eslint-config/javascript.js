@@ -143,7 +143,7 @@ module.exports = {
     // 'prefer-named-capture-group': 'off',
     'prefer-promise-reject-errors': 'error',
     // 'radix': 'off',
-    'require-await': 'error',
+    'require-await': 'warn',
     // 'require-unicode-regexp': 'off',
     // 'vars-on-top': 'off',
     'wrap-iife': ['error', 'inside'],
@@ -178,7 +178,7 @@ module.exports = {
     // 'no-sync': 'off',
 
     // Stylistic Issues
-    'array-bracket-newline': 'error',
+    'array-bracket-newline': ['error', 'consistent'],
     'array-bracket-spacing': 'error',
     // 'array-element-newline': 'off',
     'block-spacing': 'error',
@@ -245,7 +245,7 @@ module.exports = {
     'nonblock-statement-body-position': 'error',
     'object-curly-newline': ['error', { consistent: true }],
     'object-curly-spacing': ['error', 'always'],
-    'object-property-newline': 'error',
+    'object-property-newline': ["error", { allowAllPropertiesOnSameLine: true }],
     // 'one-var': 'off',
     // 'one-var-declaration-per-line': 'off',
     // 'operator-assignment': 'off',
