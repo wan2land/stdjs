@@ -1,6 +1,6 @@
 {
   "name": "@stdjs/eslint-config",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "stdjs Eslint configs. support JS, TS.",
   "keywords": [
     "eslint",
