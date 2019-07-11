@@ -1,11 +1,13 @@
-import axios from "axios"
-import { escape } from "querystring"
+/* eslint-disable @typescript-eslint/camelcase */
 
-import { OAuthStrategy, OAuthToken, OAuthUser } from "../interfaces/oauth"
+import axios from 'axios'
+import { escape } from 'querystring'
+
+import { OAuthStrategy, OAuthToken, OAuthUser } from '../interfaces/oauth'
 
 interface TokenResponse {
   access_token: string
-  token_type: "bearer"
+  token_type: 'bearer'
   expires_in: number
 }
 
@@ -33,13 +35,13 @@ export class FacebookStrategy implements OAuthStrategy {
 
   public async getToken(code: string, redirectUri?: string): Promise<OAuthToken> {
     try {
-      const response = await axios.get<TokenResponse>("https://graph.facebook.com/v3.2/oauth/access_token", {
+      const response = await axios.get<TokenResponse>('https://graph.facebook.com/v3.2/oauth/access_token', {
         params: {
           client_id: this.options.clientId,
           client_secret: this.options.clientSecret,
           redirect_uri: redirectUri || this.options.redirectUri,
           code,
-        }
+        },
       })
       return {
         token: response.data.access_token,
@@ -47,8 +49,8 @@ export class FacebookStrategy implements OAuthStrategy {
         tokenType: response.data.token_type,
       }
     } catch (e) {
-      if (e.response &&e.response.status === 401) {
-        throw Object.assign(new Error("expired code"), {code: "EXPIRED_CODE"})
+      if (e.response && e.response.status === 401) {
+        throw Object.assign(new Error('expired code'), { code: 'EXPIRED_CODE' })
       }
       throw e
     }
@@ -57,21 +59,21 @@ export class FacebookStrategy implements OAuthStrategy {
 
   public async getUser(token: OAuthToken): Promise<OAuthUser> {
     try {
-      const response = await axios.get<UserResponse>("https://graph.facebook.com/v3.2/me", {
+      const response = await axios.get<UserResponse>('https://graph.facebook.com/v3.2/me', {
         params: {
           access_token: token.token,
-          fields: "id,email,name",
+          fields: 'id,email,name',
         },
       })
       return {
         id: response.data.id,
-        ...(response.data.email ? {email: response.data.email} : {}),
+        ...response.data.email ? { email: response.data.email } : {},
         name: response.data.name,
         avatar: `https://graph.facebook.com/v3.2/${response.data.id}/picture?type=normal`,
       }
     } catch (e) {
-      if (e.response &&e.response.status === 401) {
-        throw Object.assign(new Error("expired code"), {code: "EXPIRED_CODE"})
+      if (e.response && e.response.status === 401) {
+        throw Object.assign(new Error('expired code'), { code: 'EXPIRED_CODE' })
       }
       throw e
     }

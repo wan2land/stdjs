@@ -1,14 +1,14 @@
 
-import { Queue, SendQueueOptions } from "../../interfaces/queue"
-import { LocalJob } from "./job"
+import { Queue, SendQueueOptions } from '../../interfaces/queue'
+import { LocalJob } from './job'
 
-export class LocalQueue<P> implements Queue<P> {
+export class LocalQueue<TPayload> implements Queue<TPayload> {
 
-  public jobs: Array<LocalJob<P>> = []
+  public jobs: LocalJob<TPayload>[] = []
 
-  public runningJobs: Array<LocalJob<P>> = []
+  public runningJobs: LocalJob<TPayload>[] = []
 
-  constructor(public timeout = 6000) {
+  public constructor(public timeout = 6000) {
   }
 
   public async countWaiting(): Promise<number> {
@@ -27,7 +27,7 @@ export class LocalQueue<P> implements Queue<P> {
     this.jobs = []
   }
 
-  public async send(payload: P, options?: SendQueueOptions): Promise<void> {
+  public async send(payload: TPayload, options?: SendQueueOptions): Promise<void> {
     const job = new LocalJob(this, payload)
     if (options && options.delay) {
       setTimeout(() => {
@@ -38,7 +38,7 @@ export class LocalQueue<P> implements Queue<P> {
     }
   }
 
-  public async receive(): Promise<LocalJob<P> | undefined> {
+  public async receive(): Promise<LocalJob<TPayload> | undefined> {
     const job = this.jobs.shift()
     if (job) {
       this.runningJobs.push(job)
@@ -54,7 +54,7 @@ export class LocalQueue<P> implements Queue<P> {
     return job
   }
 
-  public async delete(job: LocalJob<P>): Promise<void> {
+  public async delete(job: LocalJob<TPayload>): Promise<void> {
     const index = this.runningJobs.indexOf(job)
     if (job.timer) {
       clearTimeout(job.timer) // clear timeout :-)

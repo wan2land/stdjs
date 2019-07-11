@@ -1,13 +1,12 @@
-
-// tslint:disable no-namespace
+/* eslint-disable @typescript-eslint/no-namespace */
 // import { SQS } from "aws-sdk"
 
 export interface SqsQueueConfig extends RawAwsConfigurationOptions {
-  readonly adapter: "aws-sdk"
+  readonly adapter: 'aws-sdk'
   url: string
   endpoint?: string
   params?: {
-      [key: string]: any
+    [key: string]: any,
   }
 }
 

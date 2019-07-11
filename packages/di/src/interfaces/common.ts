@@ -1,4 +1,4 @@
 
-export type ConstructType<P> = (new (...args: any[]) => P) | Function
+export type ConstructType<T> = (new (...args: any[]) => T) | Function
 
-export type MaybePromise<P> = P | Promise<P>
+export type MaybePromise<T> = T | Promise<T>

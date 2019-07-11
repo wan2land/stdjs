@@ -1,24 +1,24 @@
-import { ContainerFluent } from "./interfaces/container"
+import { ContainerFluent } from './interfaces/container'
 
-export class Descriptor<P> implements ContainerFluent<P> {
+export class Descriptor<TVal> implements ContainerFluent<TVal> {
 
   public isFrozen = false
 
   public isSingleton = false
 
-  public afterHandlers: ((context: P) => P|Promise<P>)[] = []
+  public afterHandlers: ((context: TVal) => TVal|Promise<TVal>)[] = []
 
-  public freeze(): ContainerFluent<P> {
+  public freeze(): ContainerFluent<TVal> {
     this.isFrozen = true
     return this
   }
 
-  public singleton(): ContainerFluent<P> {
+  public singleton(): ContainerFluent<TVal> {
     this.isSingleton = true
     return this
   }
 
-  public after(handler: (context: P) => P|Promise<P>): ContainerFluent<P> {
+  public after(handler: (context: TVal) => TVal|Promise<TVal>): ContainerFluent<TVal> {
     this.afterHandlers.push(handler)
     return this
   }

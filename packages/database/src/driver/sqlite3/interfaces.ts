@@ -3,7 +3,7 @@
 // import "sqlite3"
 
 export interface Sqlite3ConnectionConfig {
-  readonly adapter: "sqlite3"
+  readonly adapter: 'sqlite3'
   readonly pool?: false
   filename: string
   mode?: number

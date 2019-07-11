@@ -6,14 +6,14 @@ export enum Priority {
   Highest = 50,
 }
 
-export interface Queue<P> {
+export interface Queue<TPayload> {
   close(): Promise<void>
   countWaiting(): Promise<number>
   countRunning(): Promise<number>
   flush(): Promise<void>
-  send(payload: P, options?: SendQueueOptions): Promise<void>
-  receive(): Promise<Job<P> | undefined>
-  delete(job: Job<P>): Promise<void>
+  send(payload: TPayload, options?: SendQueueOptions): Promise<void>
+  receive(): Promise<Job<TPayload> | undefined>
+  delete(job: Job<TPayload>): Promise<void>
 }
 
 export interface SendQueueOptions {
@@ -21,9 +21,9 @@ export interface SendQueueOptions {
   priority?: number
 }
 
-export interface Job<P> {
-  payload: P
-  queue: Queue<P>
+export interface Job<TPayload> {
+  payload: TPayload
+  queue: Queue<TPayload>
   isDeleted: boolean
   done(): Promise<void>
 }

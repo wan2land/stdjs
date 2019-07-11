@@ -1,7 +1,9 @@
-import axios from "axios"
-import { escape, parse } from "querystring"
+/* eslint-disable @typescript-eslint/camelcase */
 
-import { OAuthStrategy, OAuthToken, OAuthUser } from "../interfaces/oauth"
+import axios from 'axios'
+import { escape, parse } from 'querystring'
+
+import { OAuthStrategy, OAuthToken, OAuthUser } from '../interfaces/oauth'
 
 interface UserResponse {
   login: string
@@ -41,10 +43,10 @@ interface UserResponse {
   collaborators: number
   two_factor_authentication: boolean
   plan: {
-    name: string
-    space: number
-    collaborators: number
-    private_repos: number
+    name: string,
+    space: number,
+    collaborators: number,
+    private_repos: number,
   }
 }
 
@@ -62,45 +64,37 @@ export class GithubStrategy implements OAuthStrategy {
   ) {}
 
   public getCallbackUrl(redirectUri?: string) {
-    const scopes = this.options.scopes || ["user"]
-    return `https://github.com/login/oauth/authorize?client_id=${this.options.clientId}&redirect_uri=${escape(redirectUri || this.options.redirectUri)}&scope=${escape(scopes.join(" "))}`
+    const scopes = this.options.scopes || ['user']
+    return `https://github.com/login/oauth/authorize?client_id=${this.options.clientId}&redirect_uri=${escape(redirectUri || this.options.redirectUri)}&scope=${escape(scopes.join(' '))}`
   }
 
   public async getToken(code: string, redirectUri?: string): Promise<OAuthToken> {
-    try {
-      const response = await axios.post<string>("https://github.com/login/oauth/access_token", {
-        client_id: this.options.clientId,
-        client_secret: this.options.clientSecret,
-        redirect_uri: redirectUri || this.options.redirectUri,
-        code,
-      })
-      const data = parse(response.data)
-      return {
-        token: data.access_token as string,
-        tokenType: data.token_type as string,
-        scope: data.scope as string,
-      }
-    } catch (e) {
-      throw e
+    const response = await axios.post<string>('https://github.com/login/oauth/access_token', {
+      client_id: this.options.clientId,
+      client_secret: this.options.clientSecret,
+      redirect_uri: redirectUri || this.options.redirectUri,
+      code,
+    })
+    const data = parse(response.data)
+    return {
+      token: data.access_token as string,
+      tokenType: data.token_type as string,
+      scope: data.scope as string,
     }
   }
 
   public async getUser(token: OAuthToken): Promise<OAuthUser> {
-    try {
-      const response = await axios.get<UserResponse>("https://api.github.com/user", {
-        params: {
-          access_token: token.token,
-        },
-      })
-      return {
-        id: `${response.data.id}`,
-        email: response.data.email,
-        name: response.data.name,
-        avatar: response.data.avatar_url,
-        raw: response.data,
-      }
-    } catch (e) {
-      throw e
+    const response = await axios.get<UserResponse>('https://api.github.com/user', {
+      params: {
+        access_token: token.token,
+      },
+    })
+    return {
+      id: `${response.data.id}`,
+      email: response.data.email,
+      name: response.data.name,
+      avatar: response.data.avatar_url,
+      raw: response.data,
     }
   }
 }

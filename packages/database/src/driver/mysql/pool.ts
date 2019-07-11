@@ -1,8 +1,8 @@
-import { RowNotFoundError } from "../../error/row-not-found-error"
-import { Connection, Pool, PoolConnection, QueryBuilder, QueryResult, Row, Scalar } from "../../interfaces/database"
-import { isQueryBuilder } from "../../utils"
-import { MysqlRawPool } from "./interfaces"
-import { MysqlPoolConnection } from "./pool-connection"
+import { RowNotFoundError } from '../../error/row-not-found-error'
+import { Connection, Pool, PoolConnection, QueryBuilder, QueryResult, Row, Scalar } from '../../interfaces/database'
+import { isQueryBuilder } from '../../utils'
+import { MysqlRawPool } from './interfaces'
+import { MysqlPoolConnection } from './pool-connection'
 
 
 export class MysqlPool implements Pool {
@@ -21,19 +21,19 @@ export class MysqlPool implements Pool {
     })
   }
 
-  public async first<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
-    return (await this.select<P>(queryOrQb, values))[0]
+  public async first<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow|undefined> {
+    return (await this.select<TRow>(queryOrQb, values))[0]
   }
 
-  public async firstOrThrow<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
-    const rows = await this.select<P>(queryOrQb, values)
-    if (rows.length) {
+  public async firstOrThrow<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow|undefined> {
+    const rows = await this.select<TRow>(queryOrQb, values)
+    if (rows.length > 0) {
       return rows[0]
     }
     throw new RowNotFoundError()
   }
 
-  public select<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P[]> {
+  public select<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow[]> {
     return new Promise((resolve, reject) => {
       let query: string
       if (isQueryBuilder(queryOrQb)) {
@@ -46,7 +46,7 @@ export class MysqlPool implements Pool {
         if (err) {
           return reject(err)
         }
-        resolve((rows && rows.map) ? rows.map((result: any) => ({...result})) : [])
+        resolve(rows && rows.map ? rows.map((result: any) => ({ ...result })) : [])
       })
     })
   }
@@ -73,7 +73,7 @@ export class MysqlPool implements Pool {
     })
   }
 
-  public async transaction<P>(handler: (connection: Connection) => Promise<any>): Promise<any> {
+  public async transaction<TRet>(handler: (connection: Connection) => Promise<any>): Promise<TRet> {
     const connection = await this.getConnection()
     try {
       const result = connection.transaction(handler)

@@ -1,5 +1,5 @@
-import { InjectDecoratorFactory } from "../interfaces/decorator"
-import { MetadataInject } from "../metadata"
+import { InjectDecoratorFactory } from '../interfaces/decorator'
+import { MetadataInject } from '../metadata'
 
 export const Inject: InjectDecoratorFactory = (name) => (target, propertyKey, index) => {
   target = propertyKey ? target.constructor : target

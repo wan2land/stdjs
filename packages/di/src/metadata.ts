@@ -1,3 +1,3 @@
-import { MetadataInjectOption } from "./interfaces/metadata"
+import { MetadataInjectOption } from './interfaces/metadata'
 
 export const MetadataInject = new Map<any, MetadataInjectOption[]>()

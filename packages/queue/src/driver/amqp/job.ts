@@ -1,13 +1,13 @@
 
-import { Job } from "../../interfaces/queue"
-import { RawAmqpMessage as Message } from "./interfaces"
-import { AmqpQueue } from "./queue"
+import { Job } from '../../interfaces/queue'
+import { RawAmqpMessage as Message } from './interfaces'
+import { AmqpQueue } from './queue'
 
-export class AmqpJob<P> implements Job<P> {
+export class AmqpJob<TPayload> implements Job<TPayload> {
 
   public isDeleted = false
 
-  constructor(public queue: AmqpQueue<P>, public message: Message, public payload: P) {
+  public constructor(public queue: AmqpQueue<TPayload>, public message: Message, public payload: TPayload) {
   }
 
   public done(): Promise<void> {

@@ -1,6 +1,6 @@
 
 // import { SQS } from "aws-sdk"
-import { RawAwsSqs as SQS } from "./interfaces"
+import { RawAwsSqs as SQS } from './interfaces'
 
 export function getQueueAttributes(client: SQS, request: SQS.GetQueueAttributesRequest): Promise<SQS.GetQueueAttributesResult> {
   return new Promise((resolve, reject) => {

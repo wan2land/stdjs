@@ -1,19 +1,20 @@
 
-import { Cache } from "../../interfaces/cache"
-import { RawRedisCallback, RawRedisClient } from "./interfaces"
+import { Cache } from '../../interfaces/cache'
+import { RawRedisCallback, RawRedisClient } from './interfaces'
+
 
 export class RedisCache implements Cache {
 
   public constructor(public redis: RawRedisClient) {
   }
 
-  public async close(): Promise<boolean> {
+  public close() {
     this.redis.end()
-    return true // nothing to close :-)
+    return Promise.resolve(true) // nothing to close :-)
   }
 
-  public get<P>(key: string, defaultValue?: P): Promise<P | undefined> {
-    return new Promise((resolve, reject) => {
+  public get<TVal>(key: string, defaultValue?: TVal) {
+    return new Promise<TVal | undefined>((resolve, reject) => {
       this.redis.get(key, (err, data) => {
         if (err) {
           reject(err)
@@ -28,25 +29,25 @@ export class RedisCache implements Cache {
     })
   }
 
-  public set<P>(key: string, value: P, ttl?: number): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      const cb: RawRedisCallback<"OK" | undefined> = (err, result) => {
+  public set<TVal>(key: string, value: TVal, ttl?: number) {
+    return new Promise<boolean>((resolve, reject) => {
+      const cb: RawRedisCallback<'OK' | undefined> = (err, result) => {
         if (err) {
           reject(err)
           return
         }
-        resolve(result === "OK")
+        resolve(result === 'OK')
       }
-      if (typeof ttl !== "undefined" && ttl >= 0) {
-        this.redis.set(key, JSON.stringify(value), "EX", ttl, cb)
+      if (typeof ttl !== 'undefined' && ttl >= 0) {
+        this.redis.set(key, JSON.stringify(value), 'EX', ttl, cb)
       } else {
         this.redis.set(key, JSON.stringify(value), cb)
       }
     })
   }
 
-  public has(key: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+  public has(key: string) {
+    return new Promise<boolean>((resolve, reject) => {
       this.redis.exists(key, (err, result) => {
         if (err) {
           reject(err)
@@ -57,8 +58,8 @@ export class RedisCache implements Cache {
     })
   }
 
-  public delete(key: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+  public delete(key: string) {
+    return new Promise<boolean>((resolve, reject) => {
       this.redis.del(key, (err, result) => {
         if (err) {
           reject(err)
@@ -69,14 +70,14 @@ export class RedisCache implements Cache {
     })
   }
 
-  public clear(): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+  public clear() {
+    return new Promise<boolean>((resolve, reject) => {
       this.redis.flushall((err, result) => {
         if (err) {
           reject(err)
           return
         }
-        resolve(result === "OK")
+        resolve(result === 'OK')
       })
     })
   }

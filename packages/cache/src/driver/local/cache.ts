@@ -1,56 +1,56 @@
+import { Cache } from '../../interfaces/cache'
 
-import { Cache } from "../../interfaces/cache"
 
 export class LocalCache implements Cache {
 
   public values = new Map<string, any>()
   public expires = new Map<string, number>()
 
-  public async close(): Promise<boolean> {
-    return true // nothing to close :-)
+  public close(): Promise<boolean> {
+    return Promise.resolve(true) // nothing to close :-)
   }
 
-  public async get<P>(key: string, defaultValue?: P): Promise<P | undefined> {
+  public get<TVal>(key: string, defaultValue?: TVal) {
     if (this.has(key)) {
-      return this.values.get(key)
+      return Promise.resolve(this.values.get(key) as TVal)
     }
-    return defaultValue
+    return Promise.resolve(defaultValue)
   }
 
-  public async set<P>(key: string, value: P, ttl?: number): Promise<boolean> {
+  public set<TVal>(key: string, value: TVal, ttl?: number) {
     this.values.set(key, value)
-    const expire = typeof ttl !== "undefined" && ttl >= 0
+    const expire = typeof ttl !== 'undefined' && ttl >= 0
       ? new Date().getTime() + ttl * 1000
       : Number.MAX_SAFE_INTEGER
     this.expires.set(key, expire)
-    return true
+    return Promise.resolve(true)
   }
 
-  public async has(key: string): Promise<boolean> {
+  public has(key: string) {
     if (!this.expires.has(key)) {
-      return false
+      return Promise.resolve(false)
     }
-    const expire = this.expires.get(key)!
+    const expire = this.expires.get(key) || 0
     if (expire < new Date().getTime()) {
       this.values.delete(key)
       this.expires.delete(key)
-      return false
+      return Promise.resolve(false)
     }
-    return true
+    return Promise.resolve(true)
   }
 
-  public async delete(key: string): Promise<boolean> {
+  public delete(key: string) {
     if (this.has(key)) {
       const result = this.values.delete(key)
       this.expires.delete(key)
-      return result
+      return Promise.resolve(result)
     }
-    return false
+    return Promise.resolve(false)
   }
 
-  public async clear(): Promise<boolean> {
+  public clear() {
     this.values.clear()
     this.expires.clear()
-    return true
+    return Promise.resolve(true)
   }
 }

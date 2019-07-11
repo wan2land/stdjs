@@ -1,7 +1,7 @@
-import { RowNotFoundError } from "../../error/row-not-found-error"
-import { Connection, QueryBuilder, QueryResult, Row, Scalar, TransactionHandler } from "../../interfaces/database"
-import { isQueryBuilder } from "../../utils"
-import { PgRawClient, PgRawClientBase, PgRawPoolClient } from "./interfaces"
+import { RowNotFoundError } from '../../error/row-not-found-error'
+import { Connection, QueryBuilder, QueryResult, Row, Scalar, TransactionHandler } from '../../interfaces/database'
+import { isQueryBuilder } from '../../utils'
+import { PgRawClient, PgRawClientBase, PgRawPoolClient } from './interfaces'
 
 
 export class PgConnection implements Connection {
@@ -19,19 +19,19 @@ export class PgConnection implements Connection {
     }
   }
 
-  public async first<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
-    return (await this.select<P>(queryOrQb, values))[0]
+  public async first<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow|undefined> {
+    return (await this.select<TRow>(queryOrQb, values))[0]
   }
 
-  public async firstOrThrow<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
-    const rows = await this.select<P>(queryOrQb, values)
-    if (rows.length) {
+  public async firstOrThrow<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow|undefined> {
+    const rows = await this.select<TRow>(queryOrQb, values)
+    if (rows.length > 0) {
       return rows[0]
     }
     throw new RowNotFoundError()
   }
 
-  public async select<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P[]> {
+  public async select<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow[]> {
     await this.connect()
     const result = isQueryBuilder(queryOrQb)
       ? await this.client.query(queryOrQb.toSql(), queryOrQb.getBindings() || [])
@@ -45,7 +45,7 @@ export class PgConnection implements Connection {
       ? await this.client.query(queryOrQb.toSql(), queryOrQb.getBindings() || [])
       : await this.client.query(queryOrQb, values || [])
     let insertId: any
-    if (result.rows.length) {
+    if (result.rows.length > 0) {
       const firstRow = result.rows[0]
       const keys = Object.keys(firstRow)
       insertId = firstRow[keys[0]]
@@ -57,14 +57,14 @@ export class PgConnection implements Connection {
     }
   }
 
-  public async transaction<P>(handler: TransactionHandler<P>): Promise<P> {
-    await this.query("BEGIN")
+  public async transaction<TRow>(handler: TransactionHandler<TRow>): Promise<TRow> {
+    await this.query('BEGIN')
     try {
       const result = await handler(this)
-      await this.query("COMMIT")
+      await this.query('COMMIT')
       return result
     } catch (e) {
-      await this.query("ROLLBACK")
+      await this.query('ROLLBACK')
       throw e
     }
   }

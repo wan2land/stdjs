@@ -1,12 +1,12 @@
-import { MysqlConnectionConfig, MysqlPoolConfig } from "../driver/mysql/interfaces"
-import { PgConnectionConfig, PgPoolConfig } from "../driver/pg/interfaces"
-import { Sqlite3ConnectionConfig } from "../driver/sqlite3/interfaces"
+import { MysqlConnectionConfig, MysqlPoolConfig } from '../driver/mysql/interfaces'
+import { PgConnectionConfig, PgPoolConfig } from '../driver/pg/interfaces'
+import { Sqlite3ConnectionConfig } from '../driver/sqlite3/interfaces'
 
 
 export type ConnectionConfig = SingleConnectionConfig | ClusterConnectionConfig
 
 export interface ClusterConnectionConfig {
-  adapter: "cluster"
+  adapter: 'cluster'
   readonly pool?: false
   read: SingleConnectionConfig
   write: SingleConnectionConfig

@@ -3,7 +3,7 @@
 // from Options.Connect
 
 export interface AmqpQueueConfig extends RawAmqpConnectOptions {
-  readonly adapter: "amqplib"
+  readonly adapter: 'amqplib'
   readonly queue: string
 }
 

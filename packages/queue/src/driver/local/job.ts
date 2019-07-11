@@ -1,14 +1,14 @@
 
-import { Job } from "../../interfaces/queue"
-import { LocalQueue } from "./queue"
+import { Job } from '../../interfaces/queue'
+import { LocalQueue } from './queue'
 
-export class LocalJob<P> implements Job<P> {
+export class LocalJob<TPayload> implements Job<TPayload> {
 
   public isDeleted = false
 
   public timer?: NodeJS.Timer
 
-  constructor(public queue: LocalQueue<P>, public payload: P) {
+  public constructor(public queue: LocalQueue<TPayload>, public payload: TPayload) {
   }
 
   public done(): Promise<void> {

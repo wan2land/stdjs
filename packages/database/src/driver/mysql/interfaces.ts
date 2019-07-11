@@ -4,12 +4,12 @@
 // @ref @types/mysql ConnectionOptions + ConnectionConfig
 
 export interface MysqlConnectionConfig extends MysqlBaseConfig {
-  readonly adapter: "mysql" | "mysql2"
+  readonly adapter: 'mysql' | 'mysql2'
   readonly pool?: false
 }
 
 export interface MysqlPoolConfig extends MysqlBaseConfig {
-  readonly adapter: "mysql" | "mysql2"
+  readonly adapter: 'mysql' | 'mysql2'
   readonly pool: true
 
   acquireTimeout?: number

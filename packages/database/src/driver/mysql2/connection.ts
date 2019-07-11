@@ -1,7 +1,7 @@
-import { RowNotFoundError } from "../../error/row-not-found-error"
-import { Connection, QueryBuilder, QueryResult, Row, Scalar, TransactionHandler } from "../../interfaces/database"
-import { isQueryBuilder } from "../../utils"
-import { Mysql2RawConnection } from "./interfaces"
+import { RowNotFoundError } from '../../error/row-not-found-error'
+import { Connection, QueryBuilder, QueryResult, Row, Scalar, TransactionHandler } from '../../interfaces/database'
+import { isQueryBuilder } from '../../utils'
+import { Mysql2RawConnection } from './interfaces'
 
 
 export class Mysql2Connection implements Connection {
@@ -20,21 +20,21 @@ export class Mysql2Connection implements Connection {
     })
   }
 
-  public async first<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
-    return (await this.select<P>(queryOrQb, values))[0]
+  public async first<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow|undefined> {
+    return (await this.select<TRow>(queryOrQb, values))[0]
   }
 
-  public async firstOrThrow<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
-    const rows = await this.select<P>(queryOrQb, values)
-    if (rows.length) {
+  public async firstOrThrow<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow|undefined> {
+    const rows = await this.select<TRow>(queryOrQb, values)
+    if (rows.length > 0) {
       return rows[0]
     }
     throw new RowNotFoundError()
   }
 
-  public select<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P[]> {
+  public select<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow[]> {
     if (Array.isArray(values)) {
-      values = values.map(value => typeof value  === "undefined" ? null : value)
+      values = values.map(value => typeof value === 'undefined' ? null : value)
     }
     return new Promise((resolve, reject) => {
       let query: string
@@ -48,14 +48,14 @@ export class Mysql2Connection implements Connection {
         if (err) {
           return reject(err)
         }
-        resolve((rows && rows.map) ? rows.map((result: any) => ({...result})) : [])
+        resolve(rows && rows.map ? rows.map((result: any) => ({ ...result })) : [])
       })
     })
   }
 
   public query(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<QueryResult> {
     if (Array.isArray(values)) {
-      values = values.map(value => typeof value  === "undefined" ? null : value)
+      values = values.map(value => typeof value === 'undefined' ? null : value)
     }
     return new Promise((resolve, reject) => {
       let query: string
@@ -78,7 +78,7 @@ export class Mysql2Connection implements Connection {
     })
   }
 
-  public async transaction<P>(handler: TransactionHandler<P>): Promise<P> {
+  public async transaction<TRet>(handler: TransactionHandler<TRet>): Promise<TRet> {
     await new Promise((resolve, reject) => {
       this.connection.beginTransaction((err) => {
         if (err) {
@@ -109,4 +109,5 @@ export class Mysql2Connection implements Connection {
       })
       throw e
     }
-  }}
+  }
+}

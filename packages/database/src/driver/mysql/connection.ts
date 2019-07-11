@@ -1,7 +1,7 @@
-import { RowNotFoundError } from "../../error/row-not-found-error"
-import { Connection, QueryBuilder, QueryResult, Row, Scalar, TransactionHandler } from "../../interfaces/database"
-import { isQueryBuilder } from "../../utils"
-import { MysqlRawConnection } from "./interfaces"
+import { RowNotFoundError } from '../../error/row-not-found-error'
+import { Connection, QueryBuilder, QueryResult, Row, Scalar, TransactionHandler } from '../../interfaces/database'
+import { isQueryBuilder } from '../../utils'
+import { MysqlRawConnection } from './interfaces'
 
 
 export class MysqlConnection implements Connection {
@@ -20,19 +20,19 @@ export class MysqlConnection implements Connection {
     })
   }
 
-  public async first<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
-    return (await this.select<P>(queryOrQb, values))[0]
+  public async first<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []) {
+    return (await this.select<TRow>(queryOrQb, values))[0]
   }
 
-  public async firstOrThrow<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
-    const rows = await this.select<P>(queryOrQb, values)
-    if (rows.length) {
+  public async firstOrThrow<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []) {
+    const rows = await this.select<TRow>(queryOrQb, values)
+    if (rows.length > 0) {
       return rows[0]
     }
     throw new RowNotFoundError()
   }
 
-  public select<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P[]> {
+  public select<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow[]> {
     return new Promise((resolve, reject) => {
       let query: string
       if (isQueryBuilder(queryOrQb)) {
@@ -45,7 +45,7 @@ export class MysqlConnection implements Connection {
         if (err) {
           return reject(err)
         }
-        resolve((rows && rows.map) ? rows.map((result: any) => ({...result})) : [])
+        resolve(rows && rows.map ? rows.map((result: any) => ({ ...result })) : [])
       })
     })
   }
@@ -72,7 +72,7 @@ export class MysqlConnection implements Connection {
     })
   }
 
-  public async transaction<P>(handler: TransactionHandler<P>): Promise<P> {
+  public async transaction<TRet>(handler: TransactionHandler<TRet>): Promise<TRet> {
     await new Promise((resolve, reject) => {
       this.connection.beginTransaction((err) => {
         if (err) {

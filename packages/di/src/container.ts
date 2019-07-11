@@ -1,7 +1,7 @@
-import { Descriptor } from "./descriptor"
-import { ConstructType } from "./interfaces/common"
-import { Containable, ContainerFluent, Provider } from "./interfaces/container"
-import { MetadataInject } from "./metadata"
+import { Descriptor } from './descriptor'
+import { ConstructType } from './interfaces/common'
+import { Containable, ContainerFluent, Provider } from './interfaces/container'
+import { MetadataInject } from './metadata'
 
 export class Container implements Containable {
 
@@ -27,74 +27,74 @@ export class Container implements Containable {
   }
 
   public setToGlobal() {
-    return Container.instance = this
+    return (Container.instance = this)
   }
 
-  public instance<P>(name: PropertyKey, value: P | Promise<P>): void {
+  public instance<T>(name: PropertyKey, value: T | Promise<T>): void {
     this.instances.set(name, value)
   }
 
-  public factory<P>(name: PropertyKey, factory: () => P | Promise<P>): ContainerFluent<P> {
+  public factory<T>(name: PropertyKey, factory: () => T | Promise<T>): ContainerFluent<T> {
     this.delete(name)
     this.factories.set(name, factory)
-    const descriptor = new Descriptor<P>()
+    const descriptor = new Descriptor<T>()
     this.descriptors.set(name, descriptor)
     return descriptor
   }
 
-  public bind<P>(name: PropertyKey, constructor: ConstructType<P>): ContainerFluent<P> {
+  public bind<T>(name: PropertyKey, constructor: ConstructType<T>): ContainerFluent<T> {
     this.delete(name)
     this.binds.set(name, constructor)
-    const descriptor = new Descriptor<P>()
+    const descriptor = new Descriptor<T>()
     this.descriptors.set(name, descriptor)
     return descriptor
   }
 
-  public async create<P>(ctor: ConstructType<P>): Promise<P> {
+  public async create<T>(ctor: ConstructType<T>): Promise<T> {
     const params = []
-    const options = (MetadataInject.get(ctor) || []).filter(({propertyKey}) => !propertyKey)
-    for (const {index, name} of options) {
+    const options = (MetadataInject.get(ctor) || []).filter(({ propertyKey }) => !propertyKey)
+    for (const { index, name } of options) {
       params[index] = await this.get(name)
     }
     return new (ctor as any)(...params)
   }
 
-  public async invoke<P, R = any>(instance: P, method: keyof P): Promise<R> {
+  public async invoke<TIns, TRet = any>(instance: TIns, method: keyof TIns): Promise<TRet> {
     const params = []
-    const options = (MetadataInject.get(instance.constructor) || []).filter(({propertyKey}) => propertyKey === method)
-    for (const {index, name} of options) {
+    const options = (MetadataInject.get((instance as any).constructor) || []).filter(({ propertyKey }) => propertyKey === method)
+    for (const { index, name } of options) {
       params[index] = await this.get(name)
     }
     return (instance as any)[method](...params)
   }
 
-  public async get<P>(name: PropertyKey): Promise<P> {
+  public async get<T>(name: PropertyKey): Promise<T> {
     if (this.descriptors.has(name)) {
-      (this.descriptors.get(name) as Descriptor<P>).freeze()
+      (this.descriptors.get(name) as Descriptor<T>).freeze()
     }
     while (this.aliases.has(name)) {
       name = this.aliases.get(name) as string
     }
     if (this.instances.has(name)) {
-      return this.instances.get(name) as P
+      return this.instances.get(name) as T
     }
 
     if (!this.descriptors.has(name)) {
-      throw new Error(`"${typeof name === "symbol" ? name.toString() : name}" is not defined!`)
+      throw new Error(`"${typeof name === 'symbol' ? name.toString() : name}" is not defined!`)
     }
 
-    if (this.stack.indexOf(name) > -1) {
+    if (this.stack.includes(name)) {
       const stack = [...this.stack]
       this.stack = [] // clear stack
-      throw Object.assign(new Error("circular reference found!"), {
-        code: "CIRCULAR_REFERENCE",
-        stack: stack
+      throw Object.assign(new Error('circular reference found!'), {
+        code: 'CIRCULAR_REFERENCE',
+        stack,
       })
     }
     this.stack.push(name)
 
     const descriptor = this.descriptors.get(name)!
-    let instance: P
+    let instance: T
 
     if (this.factories.has(name)) {
       const factory = this.factories.get(name)!
@@ -103,7 +103,7 @@ export class Container implements Containable {
       instance = await this.create(this.binds.get(name)!)
     } else {
       this.stack.pop()
-      throw new Error(`"${typeof name === "symbol" ? name.toString() : name}" is not defined!`)
+      throw new Error(`"${typeof name === 'symbol' ? name.toString() : name}" is not defined!`)
     }
 
     for (const afterHandler of descriptor.afterHandlers) {
@@ -121,7 +121,7 @@ export class Container implements Containable {
       if (this.descriptors.has(name)) {
         const descriptor = this.descriptors.get(name) as Descriptor<any>
         if (descriptor.isFrozen) {
-          throw new Error(`cannot change ${typeof name === "symbol" ? name.toString() : name}`)
+          throw new Error(`cannot change ${typeof name === 'symbol' ? name.toString() : name}`)
         }
         this.descriptors.delete(name)
       }

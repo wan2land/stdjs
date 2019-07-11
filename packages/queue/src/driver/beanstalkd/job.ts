@@ -1,12 +1,12 @@
 
-import { Job } from "../../interfaces/queue"
-import { BeanstalkdQueue } from "./queue"
+import { Job } from '../../interfaces/queue'
+import { BeanstalkdQueue } from './queue'
 
-export class BeanstalkdJob<P> implements Job<P> {
+export class BeanstalkdJob<TPayload> implements Job<TPayload> {
 
   public isDeleted = false
 
-  constructor(public id: string, public queue: BeanstalkdQueue<P>, public payload: P) {
+  public constructor(public id: string, public queue: BeanstalkdQueue<TPayload>, public payload: TPayload) {
   }
 
   public done(): Promise<void> {

@@ -1,4 +1,4 @@
-import { Connection, QueryBuilder, QueryResult, Row, Scalar, TransactionHandler } from "../../interfaces/database"
+import { Connection, QueryBuilder, QueryResult, Row, Scalar, TransactionHandler } from '../../interfaces/database'
 
 
 export class ClusterConnection implements Connection {
@@ -13,26 +13,26 @@ export class ClusterConnection implements Connection {
     ])
   }
 
-  public first<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
-    return this.read.first<P>(queryOrQb as any, values)
+  public first<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []) {
+    return this.read.first<TRow>(queryOrQb as any, values)
   }
 
-  public firstOrThrow<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P|undefined> {
-    return this.read.firstOrThrow<P>(queryOrQb as any, values)
+  public firstOrThrow<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []) {
+    return this.read.firstOrThrow<TRow>(queryOrQb as any, values)
   }
 
-  public select<P extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<P[]> {
-    return this.read.select<P>(queryOrQb as any, values)
+  public select<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []) {
+    return this.read.select<TRow>(queryOrQb as any, values)
   }
 
-  public query(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<QueryResult> {
+  public query(queryOrQb: string|QueryBuilder, values: Scalar[] = []) {
     return this.write.query(queryOrQb as any, values)
   }
 
-  public async transaction<P>(handler: TransactionHandler<P>): Promise<P> {
-    return await this.read.transaction(async (read) => {
-      return await this.write.transaction(async (write) => {
-        return await handler(new ClusterConnection(read, write))
+  public transaction<TRet>(handler: TransactionHandler<TRet>): Promise<TRet> {
+    return this.read.transaction((read) => {
+      return this.write.transaction((write) => {
+        return handler(new ClusterConnection(read, write))
       })
     })
   }

@@ -2,18 +2,18 @@
 // only for developing
 // import "pg"
 
-import * as stream from "stream"
-import * as tls from "tls"
+import stream from 'stream'
+import tls from 'tls'
 
 // @ref @types/pg PoolConfig, ClientConfig, ConnectionConfig
 
 export interface PgConnectionConfig extends PgBaseConfig {
-  readonly adapter: "pg"
+  readonly adapter: 'pg'
   readonly pool?: false
 }
 
 export interface PgPoolConfig extends PgBaseConfig {
-  readonly adapter: "pg"
+  readonly adapter: 'pg'
   readonly pool: true
 
   max?: number

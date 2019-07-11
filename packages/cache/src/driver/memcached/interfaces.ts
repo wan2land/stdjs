@@ -2,7 +2,7 @@
 // import * as Memcached from "memcached"
 
 export interface MemcachedCacheConfig extends RawMemcachedLocation, RawMemcachedOptions {
-  readonly adapter: "memcached"
+  readonly adapter: 'memcached'
 }
 
 // from Memcached.Location
@@ -12,21 +12,21 @@ export interface RawMemcachedLocation {
 
 // from Memcached.options
 export interface RawMemcachedOptions {
-  maxKeySize ?: number
-  maxExpiration ?: number
-  maxValue ?: number
-  poolSize ?: number
-  algorithm ?: string
-  reconnect ?: number
-  timeout ?: number
-  retries ?: number
-  failures ?: number
-  retry ?: number
-  remove ?: boolean
-  failOverServers ?: string|string[]
-  keyCompression ?: boolean
-  idle ?: number
-  namespace ?: string
+  maxKeySize?: number
+  maxExpiration?: number
+  maxValue?: number
+  poolSize?: number
+  algorithm?: string
+  reconnect?: number
+  timeout?: number
+  retries?: number
+  failures?: number
+  retry?: number
+  remove?: boolean
+  failOverServers?: string|string[]
+  keyCompression?: boolean
+  idle?: number
+  namespace?: string
   [key: string]: any
 }
 
@@ -43,11 +43,11 @@ export interface RawMemcachedCommandData {
   execution: number
   type: string
   command: string
-  validate: Array<[string, (...args: any[]) => any]>
-  cas ?: string
-  redundancyEnabled ?: boolean
-  key ?: string
-  value ?: any
-  lifetime ?: number
+  validate: [string, (...args: any[]) => any][]
+  cas?: string
+  redundancyEnabled?: boolean
+  key?: string
+  value?: any
+  lifetime?: number
   callback(...args: any[]): any
 }

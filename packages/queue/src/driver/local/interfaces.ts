@@ -1,5 +1,5 @@
 
 export interface LocalQueueConfig {
-  readonly adapter: "local"
+  readonly adapter: 'local'
   timeout?: number
 }

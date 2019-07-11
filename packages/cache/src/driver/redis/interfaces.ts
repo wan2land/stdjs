@@ -2,7 +2,7 @@
 // import { ClientOpts } from "Redis"
 
 export interface RedisCacheConfig extends RawRedisOptions {
-  readonly adapter: "redis"
+  readonly adapter: 'redis'
 }
 
 // from ClientOpts
@@ -47,21 +47,21 @@ export interface RawRedisClient {
   del: RawRedisOverloadedCommand<string, number, boolean>
   end(flush?: boolean): void
   get(key: string, cb?: RawRedisCallback<string>): boolean
-  set(key: string, value: string, cb?: RawRedisCallback<"OK">): boolean
-  set(key: string, value: string, flag: string, cb?: RawRedisCallback<"OK">): boolean
-  set(key: string, value: string, mode: string, duration: number, cb?: RawRedisCallback<"OK" | undefined>): boolean
-  set(key: string, value: string, mode: string, duration: number, flag: string, cb?: RawRedisCallback<"OK" | undefined>): boolean
+  set(key: string, value: string, cb?: RawRedisCallback<'OK'>): boolean
+  set(key: string, value: string, flag: string, cb?: RawRedisCallback<'OK'>): boolean
+  set(key: string, value: string, mode: string, duration: number, cb?: RawRedisCallback<'OK' | undefined>): boolean
+  set(key: string, value: string, mode: string, duration: number, flag: string, cb?: RawRedisCallback<'OK' | undefined>): boolean
   flushall(cb?: RawRedisCallback<string>): boolean
 }
 
 export type RawRedisCallback<T> = (err: Error | null, reply: T) => void
 
-export interface RawRedisOverloadedCommand<T, U, R> {
-  (arg1: T, arg2: T, arg3: T, arg4: T, arg5: T, arg6: T, cb?: RawRedisCallback<U>): R
-  (arg1: T, arg2: T, arg3: T, arg4: T, arg5: T, cb?: RawRedisCallback<U>): R
-  (arg1: T, arg2: T, arg3: T, arg4: T, cb?: RawRedisCallback<U>): R
-  (arg1: T, arg2: T, arg3: T, cb?: RawRedisCallback<U>): R
-  (arg1: T, arg2: T | T[], cb?: RawRedisCallback<U>): R
-  (arg1: T | T[], cb?: RawRedisCallback<U>): R
-  (...args: Array<T | RawRedisCallback<U>>): R
+export interface RawRedisOverloadedCommand<T1, T2, T3> {
+  (arg1: T1, arg2: T1, arg3: T1, arg4: T1, arg5: T1, arg6: T1, cb?: RawRedisCallback<T2>): T3
+  (arg1: T1, arg2: T1, arg3: T1, arg4: T1, arg5: T1, cb?: RawRedisCallback<T2>): T3
+  (arg1: T1, arg2: T1, arg3: T1, arg4: T1, cb?: RawRedisCallback<T2>): T3
+  (arg1: T1, arg2: T1, arg3: T1, cb?: RawRedisCallback<T2>): T3
+  (arg1: T1, arg2: T1 | T1[], cb?: RawRedisCallback<T2>): T3
+  (arg1: T1 | T1[], cb?: RawRedisCallback<T2>): T3
+  (...args: (T1 | RawRedisCallback<T2>)[]): T3
 }

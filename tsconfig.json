@@ -12,7 +12,6 @@
     "pretty": true,
     "sourceMap": true,
     "strict": true,
-    "esModuleInterop": true,
-    "noImplicitReturns": true
+    "esModuleInterop": true
   }
 }

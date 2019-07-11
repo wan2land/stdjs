@@ -1,6 +1,6 @@
-import { PoolConnection } from "../../interfaces/database"
-import { Mysql2Connection } from "./connection"
-import { Mysql2RawPoolConnection } from "./interfaces"
+import { PoolConnection } from '../../interfaces/database'
+import { Mysql2Connection } from './connection'
+import { Mysql2RawPoolConnection } from './interfaces'
 
 
 export class Mysql2PoolConnection extends Mysql2Connection implements PoolConnection {
@@ -9,7 +9,8 @@ export class Mysql2PoolConnection extends Mysql2Connection implements PoolConnec
     super(connection)
   }
 
-  public async release(): Promise<void> {
+  public release() {
     this.connection.release()
+    return Promise.resolve()
   }
 }

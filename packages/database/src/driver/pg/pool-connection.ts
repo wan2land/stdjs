@@ -1,6 +1,6 @@
-import { PoolConnection } from "../../interfaces/database"
-import { PgConnection } from "./connection"
-import { PgRawPoolClient } from "./interfaces"
+import { PoolConnection } from '../../interfaces/database'
+import { PgConnection } from './connection'
+import { PgRawPoolClient } from './interfaces'
 
 
 export class PgPoolConnection extends PgConnection implements PoolConnection {
@@ -9,7 +9,8 @@ export class PgPoolConnection extends PgConnection implements PoolConnection {
     super(connection)
   }
 
-  public async release(): Promise<void> {
+  public release() {
     this.connection.release()
+    return Promise.resolve()
   }
 }
