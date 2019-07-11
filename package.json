@@ -4,6 +4,7 @@
   "author": "Cris <corgidisco@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "bootstrap": "lerna bootstrap",
     "build": "lerna run build --parallel",
     "test": "npm run build && npm run test:lint && npm run test:unit",
     "test:lint": "eslint packages/*/src/** --ext ts",
