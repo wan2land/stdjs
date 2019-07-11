@@ -1,7 +1,10 @@
 /node_modules
-/lib
 
 /packages/*/node_modules
+/packages/*/lib
+/packages/*/package-lock.json
 
 yarn-error.log
 lerna-debug.log
+
+TODO.md
