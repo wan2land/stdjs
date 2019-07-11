@@ -9,7 +9,7 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
-    node: true
+    node: true,
   },
   parserOptions: {
     ecmaVersion: 6,
@@ -23,7 +23,7 @@ module.exports = {
     'import/extensions': extensions,
     'import/resolver': {
       node: {
-        extensions: extensions,
+        extensions,
       },
     },
     'import/ignore': [
@@ -83,7 +83,7 @@ module.exports = {
     'curly': 'error',
     // 'default-case': 'off',
     'dot-location': ['error', 'property'],
-    'dot-notation': ['error', {allowPattern: '_'}],
+    'dot-notation': ['error', { allowPattern: '_' }],
     'eqeqeq': 'warn',
     'guard-for-in': 'warn',
     'max-classes-per-file': 'error',
@@ -91,7 +91,7 @@ module.exports = {
     'no-caller': 'error',
     'no-case-declarations': 'error',
     // 'no-div-regex': 'off',
-    'no-else-return': ['error', {allowElseIf: false}],
+    'no-else-return': ['error', { allowElseIf: false }],
     'no-empty-function': 'error',
     'no-empty-pattern': 'error',
     'no-eq-null': 'error',
@@ -239,13 +239,13 @@ module.exports = {
     'no-tabs': 'error',
     // 'no-ternary': 'off',
     'no-trailing-spaces': 'error',
-    'no-underscore-dangle': 'error',
+    // 'no-underscore-dangle': 'off',
     'no-unneeded-ternary': 'error',
     'no-whitespace-before-property': 'error',
     'nonblock-statement-body-position': 'error',
     'object-curly-newline': ['error', { consistent: true }],
     'object-curly-spacing': ['error', 'always'],
-    'object-property-newline': ["error", { allowAllPropertiesOnSameLine: true }],
+    'object-property-newline': ['error', { allowAllPropertiesOnSameLine: true }],
     // 'one-var': 'off',
     // 'one-var-declaration-per-line': 'off',
     // 'operator-assignment': 'off',
@@ -253,7 +253,7 @@ module.exports = {
     // 'padded-blocks': 'off',
     // 'padding-line-between-statements': 'off',
     // 'prefer-object-spread': 'off',
-    'quote-props': ['error', 'as-needed'],
+    'quote-props': ['error', 'consistent-as-needed'],
     'quotes': ['error', 'single'],
     'semi': ['error', 'never'],
     'semi-spacing': 'error',
@@ -352,7 +352,7 @@ module.exports = {
     // 'import/no-anonymous-default-export': 'off',
     // 'import/group-exports': 'off',
     // 'import/dynamic-import-chunkname': 'off',
-    
+
     // Unicorn
     // 'unicorn/catch-error-name': 'off',
     'unicorn/custom-error-definition': 'error',
@@ -362,7 +362,7 @@ module.exports = {
     'unicorn/filename-case': ['error', { case: 'kebabCase' }],
     'unicorn/import-index': 'error',
     'unicorn/new-for-builtins': 'error',
-    'unicorn/no-abusive-eslint-disable': 'error',
+    // 'unicorn/no-abusive-eslint-disable': 'off',
     'unicorn/no-array-instanceof': 'error',
     'unicorn/no-console-spaces': 'error',
     // 'unicorn/no-fn-reference-in-iterator': 'off',
@@ -391,5 +391,5 @@ module.exports = {
     // 'unicorn/prevent-abbreviations': 'off',
     'unicorn/regex-shorthand': 'error',
     'unicorn/throw-new-error': 'error',
-  }
+  },
 }

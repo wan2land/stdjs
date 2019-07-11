@@ -24,7 +24,7 @@ module.exports = {
     },
     'import/resolver': {
       node: {
-        extensions: extensions,
+        extensions,
       },
     },
   },
@@ -48,22 +48,22 @@ module.exports = {
     '@typescript-eslint/generic-type-naming': 'error',
     'indent': 'off',
     '@typescript-eslint/indent': ['error', 2, { SwitchCase: 1, flatTernaryExpressions: true }],
-    '@typescript-eslint/interface-name-prefix': 'error',
+    // '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/member-delimiter-style': ['error', {
       multiline: {
-        delimiter: 'none'
+        delimiter: 'comma',
       },
       singleline: {
         delimiter: 'comma',
-        requireLast: false
+        requireLast: false,
       },
       overrides: {
         interface: {
           multiline: {
-            delimiter: 'none'
-          }
-        }
-      }
+            delimiter: 'none',
+          },
+        },
+      },
     }],
     // '@typescript-eslint/member-naming': 'off',
     '@typescript-eslint/member-ordering': ['error', {
@@ -105,7 +105,7 @@ module.exports = {
         'instance-method',
 
         'method',
-      ]
+      ],
     }],
     '@typescript-eslint/no-angle-bracket-type-assertion': 'error',
     'no-array-constructor': 'off',
@@ -126,7 +126,7 @@ module.exports = {
     '@typescript-eslint/no-namespace': 'error',
     '@typescript-eslint/no-non-null-assertion': 'warn',
     '@typescript-eslint/no-object-literal-type-assertion': 'error',
-    '@typescript-eslint/no-parameter-properties': ['error', {'allows': ['public', 'public readonly']}],
+    '@typescript-eslint/no-parameter-properties': ['error', { allows: ['public', 'public readonly'] }],
     '@typescript-eslint/no-require-imports': 'error',
     '@typescript-eslint/no-this-alias': 'error',
     // '@typescript-eslint/no-type-alias': 'off',
@@ -157,5 +157,5 @@ module.exports = {
     '@typescript-eslint/type-annotation-spacing': 'error',
     // '@typescript-eslint/unbound-method': 'off',
     // '@typescript-eslint/unified-signatures': 'off',
-  }
+  },
 }
