@@ -1,20 +1,15 @@
+import { create, Priority } from '../lib'
+import { getConfig, timeout } from './helper'
 
-import "jest"
-
-import { create, Priority, QueueConfig } from "../dist"
-import { getConfig, timeout } from "./helper"
-
-require("dotenv").config(process.cwd()) // tslint:disable-line
-
-const testcases = ["local", "beanstalkd", "rabbitmq", "mix"]
+const testcases = ['local', 'beanstalkd', 'rabbitmq', 'mix']
 if (process.env.AWS_ACCESS_KEY_ID
   && process.env.AWS_SECRET_ACCESS_KEY
   && process.env.AWS_SQS_URL
   && process.env.AWS_SQS_REGION) {
-  // testcases.push("sqs")
+  testcases.push('sqs')
 }
 
-describe("queue", () => {
+describe('queue', () => {
   testcases.forEach(testcase => {
     it(`test ${testcase} basic functions`, async () => {
       const queue = create(await getConfig(testcase))
@@ -29,7 +24,10 @@ describe("queue", () => {
 
       for (let i = 0; i < 10; i++) {
         const job = await queue.receive()
-        const foundMessageKey = messages.indexOf(job.payload)
+        if (!job) {
+          throw new Error(`job(${i}) is undefined`)
+        }
+        const foundMessageKey = messages.indexOf(job.payload as string)
         messages.splice(foundMessageKey, 1)
         expect(foundMessageKey).toBeGreaterThan(-1)
         expect(job.isDeleted).toBeFalsy()
@@ -51,7 +49,7 @@ describe("queue", () => {
       queue.close()
     })
 
-    if (["local", "mix"].indexOf(testcase) > -1) {
+    if (['local', 'mix'].includes(testcase)) {
       it(`test ${testcase} timeout`, async () => {
         const queue = create(await getConfig(testcase))
         await queue.flush()
@@ -61,6 +59,9 @@ describe("queue", () => {
         }
         for (let i = 0; i < 10; i++) {
           const job = await queue.receive()
+          if (!job) {
+            throw new Error(`job(${i}) is undefined`)
+          }
           if (i % 2 === 1) {
             await job.done()
           }
@@ -70,6 +71,9 @@ describe("queue", () => {
 
         for (let i = 0; i < 5; i++) {
           const job = await queue.receive()
+          if (!job) {
+            throw new Error(`job(${i}) is undefined`)
+          }
           expect(job.payload).toEqual(`message ${i * 2}`)
           await job.done()
         }
@@ -78,30 +82,39 @@ describe("queue", () => {
       })
     }
 
-    if (["beanstalkd", "rabbitmq"].indexOf(testcase) > -1) {
+    if (['beanstalkd', 'rabbitmq'].includes(testcase)) {
       it(`test ${testcase} priority`, async () => {
         const producer = create(await getConfig(testcase))
         const consumer = create(await getConfig(testcase))
         await producer.flush()
 
-        await producer.send(`message normal`, {priority: Priority.Normal})
-        await producer.send(`message high`, {priority: Priority.High})
-        await producer.send(`message highest`, {priority: Priority.Highest})
+        await producer.send('message normal', { priority: Priority.Normal })
+        await producer.send('message high', { priority: Priority.High })
+        await producer.send('message highest', { priority: Priority.Highest })
         producer.close()
 
         {
           const job = await consumer.receive()
-          expect(job.payload).toEqual(`message highest`)
+          if (!job) {
+            throw new Error('job is undefined')
+          }
+          expect(job.payload).toEqual('message highest')
           await job.done()
         }
         {
           const job = await consumer.receive()
-          expect(job.payload).toEqual(`message high`)
+          if (!job) {
+            throw new Error('job is undefined')
+          }
+          expect(job.payload).toEqual('message high')
           await job.done()
         }
         {
           const job = await consumer.receive()
-          expect(job.payload).toEqual(`message normal`)
+          if (!job) {
+            throw new Error('job is undefined')
+          }
+          expect(job.payload).toEqual('message normal')
           await job.done()
         }
 
@@ -109,28 +122,37 @@ describe("queue", () => {
       })
     }
 
-    if (["mix"].indexOf(testcase) > -1) {
+    if (['mix'].includes(testcase)) {
       it(`test ${testcase} priority`, async () => {
         const queue = create(await getConfig(testcase))
         await queue.flush()
 
-        await queue.send(`message normal`, {priority: Priority.Normal})
-        await queue.send(`message high`, {priority: Priority.High})
-        await queue.send(`message highest`, {priority: Priority.Highest})
+        await queue.send('message normal', { priority: Priority.Normal })
+        await queue.send('message high', { priority: Priority.High })
+        await queue.send('message highest', { priority: Priority.Highest })
 
         {
           const job = await queue.receive()
-          expect(job.payload).toEqual(`message highest`)
+          if (!job) {
+            throw new Error('job is undefined')
+          }
+          expect(job.payload).toEqual('message highest')
           await job.done()
         }
         {
           const job = await queue.receive()
-          expect(job.payload).toEqual(`message high`)
+          if (!job) {
+            throw new Error('job is undefined')
+          }
+          expect(job.payload).toEqual('message high')
           await job.done()
         }
         {
           const job = await queue.receive()
-          expect(job.payload).toEqual(`message normal`)
+          if (!job) {
+            throw new Error('job is undefined')
+          }
+          expect(job.payload).toEqual('message normal')
           await job.done()
         }
 
@@ -138,7 +160,7 @@ describe("queue", () => {
       })
     }
 
-    if (["local", "sqs", "beanstalkd", "rabbitmq", "mix"].indexOf(testcase) > -1) {
+    if (['local', 'sqs', 'beanstalkd', 'rabbitmq', 'mix'].includes(testcase)) {
       it(`test ${testcase} count`, async () => {
         const queue = create(await getConfig(testcase))
         await queue.flush()
@@ -157,7 +179,7 @@ describe("queue", () => {
         try {
           expect(await queue.countRunning()).toBe(4)
         } catch (e) {
-          if (e.message !== "unsupport count running jobs") {
+          if (e.message !== 'unsupport count running jobs') {
             throw e
           }
         }

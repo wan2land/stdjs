@@ -9,7 +9,7 @@
   ],
   "author": "Cris <corgidisco@gmail.com>",
   "license": "MIT",
-  "repository":"https://github.com/corgidisco/stdjs/tree/master/packages/oauth",
+  "repository": "https://github.com/corgidisco/stdjs/tree/master/packages/oauth",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -17,6 +17,6 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "core-js": "^3.0"
+    "core-js": "^3.1.4"
   }
 }

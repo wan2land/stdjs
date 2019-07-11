@@ -1,6 +1,6 @@
 
 import { exec } from "child_process"
-import { CacheConfig } from "../dist"
+import { CacheConfig } from "../lib"
 
 function getDockerComposePort(service: string, port: number): Promise<[string, number]> {
   return new Promise((resolve, reject) => {

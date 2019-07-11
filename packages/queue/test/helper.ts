@@ -1,6 +1,7 @@
+import { exec } from 'child_process'
 
-import { exec } from "child_process"
-import { Priority, QueueConfig } from "../dist"
+import { Priority, QueueConfig } from '../lib'
+
 
 function getDockerComposePort(service: string, port: number): Promise<[string, number]> {
   return new Promise((resolve, reject) => {
@@ -9,56 +10,60 @@ function getDockerComposePort(service: string, port: number): Promise<[string, n
         reject(error)
         return
       }
-      const result = stdout.trim().split(":")
+      const result = stdout.trim().split(':')
       resolve([result[0], parseInt(result[1], 10)])
     })
   })
 }
 
 export async function getConfig(testcase: string): Promise<QueueConfig> {
-  if (testcase === "local") {
+  if (testcase === 'local') {
     return {
-      adapter: "local",
+      adapter: 'local',
       timeout: 100,
     }
-  } else if (testcase === "sqs") {
+  }
+  if (testcase === 'sqs') {
     return {
-      adapter: "aws-sdk",
-      region: process.env.AWS_SQS_REGION,
-      url: process.env.AWS_SQS_URL,
+      adapter: 'aws-sdk',
+      region: process.env.AWS_SQS_REGION || '',
+      url: process.env.AWS_SQS_URL || '',
     }
-  } else if (testcase === "beanstalkd") {
-    const port = await getDockerComposePort("beanstalkd", 11300)
+  }
+  if (testcase === 'beanstalkd') {
+    const port = await getDockerComposePort('beanstalkd', 11300)
     return {
-      adapter: "beanstalkd",
-      host: "localhost",
+      adapter: 'beanstalkd',
+      host: 'localhost',
       port: port[1],
-      tube: "jest",
+      tube: 'jest',
     }
-  } else if (testcase === "rabbitmq") {
-    const port = await getDockerComposePort("rabbitmq", 5672)
+  }
+  if (testcase === 'rabbitmq') {
+    const port = await getDockerComposePort('rabbitmq', 5672)
     return {
-      adapter: "amqplib",
-      queue: "jest",
+      adapter: 'amqplib',
+      queue: 'jest',
       port: port[1],
     }
-  } else if (testcase === "mix") {
+  }
+  if (testcase === 'mix') {
     return {
-      adapter: "mix",
+      adapter: 'mix',
       queues: [
         {
           priority: Priority.Highest,
-          adapter: "local",
+          adapter: 'local',
           timeout: 100,
         },
         {
           priority: Priority.High,
-          adapter: "local",
+          adapter: 'local',
           timeout: 100,
         },
         {
           priority: Priority.Normal,
-          adapter: "local",
+          adapter: 'local',
           timeout: 100,
         },
       ],

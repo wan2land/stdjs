@@ -1,8 +1,6 @@
+import { create, LocalCache, MemcachedCache, MemcachedCacheConfig, RedisCache, RedisCacheConfig } from '../lib'
+import { getConfig } from './helper'
 
-import "jest"
-import { getConfig, timeout } from "./helper"
-
-import { create, LocalCache, MemcachedCache, MemcachedCacheConfig, RedisCache, RedisCacheConfig } from "../dist"
 
 describe("readmd", () => {
   it("test create local", async () => {

@@ -19,10 +19,13 @@
   ],
   "author": "Cris <corgidisco@gmail.com>",
   "license": "MIT",
-  "repository":"https://github.com/corgidisco/stdjs/tree/master/packages/queue",
+  "repository": "https://github.com/corgidisco/stdjs/tree/master/packages/queue",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "rimraf ./lib && tsc && babel ./src --out-dir ./lib --extensions \".ts\" --source-maps inline"
+  },
+  "dependencies": {
+    "core-js": "^3.1.4"
   }
 }

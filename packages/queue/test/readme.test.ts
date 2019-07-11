@@ -1,7 +1,3 @@
-
-import "jest"
-import { getConfig } from "./helper"
-
 import {
   AmqpQueue,
   AmqpQueueConfig,
@@ -12,8 +8,10 @@ import {
   MixQueue,
   Priority,
   SqsQueue,
-  SqsQueueConfig
-} from "../dist"
+  SqsQueueConfig,
+} from '../lib'
+import { getConfig } from './helper'
+
 
 describe("readmd", () => {
   it("test create local", async () => {

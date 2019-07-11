@@ -2,7 +2,7 @@
 import "jest"
 import { getConfig, timeout } from "./helper"
 
-import { create } from "../dist"
+import { create } from "../lib"
 
 const testcases = ["local", "memcached", "redis"]
 
