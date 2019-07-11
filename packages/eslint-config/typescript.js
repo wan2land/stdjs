@@ -32,6 +32,10 @@ module.exports = {
     // Do not remove comments
     // used for comparison.
 
+    // overloading
+    'no-dupe-class-members': 'off',
+    'import/export': 'off',
+
     '@typescript-eslint/adjacent-overload-signatures': 'error',
     '@typescript-eslint/array-type': 'error',
     // '@typescript-eslint/await-thenable': 'off',
