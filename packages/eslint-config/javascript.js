@@ -43,7 +43,7 @@ module.exports = {
     'no-compare-neg-zero': 'error',
     'no-cond-assign': 'error',
     'no-console': 'warn',
-    'no-constant-condition': 'warn',
+    'no-constant-condition': ['warn', { checkLoops: false }],
     // 'no-control-regex': 'off',
     'no-debugger': 'warn',
     'no-dupe-args': 'error',
@@ -53,7 +53,7 @@ module.exports = {
     'no-empty-character-class': 'error',
     'no-ex-assign': 'error',
     'no-extra-boolean-cast': 'error',
-    'no-extra-parens': 'warn',
+    'no-extra-parens': ['warn', 'all', { returnAssign: false }],
     'no-extra-semi': 'error',
     // 'no-func-assign': 'off',
     // 'no-inner-declarations': 'off',
@@ -161,7 +161,7 @@ module.exports = {
     'no-undef': 'error',
     'no-undef-init': 'error',
     // 'no-undefined': 'off',
-    'no-unused-vars': 'warn',
+    'no-unused-vars': ['warn', { varsIgnorePattern: '^_', argsIgnorePattern: '^_' }],
     // 'no-use-before-define': 'off',
 
     // Node.js and CommonJS

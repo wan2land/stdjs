@@ -14,7 +14,7 @@ import { PgPool } from './driver/pg/pool'
 import { Sqlite3Connection } from './driver/sqlite3/connection'
 
 export function create(config: ConnectionConfig): Connection {
-  const { adapter, pool, ...remainConfig } = config
+  const { adapter: _adapter, pool: _pool, ...remainConfig } = config
   if (config.adapter === 'cluster') {
     return new ClusterConnection(create(config.read), create(config.write))
   } if (config.adapter === 'mysql') {

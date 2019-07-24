@@ -49,14 +49,14 @@ export class MixQueue<TPayload> implements Queue<TPayload> {
     const priority = options && options.priority || DEFAULT_PRIORITY
     for (const pair of this.queues) {
       if (pair.priority <= priority) {
-        pair.queue.send(payload, {
+        await pair.queue.send(payload, {
           delay: options && options.delay || undefined,
         })
         return
       }
     }
     // last
-    this.queues[this.queues.length - 1].queue.send(payload, {
+    await this.queues[this.queues.length - 1].queue.send(payload, {
       delay: options && options.delay || undefined,
     })
   }

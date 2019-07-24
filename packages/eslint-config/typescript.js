@@ -119,7 +119,7 @@ module.exports = {
     '@typescript-eslint/no-empty-interface': 'error',
     // '@typescript-eslint/no-explicit-any': 'off',
     'no-extra-parens': 'off',
-    '@typescript-eslint/no-extra-parens': 'warn',
+    '@typescript-eslint/no-extra-parens': ['warn', 'all', { returnAssign: false }],
     '@typescript-eslint/no-extraneous-class': 'error',
     // '@typescript-eslint/no-floating-promises': 'off',
     // '@typescript-eslint/no-for-in-array': 'off',
@@ -138,7 +138,7 @@ module.exports = {
     // '@typescript-eslint/no-unnecessary-type-assertion': 'off',
 
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/no-unused-vars': ['warn', { varsIgnorePattern: '^_', argsIgnorePattern: '^_' }],
     // 'no-use-before-define': 'off',
     // '@typescript-eslint/no-use-before-define': 'off',
     'no-useless-constructor': 'off',

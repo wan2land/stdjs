@@ -13,7 +13,7 @@ export function create<T>(config: QueueConfig): Queue<T> {
   if (config.adapter === 'local') {
     return new LocalQueue(config.timeout)
   } if (config.adapter === 'aws-sdk') {
-    const { adapter, url, ...remainConfig } = config
+    const { adapter: _, url, ...remainConfig } = config
     const aws = require('aws-sdk')
     return new SqsQueue(new aws.SQS(remainConfig), url)
   } if (config.adapter === 'beanstalkd') {
@@ -21,11 +21,11 @@ export function create<T>(config: QueueConfig): Queue<T> {
     const beans = new Beanstalkd(config.host || 'localhost', config.port || 11300)
     return new BeanstalkdQueue(beans, config.tube)
   } if (config.adapter === 'amqplib') {
-    const { adapter, queue, ...remainConfig } = config
+    const { adapter: _, queue, ...remainConfig } = config
     const amqp = require('amqplib')
     return new AmqpQueue<T>(amqp.connect(remainConfig), queue)
   } if (config.adapter === 'mix') {
-    const { adapter, queues } = config
+    const { adapter: _, queues } = config
     return new MixQueue(queues.map(queueConfig => {
       const { priority, ...remains } = queueConfig
       return {

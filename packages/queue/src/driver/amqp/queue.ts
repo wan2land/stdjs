@@ -47,7 +47,7 @@ export class AmqpQueue<TPayload> implements Queue<TPayload> {
     return result.messageCount
   }
 
-  public async countRunning(): Promise<number> {
+  public countRunning(): Promise<number> {
     throw new Error('unsupport count running jobs')
   }
 

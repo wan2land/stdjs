@@ -20,11 +20,8 @@ export interface RawAwsConfigurationOptions {
   credentials?: any
   credentialProvider?: any
 
-  /** @deprecated */
   accessKeyId?: string
-  /** @deprecated */
   secretAccessKey?: string
-  /** @deprecated */
   sessionToken?: string
 
   httpOptions?: any

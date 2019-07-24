@@ -49,7 +49,7 @@ export class BeanstalkdQueue<TPayload> implements Queue<TPayload> {
 
   public async flush(): Promise<void> {
     await this.connect()
-    while (1) {
+    while (true) {
       try {
         const res = await this.client.peekReady()
         await this.client.delete(res[0])

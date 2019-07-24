@@ -11,23 +11,24 @@ export class LocalQueue<TPayload> implements Queue<TPayload> {
   public constructor(public timeout = 6000) {
   }
 
-  public async countWaiting(): Promise<number> {
-    return this.jobs.length
+  public countWaiting(): Promise<number> {
+    return Promise.resolve(this.jobs.length)
   }
 
-  public async countRunning(): Promise<number> {
-    return this.runningJobs.length
+  public countRunning(): Promise<number> {
+    return Promise.resolve(this.runningJobs.length)
   }
 
-  public async close(): Promise<void> {
-    //
+  public close(): Promise<void> {
+    return Promise.resolve()
   }
 
-  public async flush(): Promise<void> {
+  public flush(): Promise<void> {
     this.jobs = []
+    return Promise.resolve()
   }
 
-  public async send(payload: TPayload, options?: SendQueueOptions): Promise<void> {
+  public send(payload: TPayload, options?: SendQueueOptions): Promise<void> {
     const job = new LocalJob(this, payload)
     if (options && options.delay) {
       setTimeout(() => {
@@ -36,9 +37,10 @@ export class LocalQueue<TPayload> implements Queue<TPayload> {
     } else {
       this.jobs.push(job)
     }
+    return Promise.resolve()
   }
 
-  public async receive(): Promise<LocalJob<TPayload> | undefined> {
+  public receive(): Promise<LocalJob<TPayload> | undefined> {
     const job = this.jobs.shift()
     if (job) {
       this.runningJobs.push(job)
@@ -51,10 +53,10 @@ export class LocalQueue<TPayload> implements Queue<TPayload> {
         }
       }, this.timeout)
     }
-    return job
+    return Promise.resolve(job)
   }
 
-  public async delete(job: LocalJob<TPayload>): Promise<void> {
+  public delete(job: LocalJob<TPayload>): Promise<void> {
     const index = this.runningJobs.indexOf(job)
     if (job.timer) {
       clearTimeout(job.timer) // clear timeout :-)
@@ -64,5 +66,6 @@ export class LocalQueue<TPayload> implements Queue<TPayload> {
       this.runningJobs.splice(index, 1)
     }
     job.isDeleted = true
+    return Promise.resolve()
   }
 }

@@ -10,11 +10,11 @@ export function create(config: CacheConfig): Cache {
   if (config.adapter === 'local') {
     return new LocalCache()
   } if (config.adapter === 'memcached') {
-    const { adapter, location, ...options } = config
+    const { adapter: _, location, ...options } = config
     const Memcached = require('memcached')
     return new MemcachedCache(new Memcached(location, options))
   } if (config.adapter === 'redis') {
-    const { adapter, ...options } = config
+    const { adapter: _, ...options } = config
     const redis = require('redis')
     return new RedisCache(redis.createClient(options))
   }

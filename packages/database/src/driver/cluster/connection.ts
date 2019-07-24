@@ -1,4 +1,4 @@
-import { Connection, QueryBuilder, QueryResult, Row, Scalar, TransactionHandler } from '../../interfaces/database'
+import { Connection, QueryBuilder, Row, Scalar, TransactionHandler } from '../../interfaces/database'
 
 
 export class ClusterConnection implements Connection {
