@@ -1,2 +1,3 @@
+import { Name } from './common'
 
-export type InjectDecoratorFactory = (name: PropertyKey) => ParameterDecorator
+export type InjectDecoratorFactory = (name: Name<any>) => ParameterDecorator

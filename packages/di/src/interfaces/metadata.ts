@@ -1,6 +1,7 @@
+import { Name } from './common'
 
 export interface MetadataInjectOption {
   propertyKey?: PropertyKey
   index: number
-  name: PropertyKey
+  name: Name<any>
 }

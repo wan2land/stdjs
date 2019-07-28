@@ -1,10 +1,10 @@
-import { ConstructType, MaybePromise } from './common'
+import { ConstructType, MaybePromise, Name } from './common'
 
 export interface Containable {
-  instance<T>(name: PropertyKey, instance: T|Promise<T>): void
-  factory<T>(name: PropertyKey, factory: () => T|Promise<T>): ContainerFluent<T>
-  bind<T>(name: PropertyKey, constructor: ConstructType<T>): ContainerFluent<T>
-  get<T>(name: PropertyKey): Promise<T>
+  instance<T>(name: Name<T>, instance: MaybePromise<T>): void
+  factory<T>(name: Name<T>, factory: () => MaybePromise<T>): ContainerFluent<T>
+  bind<T>(name: Name<T>, constructor: ConstructType<T>): ContainerFluent<T>
+  get<T>(name: Name<T>): Promise<T>
   register(provider: Provider): void
   create<T>(ctor: ConstructType<T>): Promise<T>
   invoke<TIns, TRet = any>(instance: TIns, method: keyof TIns): Promise<TRet>

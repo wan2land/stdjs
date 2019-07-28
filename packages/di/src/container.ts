@@ -1,5 +1,5 @@
 import { Descriptor } from './descriptor'
-import { ConstructType } from './interfaces/common'
+import { ConstructType, Name } from './interfaces/common'
 import { Containable, ContainerFluent, Provider } from './interfaces/container'
 import { MetadataInject } from './metadata'
 
@@ -8,21 +8,21 @@ export class Container implements Containable {
   public static instance = new Container()
 
   public stack: any[]
-  public descriptors: Map<PropertyKey, Descriptor<any>>
-  public instances: Map<PropertyKey, any>
-  public factories: Map<PropertyKey, () => any>
-  public binds: Map<PropertyKey, ConstructType<any>>
-  public aliases: Map<PropertyKey, string>
+  public descriptors: Map<any, Descriptor<any>>
+  public instances: Map<any, any>
+  public factories: Map<any, () => any>
+  public binds: Map<any, ConstructType<any>>
+  public aliases: Map<any, string>
   public providers: Provider[]
   public isBooted = false
 
   public constructor() {
     this.stack = []
-    this.instances = new Map<PropertyKey, any>()
-    this.descriptors = new Map<PropertyKey, Descriptor<any>>()
-    this.factories = new Map<PropertyKey, () => any>()
-    this.binds = new Map<PropertyKey, ConstructType<any>>()
-    this.aliases = new Map<PropertyKey, string>()
+    this.instances = new Map<any, any>()
+    this.descriptors = new Map<any, Descriptor<any>>()
+    this.factories = new Map<any, () => any>()
+    this.binds = new Map<any, ConstructType<any>>()
+    this.aliases = new Map<any, string>()
     this.providers = []
   }
 
@@ -30,11 +30,11 @@ export class Container implements Containable {
     return (Container.instance = this)
   }
 
-  public instance<T>(name: PropertyKey, value: T | Promise<T>): void {
+  public instance<T>(name: Name<T>, value: T | Promise<T>): void {
     this.instances.set(name, value)
   }
 
-  public factory<T>(name: PropertyKey, factory: () => T | Promise<T>): ContainerFluent<T> {
+  public factory<T>(name: Name<T>, factory: () => T | Promise<T>): ContainerFluent<T> {
     this.delete(name)
     this.factories.set(name, factory)
     const descriptor = new Descriptor<T>()
@@ -42,7 +42,7 @@ export class Container implements Containable {
     return descriptor
   }
 
-  public bind<T>(name: PropertyKey, constructor: ConstructType<T>): ContainerFluent<T> {
+  public bind<T>(name: Name<T>, constructor: ConstructType<T>): ContainerFluent<T> {
     this.delete(name)
     this.binds.set(name, constructor)
     const descriptor = new Descriptor<T>()
@@ -68,7 +68,7 @@ export class Container implements Containable {
     return (instance as any)[method](...params)
   }
 
-  public async get<T>(name: PropertyKey): Promise<T> {
+  public async get<T>(name: Name<T>): Promise<T> {
     if (this.descriptors.has(name)) {
       (this.descriptors.get(name) as Descriptor<T>).freeze()
     }
@@ -116,7 +116,7 @@ export class Container implements Containable {
     return instance
   }
 
-  public delete(...names: PropertyKey[]): void {
+  public delete(...names: Name<any>[]): void {
     for (const name of names) {
       if (this.descriptors.has(name)) {
         const descriptor = this.descriptors.get(name) as Descriptor<any>

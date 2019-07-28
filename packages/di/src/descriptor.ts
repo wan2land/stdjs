@@ -1,3 +1,4 @@
+import { MaybePromise } from './interfaces/common'
 import { ContainerFluent } from './interfaces/container'
 
 export class Descriptor<TVal> implements ContainerFluent<TVal> {
@@ -6,19 +7,19 @@ export class Descriptor<TVal> implements ContainerFluent<TVal> {
 
   public isSingleton = false
 
-  public afterHandlers: ((context: TVal) => TVal|Promise<TVal>)[] = []
+  public afterHandlers: ((context: TVal) => MaybePromise<TVal>)[] = []
 
-  public freeze(): ContainerFluent<TVal> {
+  public freeze() {
     this.isFrozen = true
     return this
   }
 
-  public singleton(): ContainerFluent<TVal> {
+  public singleton() {
     this.isSingleton = true
     return this
   }
 
-  public after(handler: (context: TVal) => TVal|Promise<TVal>): ContainerFluent<TVal> {
+  public after(handler: (context: TVal) => MaybePromise<TVal>) {
     this.afterHandlers.push(handler)
     return this
   }

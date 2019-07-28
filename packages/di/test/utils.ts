@@ -1,11 +1,12 @@
 
-export function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
 
 // monkey patch
 const originConsoleLog = console.log
 let consoleStorage = [] as any[]
+
+export function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
 
 export function startConsoleCapture(): void {
   consoleStorage = []
