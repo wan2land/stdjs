@@ -16,10 +16,10 @@ npm install @stdjs/database --save
 
 ## Support Database Connection
 
-- mysql (require `npm install mysql --save`)
-- mysql2 (require `npm install mysql2 --save`)
-- pg (require `npm install pg --save`)
-- sqlite3 (require `npm install sqlite3 --save`)
+- mysql (require `npm install mysql --save`, `npm install @types/mysql -D`)
+- mysql2 (require `npm install mysql2 --save`, `npm install types/mysql2 -D`)
+- pg (require `npm install pg --save`, `npm install @types/pg -D`)
+- sqlite3 (require `npm install sqlite3 --save`, `npm install @types/sqlite3 -D`)
 
 ## Interfaces
 
@@ -27,9 +27,11 @@ All adapter objects inherit the following interfaces:
 
 ```typescript
 
-export type Scalar = number | string | boolean | null
+export type TransactionHandler<TResult> = (connection: Connection) => Promise<TResult> | TResult
 
-export type TransactionHandler<P> = (connection: Connection) => Promise<P>|P
+export interface Connector {
+  connect(): Connection
+}
 
 export interface Pool extends Connection {
   getConnection(): Promise<PoolConnection>
@@ -41,20 +43,10 @@ export interface PoolConnection extends Connection {
 
 export interface Connection {
   close(): Promise<void>
-
-  query(qb: QueryBuilder): Promise<QueryResult>
-  query(query: string, values?: Scalar[]): Promise<QueryResult>
-
-  select<P extends Row>(qb: QueryBuilder): Promise<P[]>
-  select<P extends Row>(query: string, values?: Scalar[]): Promise<P[]>
-
-  first<P>(qb: QueryBuilder): Promise<P|undefined>
-  first<P>(query: string, values?: Scalar[]): Promise<P|undefined>
-
-  firstOrThrow<P>(qb: QueryBuilder): Promise<P>
-  firstOrThrow<P>(query: string, values?: Scalar[]): Promise<P>
-
-  transaction<P>(handler: TransactionHandler<P>): Promise<P>
+  query(query: string, values?: any[]): Promise<QueryResult>
+  first<TRow>(query: string, values?: any[]): Promise<TRow> // throw RowNotFoundError
+  select<TRow extends Row>(query: string, values?: any[]): Promise<TRow[]>
+  transaction<TResult>(handler: TransactionHandler<TResult>): Promise<TResult>
 }
 
 export interface QueryResult {
@@ -66,11 +58,6 @@ export interface QueryResult {
 export interface Row {
   [key: string]: any
 }
-
-export interface QueryBuilder {
-  toSql(): string
-  getBindings(): any[]
-}
 ```
 
 ## Usage
@@ -81,81 +68,96 @@ You can create as follows:
 
 ```javascript
 const database = require("@stdjs/database")
-const connection = database.create({
-  adapter: "mysql2"
-  /* config */
-})
+const connection = database.createConnection(/* Connector */)
 
 // or
 import { create } from "@stdjs/database"
-const connection = create({
-  adapter: "mysql2"
-  /* config */
-})
+const connection = createConnection(/* Connector */)
 ```
+
 
 ### Create Connection
 
-Use `adapter`, `pool` parameter of `create` function`s config
-
 #### mysql
 
-```typescript
-const connection = create({
-  adapter: "mysql",
-  ...mysqlConfig,
-}) // return instanceof MysqlConnection
-```
+**Options**
+
+- [mysql: connection options](https://github.com/mysqljs/mysql#connection-options).
+- [mysql: pool options](https://github.com/mysqljs/mysql#pool-options)
 
 ```typescript
-const connection = create({
-  adapter: "mysql",
+import { createConnection } from "@stdjs/database" 
+import { MysqlConnector } from '@stdjs/database/lib/driver/mysql'
+
+const connection = createConnection(new MysqlConnector({
+  /* mysql connection options */
+}))
+
+const pool = createConnection(new MysqlConnector({
   pool: true,
-  ...mysqlConfig,
-}) // return instanceof MysqlPool
+  /* mysql pool options */
+}))
 ```
 
 #### mysql2
 
-```typescript
-const connection = create({
-  adapter: "mysql2",
-  ...mysqlConfig,
-}) // return instanceof Mysql2Connection
-```
+**Options**
+
+- [mysql2: API and Configuration](https://github.com/sidorares/node-mysql2#api-and-configuration)
 
 ```typescript
-const connection = create({
-  adapter: "mysql2",
+import { createConnection } from "@stdjs/database" 
+import { Mysql2Connector } from '@stdjs/database/lib/driver/mysql2'
+
+const connection = createConnection(new Mysql2Connector({
+  /* mysql2 connection options */
+}))
+
+const pool = createConnection(new Mysql2Connector({
   pool: true,
-  ...mysqlConfig,
-}) // return instanceof Mysql2Pool
+  /* mysql2 pool options */
+}))
 ```
 
 #### pg
 
-```typescript
-const connection = create({
-  adapter: "pg",
-  ...pgConfig,
-}) // return instanceof PgConnection
-```
+**Options**
+
+- [pg: pg.Client](https://node-postgres.com/api/client)
+- [pg: pg.Pool](https://node-postgres.com/api/pool)
 
 ```typescript
-const connection = create({
-  adapter: "pg",
+import { createConnection } from "@stdjs/database" 
+import { PgConnector } from '@stdjs/database/lib/driver/pg'
+
+const connection = createConnection(new PgConnector({
+  /* pg connection options */
+}))
+
+const pool = createConnection(new PgConnector({
   pool: true,
-  ...pgConfig,
-}) // return instanceof PgPool
+  /* pg pool options */
+}))
 ```
 
 #### sqlite3
 
+**Options**
+
 ```typescript
-const connection = create({
-  adapter: "sqlite3",
-  filename: ":memory:",
-}) // return instanceof Sqlite3Connection
+interface Sqlite3ConnectorOptions {
+  filename: string
+  mode?: number
+}
+```
+
+```typescript
+import { createConnection } from "@stdjs/database" 
+import { Sqlite3Connector } from '@stdjs/database/lib/driver/sqlite3'
+
+const connection = createConnection(new Sqlite3Connector({
+  /* sqlite3 connection options (Sqlite3ConnectorOptions) */
+}))
 ```
 
 #### Cluster Connection
@@ -163,123 +165,22 @@ const connection = create({
 If you are using the cluster as AWS Aurora DB, you can do the following:
 
 ```typescript
-const connection = create({
-  adapter: "cluster",
-  write: {
-    adapter: "mysql2",
+import { createCluster } from "@stdjs/database" 
+import { Mysql2Connector } from '@stdjs/database/lib/driver/mysql2'
+
+const connection = createCluster({
+  write: new Mysql2Connector({
     pool: true,
-    host: "stdjs-database.cluster-abcdef1234.ap-somewhere.rds.amazonaws.com",
-    ...mysqlConfig,
-  },
-  read: {
-    adapter: "mysql2",
+    host: "stdjs.com",
+  }),
+  read: new Mysql2Connector({
     pool: true,
-    host: "stdjs-database.cluster-ro-abcdef1234.ap-somewhere.rds.amazonaws.com",
-    ...mysqlConfig,
-  },
-}) // return instanceof ClusterConnection
+    host: "readonly.stdjs.com",
+  }),
+})
 ```
 
 The `select` and `first` methods use `read` connection and the `query` method uses `write` connection.
-
-### Config
-
-Config can be defined as follows:
-
-#### Mysql / Mysql2
-
-Use the connection option of the `mysql` or `mysql2`.
-
-```typescript
-interface MysqlConnectionConfig extends MysqlBaseConfig {
-  readonly adapter: "mysql" | "mysql2"
-  readonly pool?: false
-}
-
-interface MysqlPoolConfig extends MysqlBaseConfig {
-  readonly adapter: "mysql" | "mysql2"
-  readonly pool: true
-
-  acquireTimeout?: number
-  waitForConnections?: boolean
-  connectionLimit?: number
-  queueLimit?: number
-}
-
-interface MysqlBaseConfig {
-  host?: string
-  port?: number
-  user?: string
-  password?: string
-  database?: string
-  charset?: string
-  timeout?: number
-  localAddress?: string
-  socketPath?: string
-  timezone?: string
-  connectTimeout?: number
-  stringifyObjects?: boolean
-  insecureAuth?: boolean
-  supportBigNumbers?: boolean
-  bigNumberStrings?: boolean
-  dateStrings?: boolean
-  trace?: boolean
-  multipleStatements?: boolean
-  flags?: string[]
-  queryFormat?(query: string, values: any): void
-}
-```
-
-#### Postgres
-
-Use the connection option of the `pg`.
-
-```typescript
-interface PgConnectionConfig extends PgBaseConfig {
-  readonly adapter: "pg"
-  readonly pool?: false
-}
-
-interface PgPoolConfig extends PgBaseConfig {
-  readonly adapter: "pg"
-  readonly pool: true
-
-  max?: number
-  min?: number
-  connectionTimeoutMillis?: number
-  idleTimeoutMillis?: number
-
-  application_name?: string
-  Promise?: PromiseConstructorLike
-}
-
-interface PgBaseConfig {
-  ssl?: boolean | tls.TlsOptions
-
-  user?: string
-  database?: string
-  password?: string
-  port?: number
-  host?: string
-  connectionString?: string
-  keepAlive?: boolean
-  stream?: stream.Duplex
-}
-```
-
-
-#### Sqlite
-
-Use the connection option of the `sqlite3`.
-
-```typescript
-interface Sqlite3ConnectionConfig {
-  readonly adapter: "sqlite3"
-  readonly pool?: false
-  filename: string
-  mode?: number
-}
-```
 
 ## License
 

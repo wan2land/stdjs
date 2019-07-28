@@ -1,12 +1,11 @@
-import { RowNotFoundError } from '../../error/row-not-found-error'
-import { Connection, QueryBuilder, QueryResult, Row, Scalar, TransactionHandler } from '../../interfaces/database'
-import { isQueryBuilder } from '../../utils'
-import { Sqlite3RawConnection } from './interfaces'
+import { Database } from 'sqlite3'
 
+import { RowNotFoundError } from '../../errors/row-not-found-error'
+import { Connection, QueryResult, Row, TransactionHandler } from '../../interfaces/database'
 
 export class Sqlite3Connection implements Connection {
 
-  public constructor(public connection: Sqlite3RawConnection) {
+  public constructor(public connection: Database) {
   }
 
   public close(): Promise<void> {
@@ -20,33 +19,8 @@ export class Sqlite3Connection implements Connection {
     })
   }
 
-  public first<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow|undefined> {
-    return new Promise<TRow|undefined>((resolve, reject) => {
-      let query: string
-      if (isQueryBuilder(queryOrQb)) {
-        query = queryOrQb.toSql()
-        values = queryOrQb.getBindings() || []
-      } else {
-        query = queryOrQb
-      }
-      this.connection.get(query, values || [], (err, row) => {
-        if (err) {
-          return reject(err)
-        }
-        resolve(row)
-      })
-    })
-  }
-
-  public firstOrThrow<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow|undefined> {
-    return new Promise<TRow|undefined>((resolve, reject) => {
-      let query: string
-      if (isQueryBuilder(queryOrQb)) {
-        query = queryOrQb.toSql()
-        values = queryOrQb.getBindings() || []
-      } else {
-        query = queryOrQb
-      }
+  public first<TRow extends Row>(query: string, values: any[] = []): Promise<TRow> {
+    return new Promise<TRow>((resolve, reject) => {
       this.connection.get(query, values || [], (err, row) => {
         if (err) {
           return reject(err)
@@ -59,15 +33,8 @@ export class Sqlite3Connection implements Connection {
     })
   }
 
-  public select<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow[]> {
+  public select<TRow extends Row>(query: string, values: any[] = []): Promise<TRow[]> {
     return new Promise<TRow[]>((resolve, reject) => {
-      let query: string
-      if (isQueryBuilder(queryOrQb)) {
-        query = queryOrQb.toSql()
-        values = queryOrQb.getBindings() || []
-      } else {
-        query = queryOrQb
-      }
       this.connection.all(query, values || [], (err, rows) => {
         if (err) {
           return reject(err)
@@ -77,15 +44,8 @@ export class Sqlite3Connection implements Connection {
     })
   }
 
-  public query(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<QueryResult> {
+  public query(query: string, values: any[] = []): Promise<QueryResult> {
     return new Promise((resolve, reject) => {
-      let query: string
-      if (isQueryBuilder(queryOrQb)) {
-        query = queryOrQb.toSql()
-        values = queryOrQb.getBindings() || []
-      } else {
-        query = queryOrQb
-      }
       this.connection.run(query, values || [], function (err: Error|null): void {
         if (err) {
           return reject(err)
@@ -99,7 +59,7 @@ export class Sqlite3Connection implements Connection {
     })
   }
 
-  public async transaction<TRet>(handler: TransactionHandler<TRet>): Promise<TRet> {
+  public async transaction<TResult>(handler: TransactionHandler<TResult>): Promise<TResult> {
     await this.query('BEGIN TRANSACTION')
     try {
       const result = await handler(this)

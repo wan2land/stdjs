@@ -1,43 +1,36 @@
-import { RowNotFoundError } from '../../error/row-not-found-error'
-import { Pool, PoolConnection, QueryBuilder, QueryResult, Row, Scalar, TransactionHandler } from '../../interfaces/database'
-import { isQueryBuilder } from '../../utils'
-import { PgRawPool } from './interfaces'
+import { Pool as OriginPool } from 'pg'
+
+import { RowNotFoundError } from '../../errors/row-not-found-error'
+import { Pool, PoolConnection, QueryResult, Row, TransactionHandler } from '../../interfaces/database'
 import { PgPoolConnection } from './pool-connection'
 
 
 export class PgPool implements Pool {
 
-  public constructor(public pool: PgRawPool) {
+  public constructor(public pool: OriginPool) {
   }
 
   public async close(): Promise<void> {
-    await this.pool.end()
+    if ((this.pool as any)._connected) {
+      await this.pool.end()
+    }
   }
 
-  public async first<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow|undefined> {
-    return (await this.select<TRow>(queryOrQb, values))[0]
-  }
-
-  public async firstOrThrow<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow|undefined> {
-    const rows = await this.select<TRow>(queryOrQb, values)
+  public async first<TRow extends Row>(query: string, values: any[] = []): Promise<TRow> {
+    const rows = await this.select<TRow>(query, values)
     if (rows.length > 0) {
       return rows[0]
     }
     throw new RowNotFoundError()
   }
 
-  public async select<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow[]> {
-    if (isQueryBuilder(queryOrQb)) {
-      return (await this.pool.query(queryOrQb.toSql(), queryOrQb.getBindings() || [])).rows
-    }
-    return (await this.pool.query(queryOrQb, values || [])).rows
+  public async select<TRow extends Row>(query: string, values: any[] = []): Promise<TRow[]> {
+    return (await this.pool.query(query, values || [])).rows
 
   }
 
-  public async query(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<QueryResult> {
-    const result = isQueryBuilder(queryOrQb)
-      ? await this.pool.query(queryOrQb.toSql(), queryOrQb.getBindings() || [])
-      : await this.pool.query(queryOrQb, values || [])
+  public async query(query: string, values: any[] = []): Promise<QueryResult> {
+    const result = await this.pool.query(query, values || [])
     let insertId: any
     if (result.rows.length > 0) {
       const firstRow = result.rows[0]
@@ -51,7 +44,7 @@ export class PgPool implements Pool {
     }
   }
 
-  public async transaction<TRet>(handler: TransactionHandler<TRet>): Promise<TRet> {
+  public async transaction<TResult>(handler: TransactionHandler<TResult>): Promise<TResult> {
     const connection = await this.getConnection()
     try {
       const result = connection.transaction(handler)

@@ -1,21 +1,13 @@
-import { RowNotFoundError } from '../../error/row-not-found-error'
-import {
-  Connection,
-  Pool,
-  PoolConnection,
-  QueryBuilder,
-  QueryResult,
-  Row,
-  Scalar,
-} from '../../interfaces/database'
-import { isQueryBuilder } from '../../utils'
-import { Mysql2RawPool } from './interfaces'
+import { Pool as OriginPool } from 'mysql2'
+
+import { RowNotFoundError } from '../../errors/row-not-found-error'
+import { Pool, PoolConnection, QueryResult, Row, TransactionHandler } from '../../interfaces/database'
 import { Mysql2PoolConnection } from './pool-connection'
 
 
 export class Mysql2Pool implements Pool {
 
-  public constructor(public pool: Mysql2RawPool) {
+  public constructor(public pool: OriginPool) {
   }
 
   public close(): Promise<void> {
@@ -29,26 +21,15 @@ export class Mysql2Pool implements Pool {
     })
   }
 
-  public async first<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow|undefined> {
-    return (await this.select<TRow>(queryOrQb, values))[0]
-  }
-
-  public async firstOrThrow<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow|undefined> {
-    const rows = await this.select<TRow>(queryOrQb, values)
+  public async first<TRow extends Row>(query: string, values: any[] = []): Promise<TRow> {
+    const rows = await this.select<TRow>(query, values)
     if (rows.length > 0) {
       return rows[0]
     }
     throw new RowNotFoundError()
   }
 
-  public select<TRow extends Row>(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<TRow[]> {
-    let query: string
-    if (isQueryBuilder(queryOrQb)) {
-      query = queryOrQb.toSql()
-      values = queryOrQb.getBindings() || []
-    } else {
-      query = queryOrQb
-    }
+  public select<TRow extends Row>(query: string, values: any[] = []): Promise<TRow[]> {
     if (Array.isArray(values)) {
       values = values.map(value => typeof value === 'undefined' ? null : value)
     }
@@ -62,14 +43,7 @@ export class Mysql2Pool implements Pool {
     })
   }
 
-  public query(queryOrQb: string|QueryBuilder, values: Scalar[] = []): Promise<QueryResult> {
-    let query: string
-    if (isQueryBuilder(queryOrQb)) {
-      query = queryOrQb.toSql()
-      values = queryOrQb.getBindings() || []
-    } else {
-      query = queryOrQb
-    }
+  public query(query: string, values: any[] = []): Promise<QueryResult> {
     if (Array.isArray(values)) {
       values = values.map(value => typeof value === 'undefined' ? null : value)
     }
@@ -78,16 +52,17 @@ export class Mysql2Pool implements Pool {
         if (err) {
           return reject(err)
         }
+
         resolve({
-          insertId: result!.insertId || undefined,
-          changes: result!.affectedRows,
+          insertId: (Array.isArray(result) ? undefined : result.insertId) || undefined,
+          changes: Array.isArray(result) ? 0 : result.affectedRows,
           raw: result,
         })
       })
     })
   }
 
-  public async transaction<TRet>(handler: (connection: Connection) => Promise<any>) {
+  public async transaction<TResult>(handler: TransactionHandler<TResult>) {
     const connection = await this.getConnection()
     try {
       const result = connection.transaction(handler)

@@ -1,11 +1,12 @@
+import { PoolConnection as OriginPoolConnection } from 'mysql2'
+
 import { PoolConnection } from '../../interfaces/database'
 import { Mysql2Connection } from './connection'
-import { Mysql2RawPoolConnection } from './interfaces'
 
 
 export class Mysql2PoolConnection extends Mysql2Connection implements PoolConnection {
 
-  public constructor(public connection: Mysql2RawPoolConnection) {
+  public constructor(public connection: OriginPoolConnection) {
     super(connection)
   }
 
