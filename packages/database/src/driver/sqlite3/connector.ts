@@ -7,6 +7,8 @@ import { Sqlite3ConnectorOptions } from './interfaces'
 
 export class Sqlite3Connector implements Connector {
 
+  public dialect = 'sqlite'
+
   public constructor(public options: Sqlite3ConnectorOptions) {
   }
 

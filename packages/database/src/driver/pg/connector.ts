@@ -8,6 +8,8 @@ import { PgPool } from './pool'
 
 export class PgConnector implements Connector {
 
+  public dialect = 'postgres'
+
   public constructor(public options: PgConnectorOptions | PgPoolConnectorOptions) {
   }
 

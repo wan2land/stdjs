@@ -79,7 +79,7 @@ const selectSqls: {[testcase: string]: string} = {
   'sqlite3': 'SELECT * FROM tests_sqlite3 ORDER BY id',
 }
 
-describe('connection', () => {
+describe('testsuite of connection', () => {
   for (const testcase of testcases) {
     it(`test insert on ${testcase}`, async () => {
       const connection = await connect(testcase)

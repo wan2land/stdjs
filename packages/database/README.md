@@ -30,6 +30,7 @@ All adapter objects inherit the following interfaces:
 export type TransactionHandler<TResult> = (connection: Connection) => Promise<TResult> | TResult
 
 export interface Connector {
+  dialect: string
   connect(): Connection
 }
 

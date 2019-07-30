@@ -8,6 +8,8 @@ import { MysqlPool } from './pool'
 
 export class MysqlConnector implements Connector {
 
+  public dialect = 'mysql'
+
   public constructor(public options: MysqlConnectorOptions | MysqlPoolConnectorOptions) {
   }
 
