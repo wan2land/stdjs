@@ -11,9 +11,7 @@ export class PgPool implements Pool {
   }
 
   public async close(): Promise<void> {
-    if ((this.pool as any)._connected) {
-      await this.pool.end()
-    }
+    await this.pool.end()
   }
 
   public async first<TRow extends Row>(query: string, values: any[] = []): Promise<TRow> {
