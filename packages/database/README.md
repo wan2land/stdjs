@@ -16,10 +16,14 @@ npm install @stdjs/database --save
 
 ## Support Database Connection
 
-- mysql (require `npm install mysql --save`, `npm install @types/mysql -D`)
-- mysql2 (require `npm install mysql2 --save`, `npm install types/mysql2 -D`)
-- pg (require `npm install pg --save`, `npm install @types/pg -D`)
-- sqlite3 (require `npm install sqlite3 --save`, `npm install @types/sqlite3 -D`)
+- mysql
+  - `npm install mysql --save` (in typescript `npm install @types/mysql -D`)
+- mysql2
+  - `npm install mysql2 --save` (in typescript `npm install types/mysql2 -D`)
+- pg
+  - `npm install pg --save` (in typescript `npm install @types/pg -D`)
+- sqlite3
+  - `npm install sqlite3 --save` (in typescript `npm install @types/sqlite3 -D`)
 
 ## Interfaces
 
