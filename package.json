@@ -44,5 +44,9 @@
     "sqlite3": "^4.0.9",
     "ts-jest": "^24.0.2",
     "typescript": "^3.4.5"
+  },
+  "dependencies": {
+    "@types/memcached": "^2.2.6",
+    "@types/redis": "^2.8.13"
   }
 }
