@@ -1,6 +1,7 @@
 import { exec } from 'child_process'
 
 import { Connector } from '../lib'
+import { IORedisConnector } from '../lib/driver/ioredis'
 import { MemcachedConnector } from '../lib/driver/memcached'
 import { RedisConnector } from '../lib/driver/redis'
 
@@ -26,6 +27,13 @@ export async function getConnector(testcase: string): Promise<Connector | undefi
     const port = await getDockerComposePort('memcached', 11211)
     return new MemcachedConnector({
       location: `127.0.0.1:${port[1]}`,
+    })
+  }
+  if (testcase === 'ioredis') {
+    const port = await getDockerComposePort('redis', 6379)
+    return new IORedisConnector({
+      host: '127.0.0.1',
+      port: port[1],
     })
   }
   if (testcase === 'redis') {
