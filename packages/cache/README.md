@@ -23,6 +23,10 @@ npm install @stdjs/cache --save
   - `npm install memcached --save` (in typescript `npm install @types/memcached -D`)
 - redis
   - `npm install redis --save` (in typescript `npm install @types/redis -D`)
+- ioredis
+  - `npm install ioredis --save`
+- lru-cache
+  - `npm install lru-cache --save` (in typescript `npm install @types/redis -D`)
 
 ## Interfaces
 
@@ -91,6 +95,32 @@ import { createCache } from "@stdjs/database"
 import { RedisConnector } from '@stdjs/database/lib/driver/redis'
 
 const storage = createCache(new RedisConnector({
+  ...options,
+}))
+```
+
+### Create Redis Cache
+
+- [ioredis: cache options](https://github.com/luin/ioredis/blob/master/API.md#new-redisport-host-options).
+
+```ts
+import { createCache } from "@stdjs/database" 
+import { IORedisConnector } from '@stdjs/database/lib/driver/ioredis'
+
+const storage = createCache(new IORedisConnector({
+  ...options,
+}))
+```
+
+### Create Lru Cache
+
+- [lru-cache: node lru cache options](https://github.com/isaacs/node-lru-cache#options).
+
+```ts
+import { createCache } from "@stdjs/database" 
+import { LruCacheConnector } from '@stdjs/database/lib/driver/lru-cache'
+
+const storage = createCache(new LruCacheConnector({
   ...options,
 }))
 ```

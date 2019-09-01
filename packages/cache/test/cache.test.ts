@@ -2,7 +2,7 @@ import { createCache } from '../lib'
 import { getConnector, timeout } from './utils'
 
 
-const testcases = ['local', 'memcached', 'redis', 'ioredis']
+const testcases = ['local', 'memcached', 'redis', 'ioredis', 'lru-cache']
 
 describe('testsuite of cache', () => {
 

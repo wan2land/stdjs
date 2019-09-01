@@ -4,6 +4,7 @@ import { Connector } from '../lib'
 import { IORedisConnector } from '../lib/driver/ioredis'
 import { MemcachedConnector } from '../lib/driver/memcached'
 import { RedisConnector } from '../lib/driver/redis'
+import { LruCacheConnector } from '../lib/driver/lru-cache'
 
 
 function getDockerComposePort(service: string, port: number): Promise<[string, number]> {
@@ -42,6 +43,9 @@ export async function getConnector(testcase: string): Promise<Connector | undefi
       host: '127.0.0.1',
       port: port[1],
     })
+  }
+  if (testcase === 'lru-cache') {
+    return new LruCacheConnector({})
   }
   throw new Error(`unknown testcase ${testcase}`)
 }
