@@ -1,20 +1,20 @@
+import { Callback, RedisClient } from 'redis'
 
 import { Cache } from '../../interfaces/cache'
-import { RawRedisCallback, RawRedisClient } from './interfaces'
 
 
 export class RedisCache implements Cache {
 
-  public constructor(public redis: RawRedisClient) {
+  public constructor(public redis: RedisClient) {
   }
 
   public close() {
-    this.redis.end()
+    this.redis.end(true)
     return Promise.resolve(true) // nothing to close :-)
   }
 
-  public get<TVal>(key: string, defaultValue?: TVal) {
-    return new Promise<TVal | undefined>((resolve, reject) => {
+  public get<T>(key: string, defaultValue?: T) {
+    return new Promise<T | undefined>((resolve, reject) => {
       this.redis.get(key, (err, data) => {
         if (err) {
           reject(err)
@@ -29,9 +29,9 @@ export class RedisCache implements Cache {
     })
   }
 
-  public set<TVal>(key: string, value: TVal, ttl?: number) {
+  public set<T>(key: string, value: T, ttl?: number) {
     return new Promise<boolean>((resolve, reject) => {
-      const cb: RawRedisCallback<'OK' | undefined> = (err, result) => {
+      const cb: Callback<'OK' | undefined> = (err, result) => {
         if (err) {
           reject(err)
           return

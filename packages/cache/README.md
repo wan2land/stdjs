@@ -1,12 +1,8 @@
 # STDJS - Cache
 
-[![Build](https://travis-ci.org/corgidisco/stdjs-cache.svg?branch=master)](https://travis-ci.org/corgidisco/stdjs-cache)
 [![Downloads](https://img.shields.io/npm/dt/@stdjs/cache.svg)](https://npmcharts.com/compare/@stdjs/cache?minimal=true)
 [![Version](https://img.shields.io/npm/v/@stdjs/cache.svg)](https://www.npmjs.com/package/@stdjs/cache)
 [![License](https://img.shields.io/npm/l/@stdjs/cache.svg)](https://www.npmjs.com/package/@stdjs/cache)
-
-[![dependencies Status](https://david-dm.org/corgidisco/stdjs-cache/status.svg)](https://david-dm.org/corgidisco/stdjs-cache)
-[![devDependencies Status](https://david-dm.org/corgidisco/stdjs-cache/dev-status.svg)](https://david-dm.org/corgidisco/stdjs-cache?type=dev)
 
 [![NPM](https://nodeico.herokuapp.com/@stdjs/cache.svg)](https://www.npmjs.com/package/@stdjs/cache)
 
@@ -23,16 +19,26 @@ npm install @stdjs/cache --save
 ## Support Cache
 
 - local
-- memcached (require `npm install memcached --save`)
-- redis (require `npm install redis --save`)
+- memcached
+  - `npm install memcached --save` (in typescript `npm install @types/memcached -D`)
+- redis
+  - `npm install redis --save` (in typescript `npm install @types/redis -D`)
+- ioredis
+  - `npm install ioredis --save`
+- lru-cache
+  - `npm install lru-cache --save` (in typescript `npm install @types/redis -D`)
 
 ## Interfaces
 
 ```typescript
+export interface Connector {
+  connect(): Cache
+}
+
 export interface Cache {
   close(): Promise<boolean>
-  get<P>(key: string, defaultValue?: P): Promise<P | undefined>
-  set<P>(key: string, value: P, ttl?: number): Promise<boolean> // ttl unit is `seconds`
+  get<T>(key: string, defaultValue?: T): Promise<T | undefined>
+  set<T>(key: string, value: T, ttl?: number): Promise<boolean> // ttl unit is `seconds`
   has(key: string): Promise<boolean>
   delete(key: string): Promise<boolean>
   clear(): Promise<boolean>
@@ -47,52 +53,76 @@ You can create as follows:
 
 ```javascript
 const cache = require("@stdjs/cache")
-const storage = cache.create({
-  adapter: "local"
-  /* config */
-})
+const storage = cache.createCache(/* Connector */)
 
 // or
-import { create } from "@stdjs/cache"
-const storage = create({
-  adapter: "local"
-  /* config */
-})
+import { createCache } from "@stdjs/cache"
+const storage = createCache(/* Connector */)
 ```
 
 ### Create Local Cache
 
 ```ts
-const storage = create({
-  adapter: "local",
-})
+const storage = createCache()
 ```
 
 ### Create Memcached Cache
 
 Memcached's ttl has a maximum value of 30 days. Even if you do not specify ttl, it is automatically set to 30 days.
 
-```ts
-const storage = create({
-  adapter: "memcached",
+- [memcached: location options](https://www.npmjs.com/package/memcached#server-locations)
+- [memcached: cache options](https://github.com/3rd-Eden/memcached#options).
 
+```ts
+import { createCache } from "@stdjs/database" 
+import { MemcachedConnector } from '@stdjs/database/lib/driver/memcached'
+
+const storage = createCache(new MemcachedConnector({
   // https://www.npmjs.com/package/memcached#server-locations
   location, // like, "127.0.0.1:11211", ["127.0.0.1:11211", "127.0.0.1:11212"] ...
 
   // https://www.npmjs.com/package/memcached#options
   ...options,
-})
+}))
 ```
 
 ### Create Redis Cache
 
-```ts
-const storage = create({
-  adapter: "redis",
+- [redis: cache options](https://www.npmjs.com/package/redis#rediscreateclient).
 
-  // https://www.npmjs.com/package/redis#rediscreateclient
+```ts
+import { createCache } from "@stdjs/database" 
+import { RedisConnector } from '@stdjs/database/lib/driver/redis'
+
+const storage = createCache(new RedisConnector({
   ...options,
-})
+}))
+```
+
+### Create Redis Cache
+
+- [ioredis: cache options](https://github.com/luin/ioredis/blob/master/API.md#new-redisport-host-options).
+
+```ts
+import { createCache } from "@stdjs/database" 
+import { IORedisConnector } from '@stdjs/database/lib/driver/ioredis'
+
+const storage = createCache(new IORedisConnector({
+  ...options,
+}))
+```
+
+### Create Lru Cache
+
+- [lru-cache: node lru cache options](https://github.com/isaacs/node-lru-cache#options).
+
+```ts
+import { createCache } from "@stdjs/database" 
+import { LruCacheConnector } from '@stdjs/database/lib/driver/lru-cache'
+
+const storage = createCache(new LruCacheConnector({
+  ...options,
+}))
 ```
 
 ## License

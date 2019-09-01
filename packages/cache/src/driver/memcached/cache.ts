@@ -1,10 +1,11 @@
+import Memcached from 'memcached'
+
 import { Cache } from '../../interfaces/cache'
-import { RawMemcached } from './interfaces'
 
 
 export class MemcachedCache implements Cache {
 
-  public constructor(public memcached: RawMemcached) {
+  public constructor(public memcached: Memcached) {
   }
 
   public close() {
@@ -12,19 +13,19 @@ export class MemcachedCache implements Cache {
     return Promise.resolve(true)
   }
 
-  public get<TVal>(key: string, defaultValue?: TVal) {
-    return new Promise<TVal | undefined>((resolve, reject) => {
+  public get<T>(key: string, defaultValue?: T) {
+    return new Promise<T | undefined>((resolve, reject) => {
       this.memcached.get(key, (err, data) => {
         if (err) {
           reject(err)
           return
         }
-        resolve(typeof data !== 'undefined' ? data as TVal : defaultValue)
+        resolve(typeof data !== 'undefined' ? data as T : defaultValue)
       })
     })
   }
 
-  public set<TVal>(key: string, value: TVal, ttl?: number) {
+  public set<T>(key: string, value: T, ttl?: number) {
     return new Promise<boolean>((resolve, reject) => {
       this.memcached.set(
         key,

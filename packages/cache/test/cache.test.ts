@@ -1,16 +1,14 @@
+import { createCache } from '../lib'
+import { getConnector, timeout } from './utils'
 
-import "jest"
-import { getConfig, timeout } from "./helper"
 
-import { create } from "../lib"
+const testcases = ['local', 'memcached', 'redis', 'ioredis', 'lru-cache']
 
-const testcases = ["local", "memcached", "redis"]
-
-describe("cache", () => {
+describe('testsuite of cache', () => {
 
   testcases.forEach(testcase => {
     it(`test ${testcase} basic methods`, async () => {
-      const cache = create(await getConfig(testcase))
+      const cache = createCache(await getConnector(testcase))
       await expect(cache.clear()).resolves.toBeTruthy()
 
       for (let i = 0; i < 10; i++) {
@@ -23,11 +21,11 @@ describe("cache", () => {
       }
 
       // remove item 0
-      await expect(cache.delete(`item_0`)).resolves.toBeTruthy()
-      await expect(cache.delete(`item_0`)).resolves.toBeFalsy()
+      await expect(cache.delete('item_0')).resolves.toBeTruthy()
+      await expect(cache.delete('item_0')).resolves.toBeFalsy()
 
-      await expect(cache.has(`item_0`)).resolves.toBeFalsy()
-      await expect(cache.get(`item_0`)).resolves.toBeUndefined()
+      await expect(cache.has('item_0')).resolves.toBeFalsy()
+      await expect(cache.get('item_0')).resolves.toBeUndefined()
 
       for (let i = 1; i < 10; i++) {
         await expect(cache.has(`item_${i}`)).resolves.toBeTruthy()
@@ -38,7 +36,7 @@ describe("cache", () => {
     })
 
     it(`test ${testcase} expire`, async () => {
-      const cache = create(await getConfig(testcase))
+      const cache = createCache(await getConnector(testcase))
       await cache.clear()
 
       for (let i = 0; i < 10; i++) {
