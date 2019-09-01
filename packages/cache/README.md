@@ -26,7 +26,7 @@ npm install @stdjs/cache --save
 - ioredis
   - `npm install ioredis --save`
 - lru-cache
-  - `npm install lru-cache --save` (in typescript `npm install @types/redis -D`)
+  - `npm install lru-cache --save` (in typescript `npm install @types/lru-cache -D`)
 
 ## Interfaces
 
@@ -99,7 +99,7 @@ const storage = createCache(new RedisConnector({
 }))
 ```
 
-### Create Redis Cache
+### Create IORedis Cache
 
 - [ioredis: cache options](https://github.com/luin/ioredis/blob/master/API.md#new-redisport-host-options).
 
