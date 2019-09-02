@@ -21,10 +21,10 @@ npm install @stdjs/cache --save
 - local
 - memcached
   - `npm install memcached --save` (in typescript `npm install @types/memcached -D`)
-- redis
-  - `npm install redis --save` (in typescript `npm install @types/redis -D`)
 - ioredis
   - `npm install ioredis --save`
+- redis
+  - `npm install redis --save` (in typescript `npm install @types/redis -D`)
 - lru-cache
   - `npm install lru-cache --save` (in typescript `npm install @types/lru-cache -D`)
 
@@ -74,8 +74,8 @@ Memcached's ttl has a maximum value of 30 days. Even if you do not specify ttl, 
 - [memcached: cache options](https://github.com/3rd-Eden/memcached#options).
 
 ```ts
-import { createCache } from "@stdjs/database" 
-import { MemcachedConnector } from '@stdjs/database/lib/driver/memcached'
+import { createCache } from "@stdjs/cache" 
+import { MemcachedConnector } from '@stdjs/cache/lib/driver/memcached'
 
 const storage = createCache(new MemcachedConnector({
   // https://www.npmjs.com/package/memcached#server-locations
@@ -91,8 +91,8 @@ const storage = createCache(new MemcachedConnector({
 - [redis: cache options](https://www.npmjs.com/package/redis#rediscreateclient).
 
 ```ts
-import { createCache } from "@stdjs/database" 
-import { RedisConnector } from '@stdjs/database/lib/driver/redis'
+import { createCache } from "@stdjs/cache" 
+import { RedisConnector } from '@stdjs/cache/lib/driver/redis'
 
 const storage = createCache(new RedisConnector({
   ...options,
@@ -104,8 +104,8 @@ const storage = createCache(new RedisConnector({
 - [ioredis: cache options](https://github.com/luin/ioredis/blob/master/API.md#new-redisport-host-options).
 
 ```ts
-import { createCache } from "@stdjs/database" 
-import { IORedisConnector } from '@stdjs/database/lib/driver/ioredis'
+import { createCache } from "@stdjs/cache" 
+import { IORedisConnector } from '@stdjs/cache/lib/driver/ioredis'
 
 const storage = createCache(new IORedisConnector({
   ...options,
@@ -117,8 +117,8 @@ const storage = createCache(new IORedisConnector({
 - [lru-cache: node lru cache options](https://github.com/isaacs/node-lru-cache#options).
 
 ```ts
-import { createCache } from "@stdjs/database" 
-import { LruCacheConnector } from '@stdjs/database/lib/driver/lru-cache'
+import { createCache } from "@stdjs/cache" 
+import { LruCacheConnector } from '@stdjs/cache/lib/driver/lru-cache'
 
 const storage = createCache(new LruCacheConnector({
   ...options,
