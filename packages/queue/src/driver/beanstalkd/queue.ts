@@ -1,13 +1,13 @@
 
 import { Priority, Queue, SendQueueOptions } from '../../interfaces/queue'
-import { priorityScale } from '../../utils'
+import { scalePriority } from '../../utils'
 import { BeanstalkdJob } from './job'
 
 const DEFAULT_PRIORITY = Priority.Normal
 const DEFAULT_DELAY = 0
 const DEFAULT_TTR = 1
 
-const scale = priorityScale([0, 255], [255, 0])
+const scale = scalePriority([0, 255], [255, 0])
 
 export class BeanstalkdQueue<TPayload> implements Queue<TPayload> {
 

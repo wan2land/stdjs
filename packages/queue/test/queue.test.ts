@@ -1,7 +1,7 @@
-import { create, Priority } from '../lib'
-import { getConfig, timeout } from './helper'
+import { createQueue, Priority } from '../lib'
+import { getConfig, timeout } from './utils'
 
-const testcases = ['local', 'beanstalkd', 'rabbitmq', 'mix']
+const testcases = ['local', 'beanstalkd', 'rabbitmq']
 if (process.env.AWS_ACCESS_KEY_ID
   && process.env.AWS_SECRET_ACCESS_KEY
   && process.env.AWS_SQS_URL
@@ -12,7 +12,7 @@ if (process.env.AWS_ACCESS_KEY_ID
 describe('queue', () => {
   testcases.forEach(testcase => {
     it(`test ${testcase} basic functions`, async () => {
-      const queue = create(await getConfig(testcase))
+      const queue = createQueue(await getConfig(testcase))
       await queue.flush()
 
       const messages = []
@@ -49,9 +49,10 @@ describe('queue', () => {
       queue.close()
     })
 
-    if (['local', 'mix'].includes(testcase)) {
+    if (['local'].includes(testcase)) {
       it(`test ${testcase} timeout`, async () => {
-        const queue = create(await getConfig(testcase))
+        const queue = createQueue(await getConfig(testcase))
+        ;(queue as any).timeout = 100
         await queue.flush()
 
         for (let i = 0; i < 10; i++) {
@@ -84,8 +85,8 @@ describe('queue', () => {
 
     if (['beanstalkd', 'rabbitmq'].includes(testcase)) {
       it(`test ${testcase} priority`, async () => {
-        const producer = create(await getConfig(testcase))
-        const consumer = create(await getConfig(testcase))
+        const producer = createQueue(await getConfig(testcase))
+        const consumer = createQueue(await getConfig(testcase))
         await producer.flush()
 
         await producer.send('message normal', { priority: Priority.Normal })
@@ -122,47 +123,9 @@ describe('queue', () => {
       })
     }
 
-    if (['mix'].includes(testcase)) {
-      it(`test ${testcase} priority`, async () => {
-        const queue = create(await getConfig(testcase))
-        await queue.flush()
-
-        await queue.send('message normal', { priority: Priority.Normal })
-        await queue.send('message high', { priority: Priority.High })
-        await queue.send('message highest', { priority: Priority.Highest })
-
-        {
-          const job = await queue.receive()
-          if (!job) {
-            throw new Error('job is undefined')
-          }
-          expect(job.payload).toEqual('message highest')
-          await job.done()
-        }
-        {
-          const job = await queue.receive()
-          if (!job) {
-            throw new Error('job is undefined')
-          }
-          expect(job.payload).toEqual('message high')
-          await job.done()
-        }
-        {
-          const job = await queue.receive()
-          if (!job) {
-            throw new Error('job is undefined')
-          }
-          expect(job.payload).toEqual('message normal')
-          await job.done()
-        }
-
-        queue.close()
-      })
-    }
-
-    if (['local', 'sqs', 'beanstalkd', 'rabbitmq', 'mix'].includes(testcase)) {
+    if (['local', 'sqs', 'beanstalkd', 'rabbitmq'].includes(testcase)) {
       it(`test ${testcase} count`, async () => {
-        const queue = create(await getConfig(testcase))
+        const queue = createQueue(await getConfig(testcase))
         await queue.flush()
 
         for (let i = 0; i < 10; i++) {
