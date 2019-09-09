@@ -31,5 +31,6 @@
   },
   "dependencies": {
     "core-js": "^3.1.4"
-  }
+  },
+  "gitHead": "c21a7f5575864795fe7dec9244765a61aed6fd57"
 }
