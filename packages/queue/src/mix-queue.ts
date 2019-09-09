@@ -1,5 +1,5 @@
+import { Job, Priority, Queue, SendQueueOptions } from './interfaces/queue'
 
-import { Job, Priority, Queue, SendQueueOptions } from '../../interfaces/queue'
 
 const DEFAULT_PRIORITY = Priority.Normal
 

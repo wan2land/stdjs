@@ -1,12 +1,13 @@
+import { Channel, Connection } from 'amqplib'
+
 import { Priority, Queue, SendQueueOptions } from '../../interfaces/queue'
-import { priorityScale } from '../../utils'
-import { RawAmqpChannel as Channel, RawAmqpConnection as Connection } from './interfaces'
+import { scalePriority } from '../../utils'
 import { AmqpJob } from './job'
 
 
 const DEFAULT_PRIORITY = Priority.Normal
 
-const scale = priorityScale([0, 255], [0, 255])
+const scale = scalePriority([0, 255], [0, 255])
 
 const assertProps = {
   maxPriority: 255,

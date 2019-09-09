@@ -1,5 +1,8 @@
 
-// section:interface
+export interface Connector {
+  connect<TPayload>(): Queue<TPayload>
+}
+
 export enum Priority {
   Normal = 10,
   High = 30,
@@ -27,4 +30,3 @@ export interface Job<TPayload> {
   isDeleted: boolean
   done(): Promise<void>
 }
-// endsection

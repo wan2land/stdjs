@@ -1,5 +1,5 @@
-
 import { Job, Queue } from '../../interfaces/queue'
+
 
 export class SqsJob<TPayload> implements Job<TPayload> {
 

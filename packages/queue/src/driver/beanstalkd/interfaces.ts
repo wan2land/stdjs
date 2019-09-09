@@ -1,6 +1,5 @@
 
-export interface BeanstalkdQueueConfig {
-  readonly adapter: 'beanstalkd'
+export interface BeanstalkdQueueOptions {
   host?: string
   port?: number
   tube?: string

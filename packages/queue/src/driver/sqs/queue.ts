@@ -1,9 +1,8 @@
+import { SQS } from 'aws-sdk'
 
-// import { SQS } from "aws-sdk"
 import { Queue, SendQueueOptions } from '../../interfaces/queue'
-import { RawAwsSqs as SQS } from './interfaces'
 import { SqsJob } from './job'
-import { getQueueAttributes, purgeQueue, receiveMessages, sendMessage } from './promise'
+
 
 export class SqsQueue<TPayload> implements Queue<TPayload> {
 
@@ -15,50 +14,51 @@ export class SqsQueue<TPayload> implements Queue<TPayload> {
   }
 
   public async countWaiting(): Promise<number> {
-    const attrs = await getQueueAttributes(this.client, {
+    const result = await this.client.getQueueAttributes({
       QueueUrl: this.url,
       AttributeNames: [
         'ApproximateNumberOfMessages',
       ],
-    })
-    if (attrs.Attributes && attrs.Attributes.ApproximateNumberOfMessages) {
-      return parseInt(attrs.Attributes.ApproximateNumberOfMessages, 10)
+    }).promise()
+    if (result.Attributes && result.Attributes.ApproximateNumberOfMessages) {
+      return parseInt(result.Attributes.ApproximateNumberOfMessages, 10)
     }
     throw new Error('cannot count waiting jobs')
   }
 
   public async countRunning(): Promise<number> {
-    const attrs = await getQueueAttributes(this.client, {
+    const result = await this.client.getQueueAttributes({
       QueueUrl: this.url,
       AttributeNames: [
         'ApproximateNumberOfMessagesNotVisible',
       ],
-    })
-    if (attrs.Attributes && attrs.Attributes.ApproximateNumberOfMessagesNotVisible) {
-      return parseInt(attrs.Attributes.ApproximateNumberOfMessagesNotVisible, 10)
+    }).promise()
+    if (result.Attributes && result.Attributes.ApproximateNumberOfMessagesNotVisible) {
+      return parseInt(result.Attributes.ApproximateNumberOfMessagesNotVisible, 10)
     }
     throw new Error('cannot count running jobs')
   }
 
   public async flush(): Promise<void> {
-    await purgeQueue(this.client, {
+    await this.client.purgeQueue({
       QueueUrl: this.url,
-    })
+    }).promise()
   }
 
   public async send(payload: TPayload, options?: SendQueueOptions): Promise<void> {
-    await sendMessage(this.client, {
+    await this.client.sendMessage({
       QueueUrl: this.url,
       MessageBody: JSON.stringify(payload),
       DelaySeconds: options && options.delay ? Math.max(Math.floor(options.delay / 1000), 900) : void 0,
-    })
+    }).promise()
   }
 
   public async receive(): Promise<SqsJob<TPayload> | undefined> {
-    const messages = await receiveMessages(this.client, {
+    const result = await this.client.receiveMessage({
       QueueUrl: this.url,
       MaxNumberOfMessages: 1,
-    })
+    }).promise()
+    const messages = result.Messages || []
     if (messages.length === 0) {
       return
     }

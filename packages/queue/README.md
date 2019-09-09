@@ -4,9 +4,6 @@
 [![Version](https://img.shields.io/npm/v/@stdjs/queue.svg)](https://www.npmjs.com/package/@stdjs/queue)
 [![License](https://img.shields.io/npm/l/@stdjs/queue.svg)](https://www.npmjs.com/package/@stdjs/queue)
 
-[![dependencies Status](https://david-dm.org/corgidisco/stdjs-queue/status.svg)](https://david-dm.org/corgidisco/stdjs-queue)
-[![devDependencies Status](https://david-dm.org/corgidisco/stdjs-queue/dev-status.svg)](https://david-dm.org/corgidisco/stdjs-queue?type=dev)
-
 [![NPM](https://nodeico.herokuapp.com/@stdjs/queue.svg)](https://www.npmjs.com/package/@stdjs/queue)
 
 Queue Adapter with Async/Promise for Javascript(& Typescript).
@@ -22,10 +19,12 @@ npm install @stdjs/queue --save
 ## Support Queue
 
 - local
-- AWS, SQS (require `npm install aws-sdk --save`)
-- beanstalkd (require `npm install beanstalkd --save`)
-- AMQP (such as, RabbitMQ) (require `npm install amqplib --save`)
-- mix (Mix multiple queues for use Priority)
+- aws-sdk (SQS)
+  - `npm install aws-sdk --save`
+- beanstalkd
+  - `npm install beanstalkd --save`
+- amqplib (such as, RabbitMQ)
+  - `npm install amqplib --save` (in typescript `npm install @types/amqplib -D`)
 
 ### Support Options
 
@@ -35,11 +34,14 @@ adapter | delays | priority | timeout
 `aws-sdk` | O ([Max 15min](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-delay-queues.html)) | X (use `mix` adapter) | [By AWS Console](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html#changing-message-visibility-timeout)
 `beanstalkd` | O | O | X
 `amqplib` | X | O | X |
-`mix` | Case by case | O | Case by case
 
 ## Interfaces
 
 ```typescript
+export interface Connector {
+  connect<TPayload>(): Queue<TPayload>
+}
+
 export enum Priority {
   Normal = 10,
   High = 30,
@@ -77,100 +79,58 @@ You can create as follows:
 
 ```javascript
 const queue = require("@stdjs/queue")
-const connection = queue.create({
-  adapter: "local",
-  /* config */
-})
+const storage = queue.createQueue(/* Connector */)
 
 // or
-import { create } from "@stdjs/queue"
-create({
-  adapter: "local",
-  /* config */
-})
+import { createQueue } from "@stdjs/queue"
+const storage = createQueue(/* Connector */)
 ```
 
 ### Create Local Queue
 
 ```ts
-const connection = create({
-  adapter: "local",
-
-  // https://github.com/corgidisco/stdjs-queue/blob/master/src/driver/local/interfaces.ts
-  ...options,
-})
+const connection = createQueue()
 ```
 
 ### Create Aws SQS Queue
 
+- [aws-sek: SQS options](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SQS.html#constructor-property).
+
 ```ts
-const connection = create({
-  adapter: "aws-sdk",
+import { createQueue } from "@stdjs/queue" 
+import { SqsConnector } from '@stdjs/queue/lib/driver/sqs'
 
-  // SQS URL
-  url, // like "https://sqs.{region}.amazonaws.com/012345678910/your-sqs-name"
-
-  // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SQS.html#constructor-property
+const connection = createQueue(new SqsConnector({
+  url, // SQS URL, ex. "https://sqs.{region}.amazonaws.com/012345678910/your-sqs-name"
   ...options,
-})
+}))
 ```
 
 ### Create RabbitMQ(AMQP) Queue
 
+- [amqplib: options](http://www.squaremobius.net/amqp.node/channel_api.html#connecting-with-an-object-instead-of-a-url).
+
 ```ts
-const connection = create({
-  adapter: "amqplib",
+import { createQueue } from "@stdjs/queue" 
+import { AmqpConnector } from '@stdjs/queue/lib/driver/amqp'
 
-  // AMQP Queue Name
-  queue, // like "amqp-queue-name",
-
-  // http://www.squaremobius.net/amqp.node/channel_api.html#connecting-with-an-object-instead-of-a-url
+const connection = createQueue(new AmqpConnector({
+  queue, // AMQP Queue Name, ex. "amqp-queue-name",
   ...options,
-})
+}))
 ```
 
 ### Create Beanstalkd Queue
 
 ```ts
-const connection = create({
-  adapter: "beanstalkd",
+import { createQueue } from "@stdjs/queue" 
+import { BeanstalkdConnector } from '@stdjs/queue/lib/driver/beanstalkd'
 
-  // beanstalkd connection
-  host, // default "localhost"
-  port, // default 11300
-
-  // tube name
-  tube,
-})
-```
-
-### Create Mix Queue
-
-`mix` allows you to set the priority based on other default queues.
-
-```ts
-const connection = create({
-  adapter: "mix",
-  queues: [
-    {
-      priority: Priority.Highest, // Priority Highest is 50
-
-      // The following options are the same as the Queue create options.
-      adapter: "local",
-      timeout: 100,
-    },
-    {
-      priority: Priority.High, // Priority High is 30
-      adapter: "local",
-      timeout: 100,
-    },
-    {
-      priority: Priority.Normal, // Priority Normal is 10
-      adapter: "local",
-      timeout: 100,
-    },
-  ],
-})
+const connection = createQueue(new BeanstalkdConnector({
+  host, // Beanstalkd server host, default "localhost"
+  port, // Beanstalkd server port, default 11300
+  tube, // Tube name, 
+}))
 ```
 
 ## License

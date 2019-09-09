@@ -1,6 +1,9 @@
 import { exec } from 'child_process'
 
-import { Priority, QueueConfig } from '../lib'
+import { Connector } from '../lib'
+import { SqsConnector } from '../lib/driver/sqs'
+import { AmqpConnector } from '../src/driver/amqp'
+import { BeanstalkdConnector } from '../src/driver/beanstalkd'
 
 
 function getDockerComposePort(service: string, port: number): Promise<[string, number]> {
@@ -16,58 +19,30 @@ function getDockerComposePort(service: string, port: number): Promise<[string, n
   })
 }
 
-export async function getConfig(testcase: string): Promise<QueueConfig> {
+export async function getConfig(testcase: string): Promise<Connector | undefined> {
   if (testcase === 'local') {
-    return {
-      adapter: 'local',
-      timeout: 100,
-    }
+    return
   }
   if (testcase === 'sqs') {
-    return {
-      adapter: 'aws-sdk',
+    return new SqsConnector({
       region: process.env.AWS_SQS_REGION || '',
       url: process.env.AWS_SQS_URL || '',
-    }
+    })
   }
   if (testcase === 'beanstalkd') {
     const port = await getDockerComposePort('beanstalkd', 11300)
-    return {
-      adapter: 'beanstalkd',
+    return new BeanstalkdConnector({
       host: 'localhost',
       port: port[1],
       tube: 'jest',
-    }
+    })
   }
   if (testcase === 'rabbitmq') {
     const port = await getDockerComposePort('rabbitmq', 5672)
-    return {
-      adapter: 'amqplib',
+    return new AmqpConnector({
       queue: 'jest',
       port: port[1],
-    }
-  }
-  if (testcase === 'mix') {
-    return {
-      adapter: 'mix',
-      queues: [
-        {
-          priority: Priority.Highest,
-          adapter: 'local',
-          timeout: 100,
-        },
-        {
-          priority: Priority.High,
-          adapter: 'local',
-          timeout: 100,
-        },
-        {
-          priority: Priority.Normal,
-          adapter: 'local',
-          timeout: 100,
-        },
-      ],
-    }
+    })
   }
   throw new Error(`unknown testcase ${testcase}`)
 }
