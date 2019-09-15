@@ -3,7 +3,7 @@
 [![Downloads](https://img.shields.io/npm/dt/@stdjs/database.svg?style=flat-square)](https://npmcharts.com/compare/@stdjs/database?minimal=true)
 [![Version](https://img.shields.io/npm/v/@stdjs/database.svg?style=flat-square)](https://www.npmjs.com/package/@stdjs/database)
 [![License](https://img.shields.io/npm/l/@stdjs/database.svg?style=flat-square)](https://www.npmjs.com/package/@stdjs/database)
-![Typescript](https://img.shields.io/npm/types/@stdjs/database.svg?style=flat-square)
+![Typescript](https://img.shields.io/badge/language-Typescript-007acc.svg?style=flat-square)
 
 Database Adapter with Async/Promise for Javascript(& Typescript).
 

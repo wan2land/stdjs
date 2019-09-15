@@ -3,7 +3,7 @@
 [![Downloads](https://img.shields.io/npm/dt/@stdjs/cache.svg?style=flat-square)](https://npmcharts.com/compare/@stdjs/cache?minimal=true)
 [![Version](https://img.shields.io/npm/v/@stdjs/cache.svg?style=flat-square)](https://www.npmjs.com/package/@stdjs/cache)
 [![License](https://img.shields.io/npm/l/@stdjs/cache.svg?style=flat-square)](https://www.npmjs.com/package/@stdjs/cache)
-![Typescript](https://img.shields.io/npm/types/@stdjs/cache.svg?style=flat-square)
+![Typescript](https://img.shields.io/badge/language-Typescript-007acc.svg?style=flat-square)
 
 Cache Adapter with Async/Promise for Javascript(& Typescript).
 

@@ -1,10 +1,18 @@
-<img src="./logo.png" alt="stdjs" width="400" />
+<p align="center">
+  <img src="./logo.png" alt="stdjs" width="400" />
+</p>
 
-[![Build](https://img.shields.io/travis/wan2land/stdjs.svg?style=flat-square)](https://travis-ci.org/wan2land/stdjs)
-[![dependencies Status](https://img.shields.io/david/wan2land/stdjs.svg?style=flat-square)](https://david-dm.org/wan2land/stdjs)
-[![devDependencies Status](https://img.shields.io/david/dev/wan2land/stdjs.svg?style=flat-square)](https://david-dm.org/wan2land/stdjs?type=dev)
+<p align="center">Many libraries with the same interface.</p>
 
-STDJS. Many libraries with the same interface.
+<p align="center">
+  <a href="https://travis-ci.org/wan2land/stdjs"><img alt="Build" src="https://img.shields.io/travis/wan2land/stdjs.svg?style=flat-square" /></a>
+  <a href="https://david-dm.org/wan2land/stdjs"><img alt="dependencies Status" src="https://img.shields.io/david/wan2land/stdjs.svg?style=flat-square" /></a>
+  <a href="https://david-dm.org/wan2land/stdjs?type=dev"><img alt="devDependencies Status" src="https://img.shields.io/david/dev/wan2land/stdjs.svg?style=flat-square" /></a>
+  <br />
+  <img alt="License MIT" src="https://img.shields.io/badge/license-MIT-97ca00.svg?style=flat-square" />
+  <img alt="Language Typescript" src="https://img.shields.io/badge/language-Typescript-007acc.svg?style=flat-square" />
+</p>
+
 
 ## Projects
 
@@ -13,7 +21,3 @@ STDJS. Many libraries with the same interface.
 - [@stdjs/oauth](./packages/oauth)
 - [@stdjs/queue](./packages/queue)
 - [@stdjs/eslint-config](./packages/eslint-config)
-
-## License
-
-MIT
