@@ -7,9 +7,9 @@
     "eslint config",
     "typescript"
   ],
-  "author": "Cris <corgidisco@gmail.com>",
+  "author": "Changwan Jun <wan2land@gmail.com>",
   "license": "MIT",
-  "repository": "https://github.com/corgidisco/stdjs/tree/master/packages/eslint-config",
+  "repository": "https://github.com/wan2land/stdjs/tree/master/packages/eslint-config",
   "main": "index.js",
   "scripts": {
     "build": "echo \"done\""

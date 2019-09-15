@@ -1,7 +1,7 @@
 {
   "name": "stdjs",
   "private": true,
-  "author": "Cris <corgidisco@gmail.com>",
+  "author": "Changwan Jun <wan2land@gmail.com>",
   "license": "MIT",
   "scripts": {
     "bootstrap": "lerna bootstrap",

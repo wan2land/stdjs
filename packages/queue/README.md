@@ -1,10 +1,9 @@
 # STDJS - Queue
 
-[![Downloads](https://img.shields.io/npm/dt/@stdjs/queue.svg)](https://npmcharts.com/compare/@stdjs/queue?minimal=true)
-[![Version](https://img.shields.io/npm/v/@stdjs/queue.svg)](https://www.npmjs.com/package/@stdjs/queue)
-[![License](https://img.shields.io/npm/l/@stdjs/queue.svg)](https://www.npmjs.com/package/@stdjs/queue)
-
-[![NPM](https://nodeico.herokuapp.com/@stdjs/queue.svg)](https://www.npmjs.com/package/@stdjs/queue)
+[![Downloads](https://img.shields.io/npm/dt/@stdjs/queue.svg?style=flat-square)](https://npmcharts.com/compare/@stdjs/queue?minimal=true)
+[![Version](https://img.shields.io/npm/v/@stdjs/queue.svg?style=flat-square)](https://www.npmjs.com/package/@stdjs/queue)
+[![License](https://img.shields.io/npm/l/@stdjs/queue.svg?style=flat-square)](https://www.npmjs.com/package/@stdjs/queue)
+![Typescript](https://img.shields.io/npm/types/@stdjs/queue.svg?style=flat-square)
 
 Queue Adapter with Async/Promise for Javascript(& Typescript).
 

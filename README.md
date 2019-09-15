@@ -1,8 +1,8 @@
 <img src="./logo.png" alt="stdjs" width="400" />
 
-[![Build](https://img.shields.io/travis/corgidisco/stdjs.svg)](https://travis-ci.org/corgidisco/stdjs)
-[![dependencies Status](https://img.shields.io/david/corgidisco/stdjs.svg)](https://david-dm.org/corgidisco/stdjs)
-[![devDependencies Status](https://img.shields.io/david/dev/corgidisco/stdjs.svg)](https://david-dm.org/corgidisco/stdjs?type=dev)
+[![Build](https://img.shields.io/travis/wan2land/stdjs.svg?style=flat-square)](https://travis-ci.org/wan2land/stdjs)
+[![dependencies Status](https://img.shields.io/david/wan2land/stdjs.svg?style=flat-square)](https://david-dm.org/wan2land/stdjs)
+[![devDependencies Status](https://img.shields.io/david/dev/wan2land/stdjs.svg?style=flat-square)](https://david-dm.org/wan2land/stdjs?type=dev)
 
 STDJS. Many libraries with the same interface.
 

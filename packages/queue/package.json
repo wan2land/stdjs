@@ -17,9 +17,9 @@
     "promise",
     "typescript"
   ],
-  "author": "Cris <corgidisco@gmail.com>",
+  "author": "Changwan Jun <wan2land@gmail.com>",
   "license": "MIT",
-  "repository": "https://github.com/corgidisco/stdjs/tree/master/packages/queue",
+  "repository": "https://github.com/wan2land/stdjs/tree/master/packages/queue",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {

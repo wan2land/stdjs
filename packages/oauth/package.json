@@ -7,9 +7,9 @@
     "passport",
     "typescript"
   ],
-  "author": "Cris <corgidisco@gmail.com>",
+  "author": "Changwan Jun <wan2land@gmail.com>",
   "license": "MIT",
-  "repository": "https://github.com/corgidisco/stdjs/tree/master/packages/oauth",
+  "repository": "https://github.com/wan2land/stdjs/tree/master/packages/oauth",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
