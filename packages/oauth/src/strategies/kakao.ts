@@ -18,13 +18,26 @@ interface UserResponse {
   id: number
   properties: {
     nickname: string,
-    email?: string,
     profile_image: string,
     thumbnail_image: string,
   }
   kakao_account: {
-    has_email: boolean,
+    profile_needs_agreement: boolean,
+    profile: {
+      nickname: string,
+      thumbnail_image_url: string,
+      profile_image_url: string,
+    },
     email_needs_agreement: boolean,
+    is_email_valid: boolean,
+    is_email_verified: boolean,
+    email?: string,
+    age_range_needs_agreement: boolean,
+    age_range?: string,
+    birthday_needs_agreement: boolean,
+    birthday?: string,
+    gender_needs_agreement: boolean,
+    gender?: string,
   }
 }
 
@@ -78,12 +91,11 @@ export class KakaoStrategy implements OAuthStrategy {
       })
       return {
         id: `${response.data.id}`,
-        ...response.data.kakao_account.has_email ? { email: response.data.properties.email } : {},
+        ...response.data.kakao_account.email ? { email: response.data.kakao_account.email } : {},
         nickname: response.data.properties.nickname,
         avatar: response.data.properties.profile_image,
         raw: {
-          id: response.data.id,
-          ...response.data.properties,
+          ...response.data,
         },
       }
     } catch (e) {
