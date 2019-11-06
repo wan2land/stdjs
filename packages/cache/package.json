@@ -15,7 +15,7 @@
   ],
   "author": "Changwan Jun <wan2land@gmail.com>",
   "license": "MIT",
-  "repository": "https://github.com/wan2lnad/stdjs/tree/master/packages/cache",
+  "repository": "https://github.com/wan2land/stdjs/tree/master/packages/cache",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
