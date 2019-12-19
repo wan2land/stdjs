@@ -17,8 +17,8 @@
 
 ## Projects
 
-- [@stdjs/cache](./packages/cache)
-- [@stdjs/database](./packages/database)
+- [@stdjs/cache](./packages/cache): Cache Adapter that supports **Memcached**(by `memcached`), **Redis**(by `redis` or `ioredis`), and **LRU cache**(by `lru-cache`).
+- [@stdjs/database](./packages/database): Database Adapter that supports **MySQL**(by `mysql` or `mysql2`), **PostgreSQL**(by `pg`), and **SQLite**(by `sqlite3`).
 - [@stdjs/oauth](./packages/oauth)
-- [@stdjs/queue](./packages/queue)
-- [@stdjs/eslint-config](./packages/eslint-config)
+- [@stdjs/queue](./packages/queue): Queue Adapter thant supports **AWS SQS**(by `aws-sdk`), **Beanstalkd**(by `beanstalkd`), and **RabbitMQ/StormMQ**(by `amqplib`).
+- [@stdjs/eslint-config](./packages/eslint-config): ESLint Configs for **javascript**, **typescript**.
