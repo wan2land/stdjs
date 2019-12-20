@@ -16,7 +16,7 @@
     "build": "rimraf ./lib && tsc && babel ./src --out-dir ./lib --extensions \".ts\" --source-maps inline"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.19.0",
     "core-js": "^3.1.4"
   },
   "gitHead": "c21a7f5575864795fe7dec9244765a61aed6fd57"
