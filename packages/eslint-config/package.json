@@ -22,7 +22,7 @@
     "eslint-plugin-unicorn": "^9.1.1"
   },
   "devDependencies": {
-    "eslint": "^6.0.0"
+    "eslint": "6.0.1"
   },
   "peerDependencies": {
     "eslint": "^6.0.0"
