@@ -1,6 +1,6 @@
 {
   "name": "@stdjs/queue",
-  "version": "2.0.0-alpha.4",
+  "version": "2.0.0",
   "description": "Queue Adapter with Async/Promise for Javascript(& Typescript).",
   "keywords": [
     "queue-adapter",
