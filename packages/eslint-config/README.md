@@ -28,6 +28,9 @@ module.exports = {
     '@stdjs',
     '@stdjs/eslint-config/typescript',
   ],
-  rules: {}
+  parserOptions: {
+    tsconfigRootDir: __dirname,
+    project: ['./tsconfig.json'],
+  },
 }
 ```

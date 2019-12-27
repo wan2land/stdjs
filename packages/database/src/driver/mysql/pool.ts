@@ -47,8 +47,8 @@ export class MysqlPool implements Pool {
           return reject(err)
         }
         resolve({
-          insertId: result!.insertId || undefined,
-          changes: result!.affectedRows,
+          insertId: result.insertId || undefined,
+          changes: result.affectedRows,
           raw: result,
         })
       })

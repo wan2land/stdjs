@@ -20,7 +20,7 @@ export class MysqlConnection implements Connection {
     })
   }
 
-  public async first<TRow extends Row>(query: string, values: any[] = []) {
+  public async first<TRow extends Row>(query: string, values: any[] = []): Promise<TRow> {
     const rows = await this.select<TRow>(query, values)
     if (rows.length > 0) {
       return rows[0]
@@ -34,7 +34,7 @@ export class MysqlConnection implements Connection {
         if (err) {
           return reject(err)
         }
-        resolve(rows && rows.map ? rows.map((result: any) => ({ ...result })) : [])
+        resolve(rows?.map ? rows.map((result: any) => ({ ...result })) : [])
       })
     })
   }
@@ -46,8 +46,8 @@ export class MysqlConnection implements Connection {
           return reject(err)
         }
         resolve({
-          insertId: result!.insertId || undefined,
-          changes: result!.affectedRows,
+          insertId: result.insertId || undefined,
+          changes: result.affectedRows,
           raw: result,
         })
       })
