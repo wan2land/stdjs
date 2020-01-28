@@ -20,7 +20,7 @@
     "@babel/preset-env": "7.8.3",
     "@babel/preset-typescript": "7.8.3",
     "@types/amqplib": "0.5.13",
-    "@types/ioredis": "4.14.5",
+    "@types/ioredis": "4.14.6",
     "@types/jest": "24.9.1",
     "@types/lodash": "4.14.149",
     "@types/lru-cache": "5.1.0",
