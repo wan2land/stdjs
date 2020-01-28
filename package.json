@@ -27,7 +27,7 @@
     "@types/memcached": "2.2.6",
     "@types/mysql": "2.15.8",
     "@types/mysql2": "github:types/mysql2",
-    "@types/node": "12.12.25",
+    "@types/node": "12.12.26",
     "@types/pg": "7.14.1",
     "@types/redis": "2.8.14",
     "@types/sqlite3": "3.1.6",
