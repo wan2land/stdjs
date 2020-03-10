@@ -28,7 +28,7 @@
     "@types/mysql": "2.15.9",
     "@types/mysql2": "github:types/mysql2",
     "@types/node": "12.12.29",
-    "@types/pg": "7.14.1",
+    "@types/pg": "7.14.2",
     "@types/redis": "2.8.16",
     "@types/sqlite3": "3.1.6",
     "@typescript-eslint/eslint-plugin": "2.22.0",
