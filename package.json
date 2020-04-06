@@ -42,7 +42,7 @@
     "ioredis": "4.16.0",
     "jest": "25.2.3",
     "lerna": "3.20.2",
-    "lerna-update-wizard": "0.17.7",
+    "lerna-update-wizard": "0.17.8",
     "lodash": "4.17.15",
     "lru-cache": "5.1.1",
     "memcached": "2.2.2",
