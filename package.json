@@ -25,7 +25,7 @@
     "@types/lodash": "4.14.149",
     "@types/lru-cache": "5.1.0",
     "@types/memcached": "2.2.6",
-    "@types/mysql": "2.15.9",
+    "@types/mysql": "2.15.13",
     "@types/mysql2": "github:types/mysql2",
     "@types/node": "12.12.31",
     "@types/pg": "7.14.3",
